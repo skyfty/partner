@@ -907,7 +907,7 @@ class ProductAction extends CastleAction {
         $filename = $png_temp_dir.$product_id.'.png';
         if (!is_dir($png_temp_dir) && !mkdir($png_temp_dir, 0777, true)) { echo 3;$this->error('二维码保存目录不可写'); }
 
-        $qrOpt = "http://www.ourbaby.cc/Index_namecard_id_".$product_id.".html";
+        $qrOpt = "http://www.aobaomuying.cn/Index_namecard_id_".$product_id.".html";
         import("@.ORG.QRCode.qrlib");
         QRcode::png($qrOpt, $filename, 'M', 4, 2);
         header('Content-type: image/png');

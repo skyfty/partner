@@ -182,7 +182,7 @@ class BaseAction extends Action{
             role_log(MODULE_NAME, ACTION_NAME, $_REQUEST, $_REQUEST['act']);
             $randfile = "exportcache/".uniqid("excel");
             file_put_contents(dirname($_SERVER['SCRIPT_FILENAME']).'/'.$randfile, serialize($_REQUEST));
-            redirect("http://b.ayihui.cn:9501?type=export&pf=".$randfile);
+            redirect("http://b.aobaomuying.cn:9501?type=export&pf=".$randfile);
         }else {
             if ($_REQUEST["field"]) {
                 $params[] = "field=".$_REQUEST['field'];
@@ -2302,9 +2302,9 @@ class BaseAction extends Action{
         $file_name = "exportcache//ayihui_employee_".date('Y-m-d',mktime())."_".time().".xls";
         $objWriter->save($file_name);
         if (defined("SWOOLE_CALL")) {
-            exit(json_encode(array("Location"=>"http://b.ayihui.cn/".$file_name)));
+            exit(json_encode(array("Location"=>"http://b.aobaomuying.cn/".$file_name)));
         } else {
-            redirect("http://b.ayihui.cn/".$file_name);
+            redirect("http://b.aobaomuying.cn/".$file_name);
         }
     }
 

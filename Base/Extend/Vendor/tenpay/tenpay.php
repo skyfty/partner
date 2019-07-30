@@ -77,7 +77,7 @@ class tenpay{
 		$key = $this->payment['payment_config']['tenpay_key'];//"8934e7d15453e97507ef794cf7b0519d";
 		
 		/* 返回处理地址 */
-		$return_url = "http://www.ourbaby.cc/api/tenpay/return_url.php";
+		$return_url = "http://www.aobaomuying.cn/api/tenpay/return_url.php";
 		//date_default_timezone_set(PRC);
 		$strDate = date("Ymd");
 		$strTime = date("His");

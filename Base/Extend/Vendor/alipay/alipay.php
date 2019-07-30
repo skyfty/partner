@@ -67,8 +67,8 @@ class alipay{
             'key'               => $this->payment['payment_config']['alipay_key'],
             '_input_charset'	=> "utf-8",					                            //网站编码
             'sign_type'		    => 'MD5',				                                //签名方式
-            'return_url'	    => "http://www.ourbaby.cc/?m=User&a=payreturn&payment_code=alipay",	//返回URL
-            'notify_url'        => "http://www.ourbaby.cc/?m=User&a=paynotify&payment_code=alipay",	//通知URL
+            'return_url'	    => "http://www.aobaomuying.cn/?m=User&a=payreturn&payment_code=alipay",	//返回URL
+            'notify_url'        => "http://www.aobaomuying.cn/?m=User&a=paynotify&payment_code=alipay",	//通知URL
             'subject'		    => $this->order['subject'],	                            //商品名称
             'body'			    => $this->order['pay_sn'],	                            //商品描述
             'out_trade_no'	    => $this->order['pay_sn'],		                        //外部交易编号

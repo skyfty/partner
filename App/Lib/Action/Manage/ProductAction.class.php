@@ -1789,7 +1789,7 @@ class ProductAction extends BaseAction {
         $filename = $png_temp_dir.$product_id.'.png';
         if (!is_dir($png_temp_dir) && !mkdir($png_temp_dir, 0777, true)) { echo 3;$this->error('二维码保存目录不可写'); }
 
-        $qrOpt = "http://c.ourbaby.cc/index.php?m=Index&a=namecard&id=".$product_id;
+        $qrOpt = "http://c.aobaomuying.cn/index.php?m=Index&a=namecard&id=".$product_id;
         import("@.ORG.QRCode.qrlib");
         QRcode::png($qrOpt, $filename, 'M', 4, 2);
         header('Content-type: image/png');

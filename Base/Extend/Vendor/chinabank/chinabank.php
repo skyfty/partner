@@ -70,7 +70,7 @@ class chinabank{
 		$v_amount = $this->order['pay_amount'];                  			//支付金额                 
         $v_moneytype = "CNY";                                           //币种
 		$v_mid = $this->payment['payment_config']['chinabank_account'];	// 商户号，这里为测试商户号1001，替换为自己的商户号(老版商户号为4位或5位,新版为8位)即可
-		$v_url = ."http://www.ourbaby.cc/api/chinabank/return_url.php";	// 请填写返回url,地址应为绝对路径,带有http协议
+		$v_url = ."http://www.aobaomuying.cn/api/chinabank/return_url.php";	// 请填写返回url,地址应为绝对路径,带有http协议
 		$key   = $this->payment['payment_config']['chinabank_key'];			// 如果您还没有设置MD5密钥请登陆我们为您提供商户后台，地址：https://merchant3.chinabank.com.cn/
 
 		$text = $v_amount.$v_moneytype.$v_oid.$v_mid.$v_url.$key;       //md5加密拼凑串,注意顺序不能变
