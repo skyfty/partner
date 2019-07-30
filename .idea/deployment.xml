@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="aobaomuying.cn" overwriteAll="false" preserveTimestamps="false" promptOnLocalOverwrite="false" uploadOnCheckin="262241c2-c975-4e69-8734-0fef26495cbd">
+  <component name="PublishConfigData" serverName="aobaomuying.cn" overwriteAll="false" preserveTimestamps="false" promptOnLocalOverwrite="false">
     <serverData>
       <paths name="aobaomuying.cn">
         <serverdata>
@@ -10,6 +10,5 @@
         </serverdata>
       </paths>
     </serverData>
-    <option name="myUploadOnCheckinName" value="aobaomuying.cn" />
   </component>
 </project>
