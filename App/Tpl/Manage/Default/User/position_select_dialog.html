@@ -1,0 +1,45 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <div></div>
+            <table class="table table-hover" id="user_table">
+                <thead>
+                <tbody>
+                <tr>
+                    <td>部门</td>
+                    <td>{:field_html_show("staff", "department_id")}</td>
+                </tr>
+                <tr>
+                    <td>岗位</td>
+                    <td>{:field_html_show("staff", "position_id")}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $('#department_id').change(function(){
+        var department_id = $('#department_id').val();
+        if(department_id == ''){
+            $("#position_id").html('');
+        }else{
+            $.ajax({
+                type:'get',
+                url:'index.php?m=user&a=getpositionlist&id='+department_id,
+                async:false,
+                success:function(data){
+                    options = '';
+                    $.each(data.data, function(k, v){
+                        options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+                    });
+                    $("#position_id").html(options);
+                },
+                dataType:'json'
+            });
+        }
+    });
+</script>

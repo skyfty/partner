@@ -1,0 +1,184 @@
+
+<script src="__PUBLIC__/javascript-load-image/js/load-image.all.min.js"></script>
+
+<style>
+    .upload-btn {
+        position: relative;
+        top: -19px;
+        height: 22px;
+        width: 100%;
+        opacity: 0.9;
+    }
+</style>
+
+
+<script>
+    var seq_item = 1;
+    $('.pic-fileupload').change(function (e) {
+        var self = this;
+        $.each(e.target.files, function(f, v){
+            loadImage(v,function (img) {on_load_image(self, img);},{maxWidth: 600});
+        });
+        $(self).parent().find('.photograph_div').html("");
+
+    });
+
+    function on_load_image(self, img) {
+        var node = $('<div/>');
+        $(img).css("height", "100px");
+
+        node.append(img);
+        $(self).next().html(node);
+
+        $(self).parent().css("background-image", "");
+        $(self).next().next().show();
+
+        if ($(self).attr("first") == 0) {
+            seq_item++;
+            var field_name = $(self).attr("real");
+            var html = "";
+            html += '<div class="box-secondary">';
+            html += '    <div class="fileinput-button" style="border-color:white;height:110px;width:130px;background-image:url(./Public/img/add.png);background-repeat:no-repeat">';
+            html += '        <input id="new_pic_file_' + seq_item + '" first="0" real="' + field_name + '"  class="pic-fileupload" type="file" name="pic_'+field_name+'[]" style="height: 100px">';
+            html += '        <div class="prediv thumbnail productotherlistthumb img-responsive">';
+            html += '        </div>';
+            html += '        <a href="javascript:void(0);" onclick="del_img(this);" style="display:none">';
+            html += '            <img class="del_parts" src="./Public/img/delete.gif">';
+            html += '        </a>';
+            html += '        <a href="javascript:void(0);" onclick="photograph(this);">';
+            html += '            <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">';
+            html += '        </a>';
+            html += '        <div class="photograph_div"></div>';
+            html += '    </div>';
+            html += '</div>';
+            $(self).parent().parent().parent().append($(html));
+            if( typeof on_picfilechange === 'function' ){
+               $("#new_pic_file_" + seq_item).change(on_picfilechange);
+            }
+            $(self).attr("first", "1");
+            reset_file_change('#new_pic_file_' + seq_item);
+        }
+    }
+
+    function reset_file_change(ff) {
+        $(ff).change(function (e) {
+            var self = this;
+            loadImage(e.target.files[0],function (img) {on_load_image(self, img);},{maxWidth: 600});
+            $(self).parent().find('.photograph_div').html("");
+        });
+    }
+
+    //删除图片
+    function del_img(param, field, module){
+        if (!jQuery.isNumeric(param)) {
+            $(param).parent().parent().remove();
+            return false;
+        }
+        if(confirm('{:L("CONFIRM_DELETE")}')){
+            var data = {
+                images_id:param
+            };
+            if (module) {
+                data['module'] = module;
+            }
+            $.ajax({
+                'type':'get',
+                'dataType':'json',
+                'url':'{:U(MODULE_NAME."/delImg")}',
+                'data':data,
+                'success':function(data){
+                    if(data.status == 1){
+                        $('#pic-list-'+param).remove();
+                    }else{
+                        alert(data.info);
+                    }
+                }
+            });
+        }
+    }
+
+    function photograph(param){
+        var parent = $(param).parent();
+        var self = parent.find('input');
+        var photograph_save_cb = function(imgbase) {
+            loadImage(imgbase,function (img) {
+                on_load_image(self, img);
+                parent.find('.photograph_div').html('<input type="hidden" value="'+imgbase+'" name="'+self.attr("name")+'"/>');
+
+                var new_pic_file = self.clone();
+                reset_file_change(new_pic_file);
+                self.after(new_pic_file);
+                self.remove();
+
+            },{maxWidth: 600});
+
+        };
+        cropper_photograph(photograph_save_cb);
+    }
+
+
+    function photograph_main(picname){
+        var picfile = $("#" + picname);
+        var photograph_save_cb = function(imgbase) {
+            loadImage(imgbase,function (img) {
+                $("#" + picname + "_base64").val(imgbase);
+                $("#" + picname + "_prev").attr("src", imgbase);
+
+                var newpicfile = picfile.clone();
+                $(newpicfile).change(function (e) {
+                    $("#" + picname + "_base64").val("");
+                });
+                picfile.after(newpicfile);
+                picfile.remove();
+
+            },{maxWidth: 600});
+        };
+        cropper_photograph(photograph_save_cb);
+    }
+
+
+    function cropper_photograph( pc) {
+        art.dialog.data('photocallback', pc);
+        art.dialog.open("{:U('Index/photograph')}", {
+            title: "拍照",
+            lock:true,
+            fixed: true,
+            resize: false,
+            padding: 0,
+            width:600,
+            height:450,
+            button: [
+                {
+                    name: '确定',
+                    callback: function () {
+                        var cw = $(this.iframe)[0].contentWindow
+                        if (cw.webcam_state == 0) {
+                            cw.webcam.capture();
+                            this.size(613, 463);
+                        } else {
+                            cw.cropper_webcam();
+                            this.close();
+                        }
+                        return false;
+                    },
+                    focus: true
+                },
+                {
+                    name: '重拍',
+                    callback: function () {
+                        var cw = $(this.iframe)[0].contentWindow
+                        cw.restart_webcam();
+                        return false;
+                    }
+                },
+                {
+                    name: '关闭',
+                    callback: function () {
+                        this.close();
+                        return false;
+                    },
+                }
+            ],
+        }, true);
+    }
+</script>

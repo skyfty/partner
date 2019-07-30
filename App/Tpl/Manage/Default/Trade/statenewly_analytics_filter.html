@@ -1,0 +1,38 @@
+<ul class="nav pull-left">
+    <li class="pull-left">
+        <form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="" method="get">
+            <ul class="nav pull-left">
+                <include file="Public:def_analy_search_from" />
+                <li class="pull-left">
+                    状态&nbsp;
+                    <select  name="astate" id="astate" style="width:80px">
+                        <volist name="state_array" id="vo">
+                            <option value="{$key}">{$key}</option>
+                        </volist>
+                    </select>
+                    <script>
+                        $("#astate option[value='{$Think.get.astate}']").prop("selected", true);
+                        $("#astate").change(function(){
+                            $("#searchForm").submit();
+                        });
+                    </script>
+                </li>
+                <li class="pull-left">
+                    类别&nbsp;
+                    <select  name="cat" id="cat">
+                        <option value="">全部</option>
+                        <volist name="serve_category" id="vo">
+                            <option value="{$vo['serve_category_id']}">{$vo['name']}</option>
+                        </volist>
+                    </select>
+                    <script>
+                        $("#cat option[value='{$Think.get.cat}']").prop("selected", true);
+                        $("#cat").change(function(){
+                            $("#searchForm").submit();
+                        });
+                    </script>
+                </li>
+            </ul>
+        </form>
+    </li>
+</ul>

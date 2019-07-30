@@ -1,0 +1,145 @@
+<i class="icon-list"></i>
+<a href="{:U('')}&{:FP($parameter, 'payway=&inflow_model=&module_id=&fil=&dire=&type=&by=&t='.$t)}" <if condition="($Think.get.dire eq '') and ($Think.get.type eq '')">class="active"</if>>{:L('ALL')}</a>
+
+<i class="icon-road"></i>
+<a href="{:U('')}&{:FP($parameter, 'payway=&fil=su&type=&by=type&cont=inc&dire=1&t='.$t)}" <if condition="($Think.get.by eq 'type') and ($Think.get.dire eq '1')">class="active"</if>>项目收入</a>
+
+<i class="icon-adjust"></i>
+<a href="{:U('')}&{:FP($parameter, 'payway=&fil=insu&inflow=&by=inflow&cont=inc&dire=1&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.dire eq '1') and ($Think.get.fil eq 'insu')">class="active"</if>>关联收入</a>
+
+<i class="icon-star"></i>
+<a href="{:U('')}&{:FP($parameter, 'payway=&fil=zc&type=&by=type&cont=inc&dire=-1&t='.$t)}" <if condition="($Think.get.by eq 'type') and ($Think.get.dire eq '-1')">class="active"</if>>项目支出</a>
+
+<i class="icon-map-marker"></i>
+<a href="{:U('')}&{:FP($parameter, 'payway=&fil=inzc&inflow=&by=inflow&cont=inc&dire=-1&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.dire eq '-1') and ($Think.get.fil eq 'inzc')">class="active"</if>>关联支出</a>
+
+<if condition="$t eq 'inernal'">
+    <i class="icon-adjust"></i>
+    <a href="{:U('')}&{:FP($parameter, 'inflow_model=customer')}"  <if condition="($Think.get.inflow_model eq 'customer')">class="active"</if>>客户</a>
+    | <a href="{:U('')}&{:FP($parameter, 'inflow_model=product')}"  <if condition="($Think.get.inflow_model eq 'product')">class="active"</if>>雇员</a>
+    | <a href="{:U('')}&{:FP($parameter, 'inflow_model=staff')}"  <if condition="($Think.get.inflow_model eq 'staff')">class="active"</if>>员工 </a>
+</if>
+<br>
+
+<if condition="$Think.get.fil eq 'su'">
+    &nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-road"></i>
+    <volist name="shouru_type" id="vo">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=su&by=type&cont=inc&t='.$t.'&type='.$vo['type_id'].'&dire='.$vo['mold'])}" <if condition="($Think.get.by eq 'type') and ($Think.get.type eq $vo['type_id'])">class="active"</if>>
+        {$vo['name']}
+        </a>
+    </volist>
+</if>
+
+<if condition="$Think.get.fil eq 'zc'">
+    &nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-star"></i>
+    <volist name="zhichu_type" id="vo">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=zc&by=type&cont=inc&t='.$t.'&type='.$vo['type_id'].'&dire='.$vo['mold'])}" <if condition="($Think.get.by eq 'type') and ($Think.get.type eq $vo['type_id'])">class="active"</if>>
+        {$vo['name']}
+        </a>
+    </volist>
+</if>
+
+<if condition="$Think.get.fil eq 'insu'">
+    &nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-adjust"></i>
+    <if condition="$t eq 'product'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=customer&&cont=inc&t='.$t.'&dire=1')}"  <eq name="Think.get.inflow" value='customer'>class="active"</eq> >
+        客户端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq> >
+        公司端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=staff&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='staff'>class="active"</eq> >
+        员工端收入
+        </a>
+    </if>
+
+    <if condition="$t eq 'customer'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=product&&cont=inc&t='.$t.'&dire=1')}"  <eq name="Think.get.inflow" value='product'>class="active"</eq> >
+        雇员端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq> >
+        公司端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=staff&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='staff'>class="active"</eq> >
+        员工端收入
+        </a>
+    </if>
+    <if condition="$t eq 'inernal'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=product&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='product'>class="active"</eq>  >
+        雇员端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=customer&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='customer'>class="active"</eq>  >
+        客户端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq>  >
+        公司端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=staff&&cont=inc&t='.$t.'&dire=1')}"    <eq name="Think.get.inflow" value='staff'>class="active"</eq> >
+        员工端收入
+        </a>
+    </if>
+    <if condition="$t eq 'staff'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=product&&cont=inc&t='.$t.'&dire=1')}"  <eq name="Think.get.inflow" value='product'>class="active"</eq> >
+        雇员端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=customer&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='customer'>class="active"</eq>  >
+        客户端收入
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=insu&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq> >
+        公司端收入
+        </a>
+    </if>
+</if>
+
+<if condition="$Think.get.fil eq 'inzc'">
+    &nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-adjust"></i>
+    <if condition="$t eq 'product'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=customer&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='customer'>class="active"</eq> >
+        客户端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq> >
+        公司端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=staff&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='staff'>class="active"</eq> >
+        员工端支出
+        </a>
+    </if>
+    <if condition="$t eq 'customer'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=product&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='product'>class="active"</eq> >
+        雇员端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=-1')}"  <eq name="Think.get.inflow" value='inernal'>class="active"</eq>  >
+        公司端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=staff&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='staff'>class="active"</eq> >
+        员工端支出
+        </a>
+    </if>
+
+    <if condition="$t eq 'inernal'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=product&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='product'>class="active"</eq> >
+        雇员端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=customer&&cont=inc&t='.$t.'&dire=-1')}"  <eq name="Think.get.inflow" value='customer'>class="active"</eq>  >
+        客户端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq> >
+        公司端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=staff&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='staff'>class="active"</eq> >
+        员工端支出
+        </a>
+    </if>
+
+    <if condition="$t eq 'staff'">
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=product&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='product'>class="active"</eq> >
+        雇员端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=customer&&cont=inc&t='.$t.'&dire=-1')}"  <eq name="Think.get.inflow" value='customer'>class="active"</eq>  >
+        客户端支出
+        </a>
+        | <a href="{:U('')}&{:FP($parameter, 'fil=inzc&by=inflow&inflow=inernal&&cont=inc&t='.$t.'&dire=-1')}"   <eq name="Think.get.inflow" value='inernal'>class="active"</eq> >
+        公司端支出
+        </a>
+    </if>
+</if>

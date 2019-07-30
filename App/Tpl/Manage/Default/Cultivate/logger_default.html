@@ -1,0 +1,115 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Cultivate:navcat" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <table class="display" cellspacing="0" width="100%" id="logger-datatable">
+                <thead>
+                <tr  class="tr-td"   style="font-size: 14px">
+                    <th style="width: 150px">时间</th>
+                    <th width="140px">操作者 <div style="float:right;padding-right:7px;padding-left:2px;" id="staff_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_staff_id();"><i class="icon-filter"></i></a></th>
+                    <th width="140px">培训订单 <div style="float:right;padding-right:7px;padding-left:2px;" id="cultivate_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_cultivate_id();"><i class="icon-filter"></i></a></th>
+                    <th width="100px">标题</th>
+                    <th>内容</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    <if condition="$cultivate">
+    var sel_cultivate_id = "{$cultivate['cultivate_id']}";
+    <else/>
+    var sel_cultivate_id = null;
+    </if>
+    var sel_cultivate_id = null;
+    var sel_create_role_id = null;
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+                d.cultivate_id = sel_cultivate_id;
+                d.create_role_id = sel_create_role_id;
+                d.assort = "update"
+            },
+            "url": "{:U('Cultivate/logtable')}"
+        },
+        "columnDefs": [
+            {
+                "targets": [1,2,3,4],
+                "bSortable": false,
+            }
+        ],
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 0, "desc" ]],
+        'language': def_dataTable_lang_opt,
+    }
+</script>
+<include file="Cultivate:logger_table" />
+
+<script id="remove_span_tmpl" type="text/x-jquery-tmpl">
+<a ref="${id}" refm="${model}"  href="javascript:void(0);" onclick="on_click_remove_id(this);">${name}<i class="icon-remove"></i></a>
+</script>
+
+
+<include file="Cultivate:selectDialog" />
+<script type="text/javascript">
+    function on_cultivate_info_by_logger(b) {
+        sel_cultivate_id = b.cultivate_id;
+        var data = {
+            "name": b.name,
+            "id": b.cultivate_id,
+            "model":"cultivate_id"
+
+        };
+        $("#cultivate_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_cultivate_id() {
+        select_cultivate(null, on_cultivate_info_by_logger);
+    }
+</script>
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info_by_logger(b) {
+        sel_create_role_id = b.role_id;
+        var data = {
+            "name": b.name,
+            "id": b.role_id,
+            "model":"create_role_id"
+        };
+        $("#staff_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_staff_id() {
+        select_staff(null, on_staff_info_by_logger);
+    }
+</script>
+
+<script type="text/javascript">
+
+    function on_click_remove_id(sef) {
+        var refm = $(sef).attr("refm");
+        if (refm == "create_role_id") {
+            sel_create_role_id = "";
+            $("#staff_id_remove_span").html("");
+        } else {
+            sel_cultivate_id = "";
+            $("#cultivate_id_remove_span").html("");
+        }
+
+        on_time_change();
+    }
+</script>
+
+<include file="Public:footer" />

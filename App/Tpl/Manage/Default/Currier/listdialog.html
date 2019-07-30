@@ -1,0 +1,50 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <div></div>
+            <table class="table table-hover" id="currier_dialog_table">
+                <thead>
+                <tr>
+                    <th style="width: 10px">&nbsp;</th>
+                    <th>编号</th>
+                    <th>新培训项目名称</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script id="currier-checkbox" type="text/x-jquery-tmpl">
+<input type="radio" name="currier" value="${currier_id}" />
+</script>
+
+<script>
+    var reqparam = art.dialog.data('reqparam');
+    var urlajax = {
+        "url": "{:U('Currier/listDialog')}"
+    };
+    if (reqparam) {
+        urlajax['data'] = reqparam;
+    }
+    $('#currier_dialog_table').dataTable({
+        ajax:urlajax,
+        "columnDefs": [
+            {
+                "bSortable": false,
+                "targets": 0,
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).html($('#currier-checkbox').tmpl(cellData));
+                }
+            }
+        ],
+        "pageLength": 7,
+        "scrollX": true,
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 1, "desc" ]],
+        'language': def_dataTable_lang_opt
+    });
+</script>
+</body>

@@ -1,0 +1,62 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">床位信息</a></h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="Berth:navtab" />
+    </div>
+    <div class="row">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+                                    <a href="{:U('berth/edit', 'id='.$berth['berth_id'].'&assort='.$assort)}">编辑</a>&nbsp;|
+                                    <a href="{:U('berth/delete', 'berth_id='.$berth['berth_id'])}" class="del_confirm">{:L('DELETE')}</a>&nbsp;|
+                                    <if condition="($berth['status'] neq '停用')">
+                                        <a ref="{$berth['berth_id']}" status="{$berth['status']}" class="entry_status" href="javascript:void(0);">
+                                            <if condition="($berth['status'] eq '入住')">办理退住<else/>办理入住</if>&nbsp;|
+                                        </a>
+                                    </if>
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <include file="Public:defviewtable" />
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".entry_status").click(function(){
+        var title = $(this).html();
+        var dialog = art.dialog({
+            id: 'entry_status',
+            title: title,
+            lock:true,
+            ok: function () {
+                show_lock_tips("正在提交...");
+                $('#entrance_form').submit();
+            },
+            cancel:true
+        });
+
+        $.ajax({
+            url:'{:U("berth/entrance","berth_id=".$berth["berth_id"]."&status=".$berth["status"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+</script>
+
+<include file="Public:footer" />

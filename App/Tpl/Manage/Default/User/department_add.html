@@ -1,0 +1,37 @@
+<form id="department_add" class="form-horizontal" action="{:U('User/department_add')}" method="Post">
+
+    <table class="table">
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('DEPARTMENT_NAME')}
+            </td>
+            <td>
+                <input type="text" id="name" name="name"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('SUPERIORS_DEPARTMENT')}            </td>
+            <td>
+                <select name="parent_id">
+                    <option value="0">{:L('THE_TOP_DEPARTMENT')}</option>
+                    <volist name="departmentList" id="temp">
+                        <option value="{$temp.department_id}">{$temp.name}</option>
+                    </volist>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('DEPARTMENT_DESCRIPTION')}            </td>
+            <td>
+                <textarea name="description"></textarea>
+
+            </td>
+        </tr>
+
+    </table>
+
+</form>
+					
+

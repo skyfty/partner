@@ -1,0 +1,64 @@
+<include file="Public:header" />
+
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="{:U('branch/view', 'id='.$branch['branch_id'])}">门店详情</a>
+                    </li>
+                    <li>
+                        <a href="{:U('branch/employee', 'id='.$branch['branch_id'])}">员工</a>
+                    </li>
+                </ul>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <if condition="vali_permission('branch','edit')">
+                                <a href="{:U('branch/edit','id='.$branch['branch_id'])}">编辑</a> |
+                                </if>
+                                <if condition="vali_permission('branch','delete')">
+                                <a href="{:U('branch/delete','id='.$branch['branch_id'])}" class="del_confirm">{:L('DELETE')}</a>
+                                </if>
+                            </p>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                <include file="Public:defviewtable" />
+                </tbody>
+            </table>
+            <!--  -->
+		</div>
+	</div>
+</div>
+<script>
+    function on_change_category_config() {
+        art.dialog.open('{:U("branch/change_category_config", "id=".$branch["branch_id"])}', {
+            id: 'change_category_config_dialog',
+            title: "类别参数",
+            lock:true,
+            fixed:true,
+            width:600,
+            height:550,
+            ok: function () {
+                var options = {
+                    success: function (data) {
+                        if (data) {
+                            window.location.reload();
+                        }
+                    }
+                };
+                $(this.iframe.contentWindow.document).find("#change_category_config_form").ajaxSubmit(options);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>
+<include file="Public:footer" />

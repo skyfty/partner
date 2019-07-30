@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>派工单</title>
+    <style type="text/css">
+        <!--
+        *{ margin:0; padding:0;}
+        body,td,th {
+            font-size:14px;
+            color: #666;
+            margin:0;
+            padding:0;
+            font-family:微软雅黑,Arial;
+        }
+        .bodyout{margin:30px auto;width:860px;}
+        .bodyout h1{font-size:24px;font-weight:bold;text-align:center; margin-bottom:18px; color:#000;}
+        .bodyout table{width:100%;border-collapse:collapse;border:1px #aaa solid;}
+        .bodyout table td{border-collapse:collapse;border:1px #aaa solid;padding:8px 12px;line-height:26px;}
+        .bodyout table td.bgbg{background:#eee; color:#000;}
+        .bodyout table th{border-collapse:collapse;border:1px #aaa solid;}
+        .textdiv{ height:120px;}
+        .texheig{ height:50px; font-size:16px; color:#000; padding:0 15px; line-height:50px;}
+        .texleft{ float:left;}
+        .texleftt{ float:right;}
+        .rilx{ display:inline-block; width:33px; text-align:center;}
+        .rilxx{ display:inline-block; width:48px; text-align:center;}
+        -->
+    </style></head>
+
+<body>
+<div class="bodyout">
+    <h1>阿姨汇派工单</h1>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="15%" valign="middle" class="bgbg">客户姓名：</td>
+            <td width="35%" valign="middle">{$customer['name']}</td>
+            <td width="15%" valign="middle" class="bgbg">客户尊称：</td>
+            <td width="35%" valign="middle">{$customer['appellation']}</td>
+        </tr>
+        <tr>
+            <td valign="middle" class="bgbg">手机号：</td>
+            <td valign="middle">{$customer['telephone']}</td>
+            <td valign="middle" class="bgbg">其他联系电话：</td>
+            <td valign="middle">{$customer['other_contact']}</td>
+        </tr>
+        <tr>
+            <td valign="middle" class="bgbg">居住地址：</td>
+            <td colspan="3" valign="middle">{$customer['live_address']}</td>
+        </tr>
+        <tr>
+            <td valign="middle" class="bgbg">路线：</td>
+            <td colspan="3" valign="middle">{$customer['route']}</td>
+        </tr>
+        <tr>
+            <td valign="middle" class="bgbg">服务项目：</td>
+            <td valign="middle"></td>
+            <td valign="middle" class="bgbg">服务员：</td>
+            <td valign="middle"></td>
+        </tr>
+        <tr>
+            <td valign="middle" class="bgbg">约定日期：</td>
+            <td valign="middle"></td>
+            <td valign="middle" class="bgbg">约定时间：</td>
+            <td valign="middle"></td>
+        </tr>
+        <tr>
+            <td valign="middle" class="bgbg">备注：</td>
+            <td colspan="3" valign="middle">
+                <div class="textdiv">&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+    <div class="texheig">
+        <div class="texleft">派工人签字（盖章）</div>
+        <div class="texleftt"><span class="rilxx"></span>年<span class="rilx"></span>月<span class="rilx"></span>日</div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<include file="Public:dialog_header" />
+<body style="background-color: white">
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <table class="table table-hover" id="trade_dialog_table">
+                <thead>
+                <tr>
+                    <th style="width: 10px">&nbsp;</th>
+                    <th>订单编号</th>
+                    <th>产品名称</th>
+                    <th>相关方</th>
+                    <th>总金额</th>
+                    <th>未付金额</th>
+                    <th>白条金额</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script id="trade-checkbox" type="text/x-jquery-tmpl">
+<input type="radio" name="trade_id" value="${trade_id}" />
+</script>
+
+<script id="trade-corre-info" type="text/x-jquery-tmpl">
+<a href="${corre_link}" target="_blank">
+    [${idcode}]${name}
+</a>
+</script>
+
+<script>
+    $('#trade_dialog_table').dataTable({
+        ajax: {
+            "url": "{:U('trade/listDialog', 'corre='.$_GET['corre'].'&id='.$_GET['id'])}"
+        },
+        "columnDefs": [
+            {
+                "bSortable": false,
+                "targets": 0,
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).html($('#trade-checkbox').tmpl(cellData));
+                }
+            },
+            {
+                "bSortable": false,
+                "targets": 3,
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).html($('#trade-corre-info').tmpl(cellData));
+                }
+            }
+        ],
+        "scrollX": true,
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 1, "desc" ]],
+        'language': def_dataTable_lang_opt
+    });
+</script>
+</body>

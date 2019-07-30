@@ -1,0 +1,30 @@
+<form action="{:U('')}" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="id" value="{$id}"/>
+    <input type="hidden" name="field" value="{$field}"/>
+    <input type="hidden" name="assort" value="{$assort}"/>
+    <input type="hidden" name="role_id" value="{$Think.session.role_id}">
+    <table class="table table-hover">
+        <tr>
+            <td class="tdleft">附件文件</td>
+            <td>
+                <p id="file1">
+                    <input type="file" name="{$field}[]"/>
+                </p>
+                <a id="add_more" href="javascript:add_file(2);">添加文件</a>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input class="btn btn-primary" type="submit" name="submit" value="{:L('ADD')}"/> &nbsp;
+                <input class="btn" onclick="javascript:$('#dialog-file').dialog('close');" type="button" value="{:L('CANCEL')}"/>
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function add_file(id) {
+        $("#add_more").before('<p id="file' + id + '"><input type="file" name="{$field}[]"/> <a href=\'javascript:void(0)\'  onclick=\'javascript:$(\"#file' + id + '\").remove();\'>{:L('DELETE')}</a></p>');
+        $("#add_more").attr('href', 'javascript:add_file(' + (id+1) + ');');
+    }
+</script>

@@ -1,0 +1,22 @@
+<form action="{:U('Product/addevent')}" method="post" id="myform">
+    <input type="hidden" id="product_id" name="product_id" value="{$product_id}"/>
+    <input type="hidden" name="event_id" value="{$event_id}"/>
+    <input type="hidden" name="start_date" value="{$start_date}"/>
+    <input type="hidden" name="end_date" value="{$end_date}"/>
+
+    <table type="hidden" class="table table-hover">
+        <tbody>
+        <tr>
+            <td class="tdleft">{:L('WORD_STATE')}</td>
+            <td>
+                <select id="workstate_id" name="workstate_id">
+                    <volist name="workstate" id="w">
+                        <option value="{$w['workstate_id']}" <if condition="($w['workstate_id'] eq $workstate_id)">selected="selected"</if> >{$w['name']}</option>
+                    </volist>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        </tbody>
+    </table>
+</form>

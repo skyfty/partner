@@ -1,0 +1,394 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<include file="Account:public_index" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Account:navtab" />
+    </div>
+    <include file="Public:alert" />
+    <p class="view">
+        <include file="Account:catenav" />
+    </p>
+    <div class="row-fluid">
+        <div class="span1 knowledgecate ">
+            <div id="jquery-accordion-menu" class="jquery-accordion-menu">
+                <ul class="nav-dropdown">
+                    <li>
+                        <a href="javascript:void(0);"  style="color:white;background-color:#029BE2;text-shadow:0 -1px 0 rgba(0,0,0,0.2)">一般账目</a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            客户服务
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=&by=related&related=market&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'market') and ($Think.get.dire eq '') and ($Think.get.payway eq '')">class="active"</if>>
+                                全部
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=-1&by=related&related=market&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'market') and ($Think.get.dire eq '-1') and ($Think.get.payway eq '')">class="active"</if>>
+                                支出
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=1&by=related&related=market&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'market') and ($Think.get.dire eq '1') and ($Think.get.payway eq '')">class="active"</if>>
+                                收入
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            产品
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=&by=related&related=trade&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'trade') and ($Think.get.dire eq '') and ($Think.get.payway eq '')">class="active"</if>>
+                                全部
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=-1&by=related&related=trade&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'trade') and ($Think.get.dire eq '-1') and ($Think.get.payway eq '')">class="active"</if>>
+                                支出
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=1&by=related&related=trade&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'trade') and ($Think.get.dire eq '1') and ($Think.get.payway eq '')">class="active"</if>>
+                                收入
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            培训
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=&by=related&related=cultivate&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'cultivate') and ($Think.get.dire eq '') and ($Think.get.payway eq '')">class="active"</if>>
+                                全部
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=-1&by=related&related=cultivate&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'cultivate') and ($Think.get.dire eq '-1') and ($Think.get.payway eq '')">class="active"</if>>
+                                支出
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&cont=inc&dire=1&by=related&related=cultivate&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'cultivate') and ($Think.get.dire eq '1') and ($Think.get.payway eq '')">class="active"</if>>
+                                收入
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            其他
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&dire=&by=related&exctype=265,266,268,270,288,290,86,178,179,272,274,276,278,280,286,68,181,180&cont=exc&related=trainorder,business,trade,market,cultivate&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'trainorder,business,trade,market,cultivate') and ($Think.get.dire eq '') and ($Think.get.payway eq '')">class="active"</if>>
+                                全部
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&dire=-1&by=related&exctype=265,266,268,270,288,290,86,178,179&cont=exc&related=trainorder,business,trade,market&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'trainorder,business,trade,market,cultivate') and ($Think.get.dire eq '-1') and ($Think.get.payway eq '')">class="active"</if>>
+                                支出
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'payway=&type=&dire=1&by=related&exctype=272,274,276,278,280,286,68,181,180&cont=exc&related=trainorder,business,trade,market&t='.$t)}" <if condition="($Think.get.by eq 'related') and ($Think.get.related eq 'trainorder,business,trade,market,cultivate') and ($Think.get.dire eq '1') and ($Think.get.payway eq '')">class="active"</if>>
+                                收入
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{:U('')}&{:FP($parameter, 'type=86,68&dire=&by=type&related=&cont=&payway='.$cash_heji[$key].'&t='.$t)}"  style="color:white;background-color:#029BE2;text-shadow:0 -1px 0 rgba(0,0,0,0.2)">公司管理</a>
+                    </li>
+                    <foreach name="cash_type" item="vo">
+                        <li>
+                            <a href="javascript:void(0);">
+                                {$key|related_desc}
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="{:U('')}&{:FP($parameter, 'type=&dire=-1&by=&related=&cont=&payway='.$cash_heji[$key].'&t='.$t)}"  <if condition="($Think.get.payway eq $cash_heji[$key])">class="active"</if>>
+                                    全部
+                                    </a>
+                                </li>
+                                <foreach name="vo" item="vo2">
+                                <li>
+                                    <a href="{:U('')}&{:FP($parameter, 'type=&dire=-1&by=&related=&cont=&payway='.$vo2['type_id'].'&t='.$t)}"  <if condition="($Think.get.payway eq $vo2['type_id'])">class="active"</if>>
+                                    {$vo2['name']}
+                                    </a>
+                                </li>
+                                </foreach>
+                            </ul>
+
+                        </li>
+                    </foreach>
+                    <li>
+                        <a href="javascript:void(0);">
+                            其他
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'type=&dire=-1&by=&related=&cont=&payway=cost&t='.$t)}"  <if condition="($Think.get.payway eq 'cost')">class="active"</if>>
+                                    成本
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'type=&dire=-1&by=&related=&cont=&payway=fare&t='.$t)}"  <if condition="($Think.get.payway eq 'fare')">class="active"</if>>
+                                    费用
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{:U('')}&{:FP($parameter, 'type=&dire=1&by=&related=&cont=&payway=preck&t='.$t)}"  <if condition="($Think.get.payway eq 'preck')">class="active"</if>>
+                                预存款
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="span11">
+            <div class="pull-left">
+                <a id="delete"  class="btn btn-mini btn-danger" style="margin-right: 8px;">
+                    <i class="icon-remove"></i> {:L('DELETE')}
+                </a>
+            </div>
+            <div class="pull-left">
+                <include file="Account:filternav" />
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <if condition="($Think.get.dire eq '-3,3') or ($Think.get.dire eq '-3') or ($Think.get.dire eq '3')">
+                        <a class="btn btn-mini btn-primary" href="{:U('account/add','dire=-3')}&t={$t}">
+                            <i class="icon-lock"></i>&nbsp; 冻结
+                        </a>
+                        <a class="btn btn-mini btn-primary" href="{:U('account/add','dire=3')}&t={$t}">
+                            <i class="icon-screenshot"></i>&nbsp; 解冻
+                        </a>
+                        <else/>
+                        <a class="btn btn-mini btn-primary" href="{:U('account/add','dire=1')}&t={$t}">
+                            <i class="icon-arrow-up"></i>&nbsp; {:L('INCOME')}
+                        </a>
+                        <a class="btn btn-mini btn-primary" href="{:U('account/add','dire=-1')}&t={$t}">
+                            <i class="icon-arrow-down"></i>&nbsp; {:L('PAY')}
+                        </a>
+                    </if>
+                    <a class="btn btn-mini btn-primary" href="{:U('account/add','dire=-1')}&t={$t}">
+                        <i class="icon-arrow-down"></i>&nbsp;高级
+                    </a>
+                    <button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="javascript:void(0);" id="excelExport" class="link">
+                                <i class="icon-download"></i>导出到Excel
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="span11">
+            <form id="form1" action="" method="post">
+                <table class="table table-hover table-striped table_thead_fixed" id="listtable">
+                    <if condition="$list eq null"><tr><td>{:L('EMPTY_TPL_DATA')}</td></tr><else />
+                        <thead>
+
+                        <tr>
+                            <th>
+                                <input class="check_all" id="check_all" type="checkbox" />
+                            </th>
+                            <volist name="field_array" id="vo">
+                                <th>
+                                    <if condition="$_GET['asc_order'] == $vo['field']">
+                                        <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'].'&t='.$t)}">
+                                            {$vo.name} &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                        </a>
+                                        <elseif condition="$_GET['desc_order'] == $vo['field']"/>
+                                        <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order='.$vo['field'].'&t='.$t)}">
+                                            {$vo.name}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                        </a>
+                                        <else/>
+                                        <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'].'&t='.$t)}">
+                                            {$vo.name}
+                                        </a>
+                                    </if>
+                                    <include file="Public:def_index_list_field_col" />
+                                </th>
+                            </volist>
+                            <th>相关方</th>
+
+                            <th>
+                                <if condition="$_GET['asc_order'] == 'income_or_expenses'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=income_or_expenses&t='.$t)}">
+                                        {:L('PAY_TYPE')} &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                    <elseif condition="$_GET['desc_order'] == 'income_or_expenses'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order=income_or_expenses&t='.$t)}">
+                                        {:L('PAY_TYPE')}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                    <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=income_or_expenses&t='.$t)}">
+                                        {:L('PAY_TYPE')}
+                                    </a>
+                                </if>
+                            </th>
+                            <th>
+                                订单(业务|产品|培训)
+                            </th>
+                            <th>
+                            门店
+                            </th>
+                            <th>
+                                服务类别
+                            </th>
+                            <th>
+                                {:L('CREATOR_ROLE')}
+                            </th>
+
+                            <th>
+                                <if condition="$_GET['asc_order'] == 'create_time'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=create_time&t='.$t)}">
+                                        生成时间 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                    <elseif condition="$_GET['desc_order'] == 'create_time'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=create_time&desc_order=&t='.$t)}">
+                                        生成时间&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                    <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=create_time&asc_order=&t='.$t)}">
+                                        生成时间
+                                    </a>
+                                </if>
+                                <a onmouseover="mopen('table_header_datetime_create_time')" field="create_time" onmouseout="mclosetime()" date_col_filter="{:U('Berth/date_select','field=create_time')}" date_col_filter_call="filter_berth_date_field"  href="javascript:void(0);">
+                                    <i class="icon-filter"></i>
+                                </a>
+                            </th>
+
+                            <th width="40px"  style="text-align: center">{:L('OPERATING')}</th>
+                        </tr>
+                        </thead>
+                        <include file="Account:list_foot_tr" />
+
+                        <tbody>
+                        <volist name="list" id="vo">
+                            <tr>
+                                <td>
+                                    <if condition="is_ious($vo['clause_type_id'])">
+                                        <input type="checkbox" disabled  data-toggle="tooltip" title="白条相关账目无法删除, 请删除对应白条"/>
+                                        <else/>
+                                        <input type="checkbox" class="check_list" name="account_id[]" value="{$vo.account_id}"/>
+                                    </if>
+                                </td>
+                                <volist name="field_array" id="v">
+                                <td>
+                                    <if condition="$v['field'] eq 'clause_type_id'">
+                                        <a href="{:U('account/view','id='.$vo['account_id'])}&t={$t}">{$vo['clause_name']|default=L('DEFAULT')}</a>
+                                    <else />
+                                        <span style="color:#{$v['color']}">
+                                            <if condition="$v['form_type'] eq 'datetime'">
+                                                {$vo[$v['field']] | date='Y-m-d H:i:s',###}
+                                            <elseif condition="$v['field'] eq 'money'"/>
+                                                {$vo['money_show']}
+                                            <else/>
+                                                {$vo[$v['field']]}
+                                            </if>
+                                        </span>
+                                    </if>
+                                </td>
+                                </volist>
+                                <td>
+                                    <if condition="$vo.infow">
+                                        {$vo.infow.show_infow}
+                                    </if>
+                                </td>
+                                <td>
+                                    <if condition="$vo['income_or_expenses'] eq '1'">
+                                        {:L('INCOME')}
+                                        <else />
+                                        {:L('PAY')}
+                                    </if>
+                                </td>
+                                <td>
+
+                                    <if condition="($vo.market != null)">
+                                        <a href="{:U('market/view','id='.$vo['market']['market_id'])}" target="_blank">
+                                            {$vo.market.market_idcode}
+                                        </a>
+                                        <if condition="$vo.market.owner_role">
+                                            &nbsp;<a class="role_info" rel="{$vo['market']['owner_role_id']}" href="javascript:void(0)">{$vo.market.owner_role.user_name}</a>
+                                        </if>
+                                    <elseif condition="($vo.cultivate != null)"/>
+                                        <a href="{:U('cultivate/view','id='.$vo['cultivate']['cultivate_id'])}" target="_blank">
+                                            {$vo.cultivate.cultivate_idcode}
+                                        </a>
+                                        <if condition="$vo.cultivate.owner_role">
+                                            &nbsp;<a class="role_info" rel="{$vo['cultivate']['owner_role_id']}" href="javascript:void(0)">{$vo.cultivate.owner_role.user_name}</a>
+                                        </if>
+                                    <elseif condition="$vo.trade != null"/>
+                                        <a href="{:U('trade/view','id='.$vo['trade']['trade_id'])}" target="_blank">
+                                            {$vo.trade.orderid}
+                                        </a>
+                                        <if condition="$vo.trade.owner_role">
+                                            &nbsp;<a class="role_info" rel="{$vo['trade']['owner_role_id']}" href="javascript:void(0)">{$vo.trade.owner_role.user_name}</a>
+                                        </if>
+                                    </if>
+                                </td>
+                                <td>
+                                    <if condition="$vo.related_id !=0 ">
+                                        {$vo['related_owner_role_id']|branch_html_by_role}
+                                    </if>
+                                </td>
+                                <td>
+                                    <if condition="$vo.trade != null">
+                                        {$vo.trade.category_name}
+                                    <elseif condition="$vo.market != null"/>
+                                        {$vo.market.category_name}
+                                    <elseif condition="$vo.cultivate != null"/>
+                                        {$vo.cultivate.category_name}
+                                    <elseif condition="$vo.category_name"/>
+                                        {$vo.category_name}
+                                    </if>
+                                </td>
+                                <td>
+                                    <a class="role_info" rel="{$vo['creator_role_id']}" href="javascript:void(0)">
+                                        {$vo['creator_name']}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <if condition="$vo['create_time'] gt 0">
+                                        {$vo['create_time']|date="Y-m-d H:i:s",###}
+                                    </if>
+                                </td>
+
+                                <td  style="text-align: center">
+                                    <a href="{:U('account/view','id='.$vo['account_id'])}&t={$t}">
+                                        <i class="icon-th-large"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                </table>
+                </if>
+            </form>
+        </div> <!-- End #tab1 -->
+    </div> <!-- End #main-content -->
+</div>
+<include file="Public:export_dialog" />
+
+<include file="Public:footer" />	

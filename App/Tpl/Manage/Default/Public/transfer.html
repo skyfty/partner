@@ -1,0 +1,15 @@
+<include file="Staff:selectDialog" />
+<script>
+    function on_staff_info_by_transfer(b) {
+        var formdata = $("#form1").serialize();
+        formdata += "&role_id=" + b['role_id'];
+        $.post("{:U('transfer')}",formdata,function(result){
+            window.location.reload()
+        });
+    }
+
+    $("#transfer").click(function(){
+        select_staff(null, on_staff_info_by_transfer);
+    });
+
+</script>

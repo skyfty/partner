@@ -1,0 +1,123 @@
+<table class="table table-hover table-striped table_thead_fixed" width="95%" border="0" cellspacing="1" cellpadding="0">
+    <thead>
+    <tr>
+        <th width="5%">
+            <input type="checkbox" name="check_all" id="check_all" class="check_all"/> &nbsp;
+        </th>
+        <th width="20%">{:L('LABEL_NAME')}</th>
+        <th width="20%">{:L('FIELDS_NAME')}</th>
+        <th width="20%">{:L('FIELDS_TYPE')}</th>
+        <th>{:L('OPERATING')}</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <td colspan="5">
+            <div class="span8"><span style="color: rgb(243, 40, 12);">{:L('HINT_FIELDS')}</span></div>
+        </td>
+    </tr>
+    </tfoot>
+    <tbody>
+
+    <volist name="fields_group" id="gvo">
+        <if condition="$gvo.field_group_id == '0'"><thead></if>
+        <tr group_id="{$gvo.field_group_id}" class="field_group_row">
+            <td style="background-color: #7ab5d3" colspan="3">
+                <input type="checkbox" group_id="{$gvo.field_group_id}" class="check_group" id="check_group_{$vo.field_group_id}"/> &nbsp;{$gvo.name}
+            </td>
+            <td style="background-color: #7ab5d3"></td>
+            <td style="background-color: #7ab5d3"></td>
+        </tr>
+        <if condition="$gvo.field_group_id == '0'"></thead></if>
+
+        <if condition="$gvo.field_group_id == '0'">
+            <tr group_id="{$gvo.field_group_id}" class="field_group_row" style="display: none">
+                <td  colspan="5"></td>
+            </tr>
+        </if>
+
+        <volist name="gvo['fields']" id="vo">
+            <tr>
+                <td>
+                    <input <if condition="$vo['operating'] != 0 and $vo['operating'] != 3 ">disabled</if> type="checkbox" group_id="{$vo.field_group_id}" class="list" name="field_id[]" value="{$vo.field_id}"/>
+                </td>
+                <td>{$vo.name}</td>
+                <td>{$vo.field}</td>
+                <td>
+                    <if condition="$vo['form_type'] == 'box'">{:L('SELECTED')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'editor'" />{:L('THE_EDITOR')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'text'" />{:L('SINGLE_LINE_TEXT')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'textarea'" />{:L('MULTILINE_TEXT')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'datetime'" />{:L('DATE')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'number'" />{:L('NUMBER')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'floatnumber'" />{:L('NUMBER')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'user'" />{:L('USERS')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'address'" />{:L('ADDRESS')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'phone'" />{:L('TELEPHONE')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'mobile'" />{:L('PHONE')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'email'" />{:L('EMAIL')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'linkaddress'" />{:L('LINK_ADDRESS')}({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'pic'" />图片({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'video'" />视频({$vo.form_type})
+                        <elseif condition="$vo['form_type'] == 'file'" />文件({$vo.form_type})
+                        <else /><span style="color:red;">{:L('SPECIAL_FIELD_ACCESS_IS_LIMITED')}</span>
+                    </if>
+                </td>
+                <td>
+                    <if condition="$vo['operating'] == 0 or $vo['operating'] == 1 ">
+                        <a  data-toggle="modal"  href='{:U("setting/fieldedit","field_id=".$vo["field_id"])}' data-target="#dialog-edit-field">{:L('EDIT')}</a>
+                    <else />
+                        <s style="color:rgb(187, 180, 180);">{:L('EDIT')}</s>
+                    </if> &nbsp;
+
+                    <if condition="$vo['operating'] == 0 or $vo['operating'] == 3 ">
+                        <a class="delete" href="javascript:void(0)" rel="{$vo.field_id}">{:L('DELETE')}</a>
+                    <else />
+                        <s style="color:rgb(187, 180, 180);">{:L('DELETE')}</s>
+                    </if> &nbsp;
+
+                    <if condition="$vo['form_type'] != 'user' and $vo['in_index'] == 0">
+                        <a class="indexShow" href="javascript:void(0)" rel="{$vo.field_id}">{:L('THE_LIST_SHOWS')}</a>
+                    <elseif condition="$vo['form_type'] != 'user' and $vo['in_index'] == 1"/>
+                        <a class="indexShow" href="javascript:void(0)" rel="{$vo.field_id}">{:L('CANCEL_THE_LIST')}</a>
+                    </if>&nbsp;
+
+                    <if condition="($vo.model eq 'product')">
+                    <if condition="$vo['form_type'] != 'user' and $vo['in_home'] == 0">
+                        <a class="homeShow" href="javascript:void(0)" rel="{$vo.field_id}">网站显示</a>
+                    <elseif condition="$vo['form_type'] != 'user' and $vo['in_home'] == 1"/>
+                        <a class="homeShow" href="javascript:void(0)" rel="{$vo.field_id}">取消网站显示</a>
+                    </if>&nbsp;
+                    </if>
+
+                    <if condition="($vo.model eq 'staff')">
+                        <if condition="$vo['field'] eq 'level'">
+                            <a class="level_urge_position_ratio" href="javascript:void(0)" rel="{$vo.field_id}">促单费系数</a>
+                        </if>&nbsp;
+                    </if>
+
+                    <if condition="$vo['form_type'] == 'b_box'">
+                        <a href="{:U('setting/businessstatus','model=as')}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'bs_box'"/>
+                        <a href="{:U('setting/businessstatus','model=ss')}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 's_box'"/>
+                        <a href="{:U('setting/fields','model=skill')}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'p_box'"/>
+                        <a href="{:U('product/category','model='.$_GET['model'])}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'a_box'"/>
+                        <a href="{:U('account/accounttype','model='.$_GET['model'])}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'w_box'"/>
+                        <a href="{:U('product/workstate','model='.$_GET['model'])}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'cer_box'"/>
+                        <a href="{:U('train/certificate','model='.$_GET['model'])}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'ms_box'"/>
+                        <a href="{:U('setting/marketstatus','model=ss')}">{:L('SPECIAL_SETTING')}</a>
+                    <elseif condition="$vo['form_type'] == 'origin_box'"/>
+                        <a href="{:U('setting/origin','model=ss')}">{:L('SPECIAL_SETTING')}</a>
+                    </if>
+                </td>
+            </tr>
+        </volist>
+    </volist>
+    </tbody>
+</table>

@@ -1,0 +1,71 @@
+<include file="Public:header" />
+<div class="container">
+		<div class="page-header">
+			<h4>编辑床位</h4>
+		</div>
+		<div class="row">
+            <div class="span12">
+				<include file="Public:alert" />
+				<form action="{:U('berth/edit', 'id='.$berth['berth_id'])}" method="post" id="form1"  enctype="multipart/form-data">
+                <input type="hidden" name="berth_id" value="{$berth['berth_id']}">
+					<table class="table table-hover" width="95%" border="0" cellspacing="1" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <td style="text-align:center;" colspan="4" >
+                                <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tfoot>
+							<tr>
+								<td style="text-align:center;" colspan="4" >
+                                    <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                    <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                                </td>
+							</tr>
+						</tfoot>
+						<tbody>
+
+                            <include file="Public:editfieldsgroup" />
+                        </tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:editfieldvalid" />
+
+
+<include file="Dorm:selectDialog" />
+<script type="text/javascript">
+	function on_select_dorm() {
+		var data = {
+		};
+		select_dorm(data);
+	}
+	$('#dorm_name').click(on_select_dorm);
+
+	function on_dorm_info(b) {
+		$('#dorm_name').val(b.name);
+		$('#dorm_id').val(b.dorm_id);
+	}
+</script>
+
+<script>
+	$(function(){
+		<if condition="$berth['status'] == '入住'">
+			$('#status').mousedown(function(){return false;});
+			$("#status").attr("readonly", "readonly");
+		</if>
+		<if condition="($berth['status'] == '空闲') or ($berth['status'] == '') or ($berth['status'] == '停用')">
+				$('#status').html('<option value="空闲">空闲</option><option value="停用">停用</option>')
+			$("#status option[value='{$berth['status']}']").prop("selected", true);
+		</if>
+
+	});
+</script>
+
+<include file="Public:footer" />

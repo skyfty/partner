@@ -1,0 +1,26 @@
+<table class="table">
+    <volist name="trade['log']" id="vo">
+        <tr>
+            <td>
+                <notempty name="vo.owner.user_name">
+                    <a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">
+                        {$vo.owner.user_name}
+                    </a>
+                </notempty> &nbsp;
+                {$vo.create_date|date="Y-m-d  g:i:s a",###} &nbsp;
+                <notempty name="vo.create_date"> &nbsp; </notempty>
+                {$vo.subject}
+            </td>
+            <td>
+                <a href="{:U('log/delete','r=r_trade_account_log&id='.$vo['log_id'])}" class="del_confirm">
+                    {:L('DELETE')}
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+               <pre>{$vo.content}</pre>
+            </td>
+        </tr>
+    </volist>
+</table>

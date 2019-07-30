@@ -1,0 +1,336 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Account:navtab" />
+    </div>
+    <include file="Public:alert" />
+
+    <div class="row-fluid">
+        <div class="span1 knowledgecate">
+            <ul class="nav nav-list">
+                <li class="active">
+                    <a href="javascript:void(0);">账户类别</a>
+                </li>
+                <li>
+                    <a href="{:U('')}&{:FP($parameter, 'inflow=&by=inflow&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.inflow eq '')">class="active"</if>>
+                    全部
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{:U('')}&{:FP($parameter, 'by=inflow&inflow=customer&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.inflow eq 'customer')">class="active"</if>>
+                    客户
+                    </a>
+
+                </li>
+                <li>
+                    <a href="{:U('')}&{:FP($parameter, 'by=inflow&inflow=product&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.inflow eq 'product')">class="active"</if>>
+                    雇员
+                    </a>
+
+                </li>
+                <li>
+                    <a href="{:U('')}&{:FP($parameter, 'by=inflow&inflow=staff&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.inflow eq 'staff')">class="active"</if>>
+                    员工
+                    </a>
+
+                </li>
+                <li>
+                    <a href="{:U('')}&{:FP($parameter, 'by=inflow&inflow=inernal&t='.$t)}" <if condition="($Think.get.by eq 'inflow') and ($Think.get.inflow eq 'inernal')">class="active"</if>>
+                    公司
+                    </a>
+
+                </li>
+            </ul>
+        </div>
+        <div class="span11">
+            <div class="pull-left">
+                <div class="btn-group" style="padding-right: 5px">
+                    <button id="default_button"  class="btn btn-default" style="display: none"></button>
+                    <button id="delete"  class="btn btn-danger  btn-mini"><i class="icon-remove"></i>&nbsp;{:L('DELETE')}</button>
+                    <button class="btn  btn-mini  btn-danger dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0);" id="change-account-state">批量完成</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="pull-left">
+                <include file="Account:filternav" />
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-wrench"> </i>&nbsp;
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu  pull-right">
+                        <li>
+                            <a href="javascript:void(0);" id="excelExport" class="link">
+                                <i class="icon-download"></i>导出到Excel
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="span11">
+            <form id="form1" action="" method="post">
+                <table class="table table-hover table-striped table_thead_fixed" id="listtable">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input class="check_all" id="check_all" type="checkbox" />
+                            </th>
+                            <th>
+                                <if condition="$_GET['asc_order'] == 'flowid'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=flowid&t='.$t)}">
+                                        流水号 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                    <elseif condition="$_GET['desc_order'] == 'flowid'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order=flowid&t='.$t)}">
+                                        流水号&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                    <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=flowid&t='.$t)}">
+                                        流水号
+                                    </a>
+                                </if>
+                            </th>
+
+                            <th>
+                                <if condition="$_GET['asc_order'] == 'clause_type_id'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=clause_type_id&t='.$t)}">
+                                        项目 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                    <elseif condition="$_GET['desc_order'] == 'clause_type_id'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order=clause_type_id&t='.$t)}">
+                                        项目&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                    <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=clause_type_id&t='.$t)}">
+                                        项目
+                                    </a>
+                                </if>
+                            </th>
+                            <th class="flter_table_header">
+                                支付方式
+                                <if condition="($Think.get.payway neq '')"><span style="font-weight:normal">[{$Think.get.payway}]</span></if>
+
+                                <a onmouseover="mopen('payway_list')" onmouseout="mclosetime()" href="javascript:void(0);">
+                                    <i class="icon-filter"></i>
+                                </a>
+                                <div  id="payway_list" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                                    <a <if condition="($Think.get.payway eq '')"> href="{:U('')}&{:FP($parameter, 'payway=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'payway=')}"</if>>
+                                    全部
+                                    </a>
+                                    <volist name="payway_list" id="vo">
+                                        <a <if condition="($Think.get.payway eq $vo)"> href="{:U('')}&{:FP($parameter, 'payway=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'payway='.$vo)}"</if>>
+                                        {$vo}
+                                        </a>
+                                    </volist>
+                                </div>
+                            </th>
+                            <th>
+                                <if condition="$_GET['asc_order'] == 'money'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=money&t='.$t)}">
+                                        金额 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                    <elseif condition="$_GET['desc_order'] == 'money'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=money&desc_order=&t='.$t)}">
+                                        金额&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                    <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=money&asc_order=&t='.$t)}">
+                                        金额
+                                    </a>
+                                </if>
+                                <a onmouseover="mopen('table_header_text_money')" field="money" onmouseout="mclosetime()" number_col_filter="{:U('Berth/list_col_filter_select','type=number&field_id=82&field=money')}" number_col_filter_call="filter_berth_text_field"  href="javascript:void(0);">
+                                    <i class="icon-filter"></i>
+                                </a>
+                                <if condition="($_GET['money']['value'] neq '')">
+                                    <br/>
+                                    <span style="font-weight:normal">{:format_table_head_text_col('money', $parameter)}</span>
+                                </if>
+                            </th>
+                            <th>相关方</th>
+                            <th class="flter_table_header">
+                                <if condition="$_GET['asc_order'] == 'income_or_expenses'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=income_or_expenses&t='.$t)}">
+                                        收支
+                                        <img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                <elseif condition="$_GET['desc_order'] == 'income_or_expenses'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order=income_or_expenses&t='.$t)}">
+                                        收支
+                                        <img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=income_or_expenses&t='.$t)}">
+                                        收支
+                                        <img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                </if>
+                                <if condition="($Think.get.dire neq '')"><span style="font-weight:normal">[{$Think.get.dire|dire_type_desc}]</span></if>
+                                <a onmouseover="mopen('dire')" onmouseout="mclosetime()" href="javascript:void(0);">
+                                    <i class="icon-filter"></i>
+                                </a>
+                                <div  id="dire" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                                    <a href="{:U('')}&{:FP($parameter, 'dire=')}">
+                                    全部
+                                    </a>
+                                    <a   href="{:U('')}&{:FP($parameter, 'dire=-1')}">
+                                    现金流出
+                                    </a>
+                                    <a   href="{:U('')}&{:FP($parameter, 'dire=1')}">
+                                    现金流入
+                                    </a>
+
+                                </div>
+                            </th>
+                            <th>操作者</th>
+                            <th>
+                                <if condition="$_GET['asc_order'] == 'create_time'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=create_time&t='.$t)}">
+                                        生成时间 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                <elseif condition="$_GET['desc_order'] == 'create_time'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=create_time&desc_order=&t='.$t)}">
+                                        生成时间&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=create_time&asc_order=&t='.$t)}">
+                                        生成时间
+                                    </a>
+                                </if>
+                                <a onmouseover="mopen('table_header_datetime_create_time')" field="create_time" onmouseout="mclosetime()" date_col_filter="{:U('Berth/date_select','field=create_time')}" date_col_filter_call="filter_berth_date_field"  href="javascript:void(0);">
+                                    <i class="icon-filter"></i>
+                                </a>
+                            </th>
+                            <th>收据号</th>
+
+                            <th  class="flter_table_header">
+                                <if condition="$_GET['asc_order'] == 'state'">
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=state&t='.$t)}">
+                                        状态 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+                                    </a>
+                                    <elseif condition="$_GET['desc_order'] == 'customer_name'"/>
+                                    <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order=state&t='.$t)}">
+                                        状态&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+                                    </a>
+                                    <else/>
+                                    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=state&t='.$t)}">
+                                        状态
+                                    </a>
+                                </if>
+                                <if condition="($Think.get.state neq '')"><span style="font-weight:normal">[{$Think.get.state|account_state_desc}]</span></if>
+                                <a onmouseover="mopen('state')" onmouseout="mclosetime()" href="javascript:void(0);">
+                                    <i class="icon-filter"></i>
+                                </a>
+                                <div  id="state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                                    <a href="{:U('')}&{:FP($parameter, 'state=')}">
+                                        全部
+                                    </a>
+                                    <a   href="{:U('')}&{:FP($parameter, 'state=0')}">
+                                        未完成
+                                    </a>
+                                    <a   href="{:U('')}&{:FP($parameter, 'state=1')}">
+                                        已完成
+                                    </a>
+
+                                </div>
+                            </th>
+                            <th width="40px"  style="text-align: center">{:L('OPERATING')}</th>
+                        </tr>
+                        </thead>
+                        <include file="Account:list_foot_tr" />
+
+                        <tbody>
+                            <volist name="list" id="vo">
+                            <tr <if condition="$vo['state'] eq 0">class="warning"</if> >
+                                <td>
+                                    <input type="checkbox" class="check_list" name="account_id[]" value="{$vo.account_id}"/>
+                                </td>
+                                <td>
+                                    {$vo.flowid}
+                                </td>
+                                <td>
+                                    <a href="{:U('account/view','id='.$vo['account_id'])}&t={$t}">{$vo['clause_name']|default=L('DEFAULT')}</a>
+                                </td>
+                                <td>
+                                    {$vo.payway|payway_name}
+                                </td>
+                                <td>
+                                    {$vo.money}
+                                </td>
+
+                                <td>
+                                    <if condition="$vo.infow">
+                                        {$vo.infow.show_infow}
+                                    </if>
+                                </td>
+                                <td>
+                                    <switch name="vo['income_or_expenses']" >
+                                        <case value="1">收入</case>
+                                        <case value="-1">支出</case>
+                                    </switch>
+                                </td>
+                                <td>
+                                    <a class="role_info" rel="{$vo['creator_role_id']}" href="javascript:void(0)">
+                                        {$vo['creator_name']}
+                                    </a>
+                                </td>
+                                <td><if condition="$vo['create_time'] gt 0">{$vo['create_time']|date="Y-m-d H:i:s",###}</if></td>
+                                <td>
+                                    {$vo['receipt_number']}
+                                </td>
+                                <td>
+                                    {$vo['state_tip']}
+                                </td>
+                                <td  style="text-align: center">
+                                    <a href="{:U('account/view','id='.$vo['account_id'])}&t={$t}">
+                                        <i class="icon-th-large"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </volist>
+                        </tbody>
+                </table>
+            </form>
+        </div> <!-- End #tab1 -->
+    </div> <!-- End #main-content -->
+</div>
+<include file="Public:export_dialog" />
+
+<script type="text/javascript">
+
+    $(function(){
+
+        $("#check_all").click(function(){
+            $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+        });
+        $('#delete').click(function(){
+            if(confirm('{:L('CONFIRM_DELETE')}')){
+            <if condition="$Think.session.admin eq 1 and $Think.get.by eq 'deleted'">
+                $("#form1").attr('action', '{:U('account/completedelete')}&t={$t}');
+                $("#form1").submit();
+            <else />
+                $("#form1").attr('action', '{:U('account/delete')}&t={$t}');
+                $("#form1").submit();
+            </if>
+            }
+        });
+
+        $("#change-account-state").click(function(){
+            art.dialog.confirm("确实要完成选中账目吗?", function(){
+                $("#form1").attr('action', '{:U('account/change_state')}&t={$t}&state=1');
+                $("#form1").submit();
+            });
+        });
+    });
+</script>
+<include file="Public:footer" />

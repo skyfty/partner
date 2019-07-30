@@ -1,0 +1,225 @@
+<include file="Public:header" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4>{:L('ADD_PRODUCT')}</h4>
+	</div>
+	<div class="row">
+        <div class="span12">
+			<include file="Public:alert" />
+		</div>
+        <div class="span12">
+                <form id="form1" action="{:U('product/add')}" method="post" enctype="multipart/form-data">
+                <input type='hidden' name="byc" <present name="byc">value="{$byc}"</present>/>
+                <input type='hidden' name="cmodel_id" <present name="cmodel_id">value="{$cmodel_id}"</present>/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <td style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+					<tfoot>
+						<tr>
+							<td style="text-align:center;" colspan="4">
+                                <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                                <input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('RETURN')}"/>
+                            </td>
+						</tr>
+					</tfoot>
+					<tbody>
+                        <tr><th  colspan="4">联系人头像</th></tr>
+                        <tr>
+                            <td class="tdleft" height="125">主图</td>
+                            <td colspan="3" height="135">
+                                <table  class="table table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <td  height="135">
+                                            <input type="radio" name="main_pic" value="1" checked/>主图
+
+                                            <div class="thumbnail cardpicthumb">
+                                                <img id="work_pic_prev" class="cardpicthumb" />
+                                                <a href="javascript:del_img_main('work_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                                <a href="javascript:void(0);" onclick="photograph_main('work_pic');">
+                                                    <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                                </a>
+                                            </div>
+                                            <div class="btn btn-success fileinput-button">
+                                                <span>&nbsp;选择头像文件&nbsp;</span>
+                                                <input type="file" name="work_pic[]" id="work_pic">
+                                                <input type="hidden" name="work_pic_base64" id="work_pic_base64">
+                                            </div>
+                                        </td>
+                                        <td  height="135">
+                                            <input type="radio" name="main_pic" value="2" />主图
+                                            <div class="thumbnail cardpicthumb">
+                                                <img id="card_pic_prev" class="cardpicthumb" />
+                                                <a href="javascript:del_img_main('card_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                                <a href="javascript:void(0);" onclick="photograph_main('card_pic');">
+                                                    <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                                </a>
+                                            </div>
+                                            <div class="btn btn-success fileinput-button">
+                                                <span>扫描证件上传</span>
+                                                <input type="file" name="card_pic[]" id="card_pic">
+                                                <input type="hidden" name="card_pic_base64" id="card_pic_base64">
+                                            </div>
+                                        </td>
+                                        <input type="hidden" name="main_pic_type" id="main_pic_type" value="s"/>
+
+                                        <td width="70%">{:L('PRODUCT_MAIN_PICTURE_TIP')}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <include file="Public:editfieldsgroup" />
+                    </tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+<object id="rcard" type="application/x-rcard"  width="0" height="0">
+    <param name="onload" value="pluginLoaded" />
+</object>
+<script>
+    function del_img_main(pic_pre){
+        $('#'+pic_pre).attr("src", "");
+    }
+
+    $(function(){
+        var rcard = document.getElementById('rcard');
+        if (rcard.valid) {
+            if (rcard.attachEvent) {
+                rcard.attachEvent("onperson", person);
+            } else {
+                rcard.addEventListener("person", person, false);
+            }
+            rcard.open();
+
+            <if condition="$readcard == '1'">
+                rcard.person(true);
+            </if>
+        }
+
+        function person(p) {
+            if (p && p.cardid) {
+                var cardinfo = {
+                    name: p.name,
+                    address: p.address,
+                    cardid: p.cardid,
+                    police: p.police,
+                    nation: p.nation,
+                    sex: p.sex,
+                    validstart: p.validstart.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    validend: p.validend.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    birthday: p.birthday.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    nationcode: p.nationcode,
+                    msg: p.msg
+                };
+                for (var i in cardinfo) {
+                    $("#" + i).val($.trim(cardinfo[i]));
+                }
+                rcard.attachfile(p.pic, function(imgbase){
+                    var img = "data:image/gif;base64," + imgbase;
+                    $("#card_pic_prev").attr("src", img);
+                    $("#card_pic_base64").val(img);
+                    $("#main_pic_type").val("s");
+                });
+                on_cardid_change();
+            }
+        }
+    });
+
+    function on_birthday_focus() {
+        WdatePicker({onpicked : on_birthday_picked});
+    }
+
+    function on_birthday_picked() {
+        reset_zodiac_constellation($("#birthday").val());
+    }
+
+    function reset_zodiac_constellation(birthday) {
+        var birtinfo = birthday.split('-');
+        var zodiac = getshengxiao(birtinfo[0]);
+        $("#zodiac option[value='"+zodiac+"']").prop("selected", true);
+
+        var constellation = getxingzuo(birtinfo[1], birtinfo[2]);
+        $("#constellation option[value='"+constellation+"']").prop("selected", true);
+    }
+
+    function on_cardid_change() {
+        var cardid = $("#cardid").val();
+        if (cardid) {
+            var birthday = getBirth(cardid);
+            $("#birthday").val(birthday);
+            reset_zodiac_constellation(birthday);
+        }
+    }
+    $("#cardid").change(on_cardid_change);
+
+    <if condition="$byc neq 'commiss'">
+    function channel_role_model_change() {
+        $('#telephone').qtip('destroy', true);
+        var telephone = $("#telephone").val();
+        if (!isMobile(telephone)) {
+            return;
+        }
+
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("product/check_commiss_info")}',
+            'data':{
+                "telephone":telephone,
+            },
+            'success':function(data){
+                if(data.status == 1 && data.data){
+                    $('#telephone').qtip(
+                    {
+                        hide: 'unfocus',
+                        show:true,
+                        style: 'qtip-bootstrap',
+                        content: '这个雇员的联系方式在客服模块有登记，请联系客服指派.客服电话:{:defaultinfo("commiss_telephone")}'
+                    });
+                }
+            }
+        });
+    }
+    $("#telephone").blur(function(){
+        channel_role_model_change();
+    });
+    </if>
+</script>
+
+<include file="Public:newfieldvalid" />
+
+<script>
+    $(function(){
+        $("#channel_role_id_name").formValidator({
+            tipID:"channel_role_id_nameTip",
+            onShow:"<span style='color:red;'>必选项</span>",
+            empty:false,
+            onFocus:" ",
+            onCorrect:"<span style='color:green;'>√</span>"
+        }).functionValidator({
+            fun:function(val,elem){
+                var model = $("#channel_role_model option:selected").attr("model");
+                if (model == "雇员库" || model == "员工库" ||  model == "客户库") {
+                    if (val == "") {
+                        return "渠道人不可以为空";
+                    }
+                }
+                return true;
+            }
+        });
+    });
+
+</script>
+<include file="Public:def_channel_datapick"/>
+<include file="Public:footer" />

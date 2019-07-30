@@ -1,0 +1,337 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/chart/highcharts.js"></script>
+<script src="__PUBLIC__/js/chart/modules/exporting.js"></script>
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Account:navtab" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="" method="get">
+                        <ul class="nav pull-left">
+                            <li class="pull-left">
+                                {:L('SELECT ACCOUNTTYPE')}&nbsp;
+                                <select style="width:auto" name="accounttype" id="accounttype" onchange="changeRole()">
+                                    <option class="all" value="internal">{:L('INTERNAL_ACCOUNT')}</option>
+                                    <option class="all" value="customer">{:L('CUSTOMER_ACCOUNT')}</option>
+                                    <option class="all" value="product">{:L('PRODUCT_ACCOUNT')}</option>
+                                </select>&nbsp;&nbsp;
+                            </li>
+                            <if condition="$Think.get.accounttype eq 'customer'">
+                                <li class="pull-left">
+                                    {:L('CUSTOMER')}&nbsp;
+                                    <select style="width:auto" name="clause_additive" id="clause_additive" onchange="changeCondition()">
+                                        <option class="all" value="all">{:L('ALL')}</option>
+                                        <volist name="customer_list" id="vo">
+                                            <option value="{$vo.customer_id}">{$vo.name}</option>
+                                        </volist>
+                                    </select>&nbsp;&nbsp;
+                                </li>
+                            <elseif condition="$Think.get.accounttype eq 'product'"/>
+                                <li class="pull-left">
+                                    {:L('PRODUCT')}&nbsp;
+                                    <select style="width:auto" name="clause_additive" id="clause_additive" onchange="changeCondition()">
+                                        <option class="all" value="all">{:L('ALL')}</option>
+                                        <volist name="product_list" id="vo">
+                                            <option value="{$vo.product_id}">{$vo.name}</option>
+                                        </volist>
+                                    </select>&nbsp;&nbsp;
+                                </li>
+                            </if>
+                            <li class="pull-left">
+                                {:L('SELECT CLAUSETYPE')}&nbsp;
+                                <select style="width:auto" name="clausetype" id="clausetype" onchange="changeCondition()">
+                                <option class="all" value="all">{:L('ALL')}</option>
+                                <volist name="clausetype_list" id="vo">
+                                    <option value="{$vo.type_id}">{$vo.name}</option>
+                                </volist>
+                                </select>&nbsp;&nbsp;
+                            </li>
+
+                            <li class="pull-left">
+                                {:L('SELECT DATE')}&nbsp; {:L('FROM')}<input type="text" id="start_time" name="start_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.start_time}"/>{:L('TO')}<input type="text" id="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;&nbsp;
+                            </li>
+                            <li class="pull-left">
+                                <input type="hidden" name="m" value="account"/>
+                                <input type="hidden" name="a" value="analytics"/>
+                                <if condition="$Think.get.by neq null">
+                                    <input type="hidden" name="by" value="{$Think.get.by}"/>
+                                </if>
+                                <button type="submit" class="btn">{:L('SEARCH')}</button>
+                            </li>
+                        </ul>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="span2 knowledgecate">
+            <ul class="nav nav-list">
+                <li class="active">
+                    <a href="javascript:void(0);">{:L('CHOOSE STATISTICAL CONTENT')}</a>
+                </li>
+                <li id="report"><a id="show_report" class="active" href="javascript:void(0)"><i class="icon-white icon-chevron-right"></i>{:L('ACCOUNT STATISTICS REPORT')}</a></li>
+                <li id="moon"><a id="show_moon" href="javascript:void(0)"><i class="icon-white icon-chevron-right"></i>{:L('MONTHLY STATISTICS')}</a></li>
+                <li id="accounttype"><a id="show_accounttype" href="javascript:void(0)"><i class="icon-white icon-chevron-right"></i>{:L('YEAR CLAUSE YOY')}</a></li>
+            </ul>
+        </div>
+        <div class="span10">
+            <div id="report_content">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th  colspan="3"  style="text-align:center;background-color:#F5F5F5;border-right:2px solid #E0DCDC;">{:L('PAY')}</th>
+                        <th colspan="2" style="text-align:center;background-color:#F5F5F5;">{:L('INCOME')}</th>
+                    </tr>
+                    <tr>
+                        <th width="100">{:L('CLASSIFICATION_OF')}</th>
+                        <th>{:L('PAY')}{:L('TOTAL MONEY')}</th>
+                        <th>{:L('PAY')}{:L('TOTAL COUNT')}</th>
+                        <th>{:L('INCOME')}{:L('TOTAL MONEY')}</th>
+                        <th>{:L('INCOME')}{:L('TOTAL COUNT')}</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr style="background: #029BE2;color: #fff;font-size: 13px;">
+                        <td>{:L('TOTAL')}</td>
+                        <td>{$total_report.fukuan_count_total_money}</td>
+                        <td>{$total_report.fukuan_count_total}</td>
+                        <td>{$total_report.shoukuan_count_total_money}</td>
+                        <td>{$total_report.shoukuan_count_total}</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="reportList" id="vo">
+                        <tr>
+                            <td class="tdleft">
+                                <a href="{:U('account/index','t='.$vo['accounttype'].'&field=clause_type_id&search='.$vo['clausetype']['type_id'])}" target="_blank">
+                                    {$vo.clausetype.name}
+                                </a>
+                            </td>
+                            <td>
+                                {$vo.fukuan_money}
+                            </td>
+                            <td>
+                                {$vo.fukuan_count}
+                            </td>
+                            <td>
+                                {$vo.shoukuan_money}
+                            </td>
+                            <td>
+                                {$vo.shoukuan_count}
+                            </td>
+                        </tr>
+
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="moon_content" class="hidden">
+                <div id="an_chart">
+                    <div id="canvas_moon" style="min-width: 800px; height: 500px; margin: 0 auto"></div>
+                </div>
+            </div>
+            <div id="accounttype_content" class="hidden">
+                <div id="an_chart" class="span4">
+                    <div id="canvas_zhichu"  style="min-width: 400px; height: 400px;">{:L('TEMPORARILY_NO_DATA')}</div>
+                </div>
+                <div id="an_chart" class="span4">
+                    <div id="canvas_shouru" style="min-width: 400px; height: 400px;">{:L('TEMPORARILY_NO_DATA')}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+$(function () {
+    $('#canvas_moon').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '{:L('MONTHLY STATISTICS')}'
+        },
+        xAxis: {
+            categories: [
+                '一月',
+                '二月',
+                '三月',
+                '四月',
+                '五月',
+                '六月',
+                '七月',
+                '八月',
+                '九月',
+                '十月',
+                '十一月',
+                '十二月'
+            ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '{:L('MONTHLY STATISTICS')}'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} {:L('YUAN',array(''))}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: '{:L('INCOME')}',
+            data: {$moon_count['shoukuan']}
+
+        }, {
+            name: '{:L('PAY')}',
+            data: {$moon_count['fukuan']}
+
+        }]
+    });
+
+    var chart2;
+    $('#canvas_zhichu').highcharts({
+        chart2: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '{:L('ACCOUNTTYPE_PAY_STATISTICS',array($accounttype_fukuan_total_count))}'
+        },
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.2f}%</b>',
+            percentageDecimals: 1
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            type: 'pie',
+            data: [
+                {$accounttype_zhifu_array}
+            ]
+        }]
+    });
+
+    var chart3;
+    $('#canvas_shouru').highcharts({
+        chart3: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '{:L('ACCOUNTTYPE_INCOME_STATISTICS',array($accounttype_shouru_total_count))}'
+        },
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.2f}%</b>',
+            percentageDecimals: 1
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            type: 'pie',
+            data: [
+                {$accounttype_shouru_array}
+            ]
+        }]
+    });
+});
+
+
+
+function changeRole(){
+    department_id = $("#department option:selected").val();
+    $.ajax({
+        type:'get',
+        url:'index.php?m=user&a=getrolebydepartment&department_id='+department_id,
+        async:true,
+        success:function(data){
+            options = '<option value="all">{:L('ALL')}</option>';
+            if(data.data != null){
+                $.each(data.data, function(k, v){
+                    options += '<option value="'+v.role_id+'">'+v.role_name+"-"+v.user_name+'</option>';
+                });
+            }
+            $("#role").html(options);
+            <if condition="$_GET['role']">
+            $("#role option[value='{$Think.get.role}']").prop("selected", true);
+            </if>
+        },
+        dataType:'json'});
+}
+
+<if condition="$_GET['clausetype'] and $_GET['clausetype'] neq 'all'">
+    $("#clausetype option[value='{$Think.get.clausetype}']").prop("selected", true);
+    changeRole();
+</if>
+
+<if condition="$_GET['accounttype'] neq 'all'">
+    $("#accounttype option[value='{$Think.get.accounttype}']").prop("selected", true);
+</if>
+
+<if condition="$_GET['accounttype'] neq 'all'">
+    $("#clause_additive option[value='{$Think.get.clause_additive}']").prop("selected", true);
+</if>
+
+$(function(){
+    $("#show_report").click(function(){
+        $(this).addClass('active');
+        $("#show_moon").removeClass('active');
+        $("#show_accounttype").removeClass('active');
+
+        $("#report_content").removeClass('hidden');
+        $("#moon_content").addClass('hidden');
+        $("#accounttype_content").addClass('hidden');
+    });
+    $("#show_moon").click(function(){
+        $(this).addClass('active');
+        $("#show_report").removeClass('active');
+        $("#show_accounttype").removeClass('active');
+
+        $("#report_content").addClass('hidden');
+        $("#moon_content").removeClass('hidden');
+        $("#accounttype_content").addClass('hidden');
+    });
+    $("#show_accounttype").click(function(){
+        $(this).addClass('active');
+        $("#show_report").removeClass('active');
+        $("#show_moon").removeClass('active');
+
+        $("#report_content").addClass('hidden');
+        $("#moon_content").addClass('hidden');
+        $("#accounttype_content").removeClass('hidden');
+    });
+});
+</script>
+<include file="Public:footer" />

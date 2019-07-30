@@ -1,0 +1,61 @@
+<script type="text/javascript" src="__PUBLIC__/js/jscolor/jscolor.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidator-4.0.1.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidatorRegex.js" charset="UTF-8"></script>
+<form class="form-horizontal" action="{:U('setting/fieldgroupadd')}" method="post" name="form1" id="form1">
+    <input type="hidden" name="model" value="{$model}"/>
+    <input type="hidden" name="assort" value="{$assort}"/>
+    <table class="table">
+        <tr id="name_td">
+            <td width="50%" class="tdleft">{:L('FIELDS_GROUP_NAME')}</td>
+            <td><input type="text" name="name" id="name"/></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    $(function(){
+        jscolor.bind();
+        $.formValidator.initConfig({formID:"form1",debug:false,submitOnce:true,
+            onError:function(msg,obj,errorlist){
+                alert(msg);
+            },
+            submitAfterAjaxPrompt : '{:L('AJAX_VALIDATING_PLEASE_WAIT')}'
+        });
+
+        $("#examine").click(function(){
+        });
+
+        $("#name").formValidator({
+            tipID:"nameTip",
+            empty:false,
+            onShow:"{:L('FOR_EXAMPLE_THE_ARTICLE_TITLE')}",
+            onFocus:"{:L('PLEASE_ENTER_A_NAME')}",
+            onCorrect:"{:L('CORRECT_FORMAT')}"
+        }).inputValidator({
+            min:1,
+            empty:{
+                leftEmpty:false,
+                rightEmpty:false,
+                emptyError:"{:L('BOTH_SIDES_ARE_NOT_FREE')}"
+            },
+            onError:"{:L('LABEL_NAME_CANNOT_BE_EMPTY')}"
+        });
+        $("#max_length").formValidator({
+            tipID:"max_lengthTip",
+            empty:true,
+            onEmpty:'',
+            onShow:" ",
+            onFocus:" ",
+            onCorrect:"√"
+        }).regexValidator({
+            regExp:"intege1",
+            param:'i',
+            dataType:"enum",
+            onError:"{:L('ONLY_FILL_IN_POSITIVE_INTEGER')}"
+        }).inputValidator({
+            max:1000,
+            type:"value",
+            onError:"{:L('MUST_BE_BETWEEN_1_1000')}"
+        });
+
+    });
+</script>

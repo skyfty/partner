@@ -1,0 +1,167 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<div class="container">
+    <div class="row-fluid" style="padding-top: 15px">
+        <div class="span12">
+            <table class="display datatables" cellspacing="0" width="100%" id="logger-datatable">
+                <thead>
+                <tr  class="tr-td">
+                    <th></th>
+                    <th style="width: 130px">时间</th>
+                    <th width="70px">操作者 <div style="float:right;padding-right:7px;padding-left:2px;" id="staff_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_staff_id();"><i class="icon-filter"></i></a></th>
+                    <th>模块</th>
+                    <th>操作</th>
+                    <th>行为</th>
+                    <th>请求</th>
+                    <th>IP</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script id="log-info-tmpl" type="text/x-jquery-tmpl">
+<table class="table" cellpadding="2" cellspacing="0" border="0">
+    <tbody>
+        <tr>
+            <td class="tdleft" width="15%">时间</td>
+            <td>${create_time_show}</td>
+            <td class="tdleft" width="15%">操作者</td>
+            <td>${role_show}</td>
+            <td class="tdleft" width="15%">IP</td>
+            <td>${ip}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">模块</td>
+            <td>${module}</td>
+            <td class="tdleft" width="15%">操作</td>
+            <td>${action}</td>
+            <td class="tdleft" width="15%">行为</td>
+            <td>${act}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">请求</td>
+            <td colspan="5">${request}</td>
+        </tr>
+    </tbody>
+</table>
+</script>
+
+<script id="remove_span_tmpl" type="text/x-jquery-tmpl">
+<a ref="${id}" refm="${model}"  href="javascript:void(0);" onclick="on_click_remove_id(this);">${name}<i class="icon-remove"></i></a>
+</script>
+
+<script id="date-search" type="text/x-jquery-tmpl">
+<div id="account-datatable-date-filter" style="padding-left:20px" class="dataTables_filter">
+<div style="float:left;padding-top:4px">起止日期：</div>
+<input type="text" placeholder="开始时间" style="width:145px"   id="start_time" name="start_time" onClick="on_start_time_focus();" class="Wdate" value="{$Think.get.start_time}"/>
+<input style="float:right;" placeholder="结束时间"  style="width:145px" type="text" id="end_time" onClick="on_end_time_focus();" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+</div>
+</script>
+
+<script>
+    var sel_role_id = null;
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+                d.role_id = sel_role_id;
+            },
+            "url": "{:U('Index/stafflog')}"
+        },
+        "columns": [
+            {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+            },
+            { "data": "create_time_show" },
+            { "data": "role_show" },
+            { "data": "module" },
+            { "data": "action" },
+            { "data": "act" },
+            { "data": "request_show" },
+            { "data": "ip" }
+        ],
+        "columnDefs": [
+            {
+                "bSortable": false,
+                "targets": 0
+            }
+        ],
+        "processing": true,
+        "order": [[ 1, "desc" ]],
+        'language': def_dataTable_lang_opt
+    };
+
+    var logger_table = $('#logger-datatable').DataTable(datatable_options);
+    $("#logger-datatable_length").after($("#date-search").tmpl());
+
+    $('#logger-datatable tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = logger_table.row(tr);
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            row.child($("#log-info-tmpl").tmpl(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+
+    function on_end_time_focus() {
+        var mindate = $("#start_time").val();
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm:ss',
+            minDate: mindate,
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_start_time_focus() {
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm:ss',
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_time_change() {
+        logger_table.ajax.reload();
+    }
+</script>
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info_by_logger(b) {
+        sel_role_id = b.role_id;
+        var data = {
+            "name": b.name,
+            "id": b.role_id,
+            "model":"sel_role_id"
+        };
+        $("#staff_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_staff_id() {
+        select_staff(null, on_staff_info_by_logger);
+    }
+
+    function on_click_remove_id() {
+        sel_role_id = "";
+        $("#staff_id_remove_span").html("");
+        on_time_change();
+    }
+</script>
+
+
+
+<include file="Public:footer" />

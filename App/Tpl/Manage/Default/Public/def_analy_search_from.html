@@ -1,0 +1,30 @@
+<li class="pull-left">
+    选择时间&nbsp;
+    开始&nbsp; <input type="text" id="start_time" name="start_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.start_time}"/>&nbsp;
+    结束&nbsp;<input type="text" id="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+</li>
+<li class="pull-left">
+    周期&nbsp;
+    <select name="cycle" id="cycle" style="width: 50px">
+        <option value="week">周</option>
+        <option value="month">月</option>
+        <option value="quarter">季</option>
+        <option value="year">年</option>
+    </select>&nbsp
+    <script>
+        $("#cycle option[value='{$Think.get.cycle}']").prop("selected", true);
+        $("#cycle").change(function(){
+            $("#searchForm").submit();
+        });
+    </script>
+</li>
+<li class="pull-left">
+    <input type="hidden" name="m" value="{$Think.MODULE_NAME}"/>
+    <input type="hidden" name="a" value="analytics"/>
+    <input type="hidden" name="assort" value="{$Think.get.assort}"/>
+    <input type="hidden" name="tab" value="{$Think.get.tab}"/>
+    <if condition="$Think.get.by neq null">
+        <input type="hidden" name="by" value="{$Think.get.by}"/>
+    </if>
+    <button type="submit" class="btn btn-primary">{:L('SEARCH')}</button>&nbsp
+</li>

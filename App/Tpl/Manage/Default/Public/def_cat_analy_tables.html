@@ -1,0 +1,66 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th colspan="2" style="color: #333333">类别统计</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="{$cat_count_report_list_cnt}" width="60%">
+            <div id="canvas_cycle" style="min-width: 300px; height: 300px;margin: 0 auto">{:L('TEMPORARILY_NO_DATA')}</div>
+        </td>
+    </tr>
+    <foreach name="cat_count_report_list" item="vo">
+        <tr>
+            <td>
+                {$key}
+            </td>
+            <td>{$vo}</td>
+        </tr>
+    </foreach>
+    </tbody>
+</table>
+
+
+<script src="__PUBLIC__/highcharts/highcharts.js"></script>
+<script src="__PUBLIC__/highcharts/modules/exporting.js"></script>
+<script src="__PUBLIC__/highcharts/modules/funnel.js"></script>
+<script>
+    var charts_options = {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '雇员职业类别'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            type: 'pie',
+            data: [
+                    <foreach name="cat_count_report_list" item="vo">
+                ['{$key}',   {$vo}],
+                </foreach>
+    ]
+
+    }]
+    }
+
+    $(document).ready(function () {
+        $('#canvas_cycle').highcharts(charts_options);
+    });
+
+</script>

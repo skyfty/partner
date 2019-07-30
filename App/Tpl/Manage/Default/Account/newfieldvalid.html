@@ -1,0 +1,57 @@
+<script>
+
+    function get_account_tip(type_id, module, module_id) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'index.php?m=account&a=getaccounttip',
+            'data':{
+                'type_id': type_id,
+                'module': module,
+                'module_id': module_id
+            },
+            'success':function(data){
+                if(data.status == 1 && data.data){
+                    $("#money").attr('placeholder', data.data);
+                } else {
+                    $("#money").attr('placeholder', "");
+                }
+            }
+        });
+    }
+
+
+    function check_form_validator(ii, tip) {
+        $(ii).formValidator({
+            empty:false,
+            onFocus:" ",
+        }).inputValidator({
+            min:1,max:10,
+            empty:false,
+            onErrorMin:tip
+        });
+    }
+
+    $(function() {
+        $.formValidator.initConfig({
+            formID: "form1",
+            debug: false,
+            submitOnce: true,
+            onError: function (msg, obj, errorlist) {
+                art.dialog.alert(msg);
+            }
+        });
+
+        $("#money").formValidator({
+            empty:false,
+            onFocus:" ",
+            onShow: " ",
+            onCorrect:"<span style='color:green;'>√</span>"
+        }).inputValidator({
+            min:1,max:10,
+            onErrorMin:"金额不能为空！",
+            onErrorMax:"金额太大了"
+        });
+    });
+
+</script>

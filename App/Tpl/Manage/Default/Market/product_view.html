@@ -1,0 +1,332 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">客户服务详情</a><span style="font-size: medium;color: #0088cc;"> - {$market['idcode']} - {$market['category_name']} - {$market['customer_id']|customer_show_html=###, false}</span></h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table" style="margin-bottom: 0px">
+                    <thead >
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;" class="view_top_nav">
+                                <if condition="is_market_settle($market) or $market['status_id'] == '0'">
+                                    <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">增加</a>
+                                <else/>
+                                    <a href="{:U('market/product_add', 'id='.$market['market_id'])}">增加</a>
+                                </if>
+
+                                <if condition="$evaluate_state">
+                                    <a target="_blank" href="{:U('market/survey','market_id='.$market['market_id'])}">回访</a>
+                                </if>
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <td class="tdleft" width="16%">客户电话:</td>
+                                    <td>{$market['customer_telephone']}</td>
+                                    <td class="tdleft" width="16%">回访状态:</td>
+                                    <td width="16%">
+                                        {$market['survey_state']}
+                                    </td>
+                                    <td class="tdleft" width="16%">客评状态:</td>
+                                    <td>{$market['evaluate_state']}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <volist name="fields_group" id="gvo">
+
+                        <include file="Public:fieldtable"/>
+                    </volist>
+
+                    </tbody>
+                </table>
+                <table id="datatables" class="display datatables" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>雇员</th>
+                        <th>级别</th>
+                        <th>服务价格</th>
+                        <th>服务开始时间</th>
+                        <th>服务结束时间</th>
+                        <th>状态</th>
+                        <th>评价</th>
+                        <if condition="($market['serve_modality'] == '1')">
+                             <th>结算次数</th>
+                         <else/>
+                            <th>结算天数</th>
+                        </if>
+                        <th>结算金额</th>
+                        <th>工资</th>
+                        <th>中介费</th>
+                        <th style="width: 70px">操作</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>合计:</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th style="text-align: left">{$market['sum_settle_duration']}</th>
+                        <th style="text-align: left">{$market['sum_settle_price']}</th>
+                        <th style="text-align: left">{$market['sum_salary']}</th>
+                        <th style="text-align: left">{$market['sum_agency']}</th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid" style="padding-top: 10px">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table cost-datatables  compact" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <td style="background:#f5f5f5">此客户待回访订单</td>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <volist name="wait_evallist" id="vo">
+                                <p>
+                                [{$vo['create_time']|toDate}]&nbsp; {$vo['category_name']}&nbsp; {:market_show_html($vo, "product")}&nbsp;
+                                    <if condition="in_array($vo['evaluate_state'],array('', '未评'))">
+                                        <span style="color: red">[待评价]</span>
+                                    <elseif condition="in_array($vo['survey_state'],array('', '未评'))"/>
+                                        <span style="color: red">[待回访]</span>
+                                    </if>
+                                </p>
+                            </volist>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="product-info-tmpl" type="text/x-jquery-tmpl">
+<table class="table" cellpadding="2" cellspacing="0" border="0">
+    <tbody>
+        <tr>
+            <td class="tdleft" width="15%">雇员</td>
+            <td>${product_name}</td>
+            <td class="tdleft" width="15%">级别</td>
+            <td>${product_level_show}</td>
+            <td class="tdleft" width="15%">保险</td>
+            <td>${insurance_show}
+            {{if insurance_show =='未上'}}
+                <a target="_blank" href="{:U('trade/add')}&product_id=${product_id}&serve_id=${def_serve_id}&autotime=1&refer_url={$_SERVER['REQUEST_URI']|urlencode}">[快速上保险]</a>
+            {{/if}}
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">渠道</td>
+            <td>${product_channel}</td>
+            <td class="tdleft" width="15%">渠道人</td>
+            <td>${product_channel_role_id}</td>
+            <td class="tdleft" width="15%">责任人</td>
+            <td>${product_owner_role_id}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">服务开始时间</td>
+            <td>${real_start_time_show}</td>
+            <td class="tdleft" width="15%">服务结束时间</td>
+            <td>${real_end_time_show}</td>
+            <td class="tdleft" width="15%">休息天数</td>
+            <td>${recess_day}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">服务价格</td>
+            <td>${service_price}</td>
+            <td class="tdleft" width="15%">中介费比例</td>
+            <td>${agency_scale}</td>
+            <td class="tdleft" width="15%">服务天数</td>
+            <td>${service_duration}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">订单金额</td>
+            <td>${price}</td>
+            <td class="tdleft" width="10%">工资</td>
+            <td>${salary}</td>
+            <td class="tdleft" width="15%">中介费</td>
+            <td>${agency}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="10%">服务时间调整</td>
+            <td>${time_adjust}</td>
+            <td class="tdleft" width="15%">
+                <if condition="($market['serve_modality'] == '1')">
+                     结算次数
+                 <else/>
+                    结算天数
+                </if>
+            </td>
+            <td>${settle_duration}</td>
+            <td class="tdleft" width="15%">状态</td>
+            <td>${service_status_id_show}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">金额调整</td>
+            <td>${money_adjust}</td>
+            <td class="tdleft" width="15%">结算金额</td>
+            <td>${settle_price}</td>
+            <td class="tdleft" width="15%">派工单号</td>
+            <td>${job_number}</td>
+        </tr>
+        {{if evaluate_info}}
+        <tr>
+            <td class="tdleft" width="15%">客户评价</td>
+            <td colspan="5">
+                <table style="width:100%">
+                <tr>
+                    <td class="tdleft" width="15%">服务意识</td>
+                    <td>${evaluate_info.aware}</td>
+                    <td class="tdleft" width="15%">专业水平</td>
+                    <td>${evaluate_info.profession}</td>
+                    <td class="tdleft" width="15%">总体评价</td>
+                    <td>${evaluate_info.evaluate}</td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">详细评价</td>
+                    <td colspan="5">${evaluate_info.evaluate_describe}</td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">附件</td>
+                    <td colspan="5">{{html evaluate_info.picture.html}}</td>
+                </tr>
+                </table>
+            </td>
+        </tr>
+        {{/if}}
+        <tr>
+            <td class="tdleft" width="15%">备注</td>
+            <td colspan="5">${serve_description}</td>
+        </tr>
+    </tbody>
+</table>
+</script>
+
+<script id="product-operator-tmpl" type="text/x-jquery-tmpl">
+    <a id="product_mark_${product_id}" style="padding-left:2px"  href="{:U('index/export_pdf')}&model=market&ea=mission&id=${market_product_id}&market_id=${market_id}" target="_blank">派</a>
+    {{if service_status_id == '3'}}
+        <a style="padding-left:2px" href="{:U('market/evaluate')}&id=${market_product_id}&market_id=${market_id}">客评</a>
+    {{/if}}
+
+    <if condition="$market['settle_state'] lt '917'">
+        <a style="padding-left:2px" href="{:U('market/product_edit')}&id=${market_product_id}&market_id=${market_id}">编</a>
+        <a style="padding-left:2px" href="{:U('market/product_delete')}&id=${market_product_id}&market_id=${market_id}"  onclick="return del_confirm();">删</a>
+    </if>
+
+</script>
+
+
+<script>
+
+    $(document).ready(function() {
+        var table = $('#datatables').DataTable( {
+            ajax: {
+                "data": function(d) {
+                },
+                "url": "{:U('market/product_list', 'id='.$market['market_id'])}"
+            },
+            "columns": [
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+                { "data": "product_name_show" },
+                { "data": "product_level_show" },
+                { "data": "service_price" },
+                { "data": "real_start_time_show" },
+                { "data": "real_end_time_show" },
+                { "data": "service_status_id_show" },
+                { "data": "product_evaluate_state" },
+                { "data": "settle_duration" },
+                { "data": "settle_price" },
+                { "data": "salary" },
+                { "data": "agency" },
+                {
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+            ],
+            "columnDefs": [
+                {
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).html($("#product-operator-tmpl").tmpl(rowData));
+                    },
+                    "targets": 12
+                },
+                {
+                    "bSortable": false,
+                    "targets": 0,
+
+                }
+            ],
+            "bStateSave":true,
+            'searching':false,
+            "processing": true,
+            "order": [[1, 'asc']],
+            'language': def_dataTable_lang_opt,
+        } );
+
+        $('#datatables tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                row.child($("#product-info-tmpl").tmpl(row.data())).show();
+                tr.addClass('shown');
+            }
+        } );
+
+        $('#datatables').on( 'init.dt', function () {
+            <if condition="$Think.get.show_product_id">
+                    $("#product_mark_{$Think.get.show_product_id}").parent().parent().find(".details-control").click();
+            </if>
+
+        }) .dataTable();
+
+    } );
+
+</script>
+
+
+<include file="Public:footer" />	

@@ -1,0 +1,124 @@
+<ul class="nav nav-tabs">
+<foreach name="accountcat" item="vo">
+    <li <if condition="$acat eq $key">class="active"</if> >
+    <a href="{:U('', 'acat='.$key.'&assort='.$assort.'&id='.$_GET['id'])}">{$vo}</a>
+    </li>
+</foreach>
+</ul>
+<div class="tab-content">
+    <table  class="display datatables" cellspacing="0" width="100%" id="account_list">
+        <thead>
+        <tr>
+            <th>
+                类型
+            </th>
+            <th>
+                金额
+            </th>
+            <th>
+                操作人
+            </th>
+            <th>相关方</th>
+            <th style="text-align: center">
+                订单(培训&nbsp;|&nbsp;业务&nbsp;|&nbsp;产品|新培训)
+            </th>
+            <th>
+                时间
+            </th>
+            <th>
+                备注
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th style="text-align: right">合计:</th>
+            <th colspan="7" style="text-align: left"><span  id="accounts_totals">{$accounts_totals}</span></th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script id="account-operator-tmpl" type="text/x-jquery-tmpl">
+<a target="_blank" href="{:U('account/view')}&t={$Think.MODULE_NAME|strtolower}&id=${account_id}&refer_view_url={$Think.Server.REQUEST_URI|urlencode}">
+查看
+</a>
+</script>
+
+
+<script id="date-search" type="text/x-jquery-tmpl">
+<div id="account-datatable-date-filter" style="padding-left:20px" class="dataTables_filter">
+<div style="float:left;padding-top:4px">起止日期：</div>
+<input type="text" placeholder="开始时间"   id="start_time" name="start_time" onClick="on_start_time_focus();" class="Wdate" value="{$Think.get.start_time}"/>
+<input style="float:right;" placeholder="结束时间"  type="text" id="end_time" onClick="on_end_time_focus();" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+</div>
+</script>
+
+<script>
+    var ajaxdata =  function(d) {
+        d.clause_additive = "{$clause_additive}";
+        d.acat = "{$acat}";
+        d.start_time = $('#start_time').val();
+        d.end_time = $('#end_time').val();
+        return d;
+    };
+    var account_list = $('#account_list').dataTable( {
+        ajax: {
+            "data": ajaxdata,
+            "url": "{:U($Think.MODULE_NAME.'/account_list')}",
+            dataFilter: function(data){
+                var json = jQuery.parseJSON( data );
+                $("#accounts_totals").html(json.sum_money);
+                return JSON.stringify( json );
+            }
+        },
+        "columnDefs": [
+            {
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).html($("#account-operator-tmpl").tmpl({"account_id":cellData}));
+                },
+                "targets": 7,
+                "bSortable": false,
+            }
+        ],
+        "scrollX": true,
+        "serverSide": true,
+        "processing": true,
+        "order": [[5, 'desc']],
+        'language': def_dataTable_lang_opt
+    });
+    $("#account_list_length").after($("#date-search").tmpl());
+
+    function on_end_time_focus() {
+        var mindate = $("#start_time").val();
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd',
+            minDate: mindate,
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_start_time_focus() {
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd',
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_time_change() {
+        account_list.fnClearTable(true);
+        $.ajax({
+            url: "{:U($Think.MODULE_NAME.'/get_account_total')}",
+            data: ajaxdata({}),
+            success: function(d){
+            }
+        });
+    }
+
+</script>
+

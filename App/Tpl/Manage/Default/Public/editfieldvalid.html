@@ -1,0 +1,158 @@
+<include file="Public:filefieldvalid"/>
+<include file="Public:rolefieldvalid"/>
+
+<script>
+
+$(function() {
+    $.formValidator.initConfig({
+        formID: "form1",
+        debug: false,
+        submitOnce: true,
+        onError: function (msg, obj, errorlist) {
+            art.dialog.alert(msg);
+        }
+    });
+
+<volist name="fields_group" id="gvo">
+<volist name="gvo['fields']" id="vo">
+    <if condition="$vo['is_validate'] == 1">
+        <if condition="$vo['form_type'] != 'box' || $vo['setting']['type'] == 'select'">
+            $("#{$vo[field]}").formValidator({
+            tipID:"{$vo[field]}Tip",
+            <if condition="$vo['is_null'] == 1">
+                onShow:"<span style='color:red;'>必选项</span>",
+                empty:false,
+            <else />
+                onShow:" ",
+                empty:true,
+            </if>
+
+            onFocus:" ",
+            onCorrect:"<span style='color:green;'>√</span>"
+            }).inputValidator({
+            <if condition="$vo['is_null'] == 1">
+                min:1,max:{$vo[max_length]|default="255"},
+                onshow:"{$vo[name]}不可以为空",
+            <else />
+                min:0,max:{$vo[max_length]|default="255"},
+            </if>
+            onErrorMin:"{$vo[name]}不可以为空",
+            onErrorMax:"{$vo[name]}超出最大长度"
+            });
+
+            <if condition="$vo['form_type'] == 'email'">
+                $("#{$vo[field]}").regexValidator({
+                regExp:"email",
+                dataType:"enum",
+                onError:"{$vo[name]}格式不正确"
+                });
+            <elseif condition="$vo['form_type'] == 'mobile'"/>
+                $("#{$vo[field]}").regexValidator({
+                regExp:"mobile",
+                dataType:"enum",
+                onError:"{$vo[name]}格式不正确"
+                });
+            <elseif condition="$vo['form_type'] == 'phone'"/>
+                $("#{$vo[field]}").regexValidator({
+                regExp:"tel",
+                dataType:"enum",
+                onError:"{$vo[name]}格式不正确"
+                });
+            <elseif condition="$vo['form_type'] == 'datetime'"/>
+                $("#{$vo[field]}").regexValidator({
+                regExp:"date",
+                dataType:"enum",
+                onError:"{$vo[name]}格式不正确"
+                });
+            <elseif condition="$vo['form_type'] == 'number'"/>
+                $("#{$vo[field]}").regexValidator({
+                regExp:"num",
+                dataType:"enum",
+                onError:"{$vo[name]}格式不正确"
+                });
+            </if>
+
+            <if condition="$vo['is_unique'] == 1">
+                $("#{$vo[field]}").ajaxValidator({
+                dataType : "json",
+                type : "GET",
+                async : false,
+                isValid : true,
+                data : {
+                    id:{$model_id}
+                },
+                url : "{:U($Think.MODULE_NAME.'/validate')}",
+                success : function(data){
+                    if( data.status == 1 ) return false;
+                    if( data.status == 0 ) return true;$("#form1").submit();
+                    return false;
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("服务器没有返回数据，可能服务器忙，请重试"+errorThrown);
+                },
+                onError : "该{$vo['name']}不可用，请更换{$vo['name']}",
+                onWait : "正在对{$vo['name']}进行合法性校验，请稍候..."
+                });
+            </if>
+        <else />
+            <if condition="$vo['setting']['type'] == 'checkbox'">
+                $(":checkbox[name='{$vo['field']}[]']").formValidator({
+                tipID:"{$vo[field]}Tip",
+                <if condition="$vo['is_null'] == 1">
+                    onShow:"<span style='color:red;'>必选项</span>",
+                <else />
+                    onShow:" ",
+                </if>
+                onFocus:" ",
+                onCorrect:"<span style='color:green;'>√</span>"
+                }).inputValidator({
+                <if condition="$vo['is_null'] == 1">
+                    min:1,
+                <else/>
+                    min:0,
+                </if>
+                onError:"请选择{$vo[name]}"
+                });
+                <elseif condition="$vo['setting']['type'] == 'select'"/>
+                $("#{$vo[field]}").formValidator({
+                tipID:"{$vo[field]}Tip",
+                <if condition="$vo['is_null'] == 1">
+                    onShow:"<span style='color:red;'>必选项</span>",
+                <else />
+                    onShow:" ",
+                </if>
+                onFocus:" ",
+                onCorrect:"<span style='color:green;'>√</span>"
+                }).inputValidator({
+                <if condition="$vo['is_null'] == 1">
+                    min:1,
+                <else/>
+                    min:0,
+                </if>
+                onError:"请选择{$vo[name]}"
+                });
+                <else />
+                $(":radio[name='{$vo['field']}']").formValidator({
+                tipID:"{$vo[field]}Tip",
+                <if condition="$vo['is_null'] == 1">
+                    onShow:"<span style='color:red;'>必选项</span>",
+                <else />
+                    onShow:" ",
+                </if>
+                onFocus:" ",
+                onCorrect:"<span style='color:green;'>√</span>"
+                }).inputValidator({
+                <if condition="$vo['is_null'] == 1">
+                    min:1,
+                <else/>
+                    min:0,
+                </if>
+                onError:"请选择{$vo[name]}"
+                });
+            </if>
+        </if>
+    </if>
+</volist>
+</volist>
+});
+</script>

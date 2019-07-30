@@ -1,0 +1,24 @@
+<include file="Currier:logger_table_sel" />
+
+<script id="type-select" type="text/x-jquery-tmpl">
+<div style="float:left;padding-right:7px;padding-left:7px;" id="assort_tmpl_div">
+<select name="assort" style="width:100px;" id="assort" class="" onchange="on_assort_change();">
+<option value="default">更新日志</option>
+<option value="entrance">入住日志</option>
+</select>
+</div>
+
+</script>
+
+
+<script type="text/javascript">
+
+    function on_assort_change() {
+        var assort = $("#assort").val();
+        window.location.replace("{:U('currier/logger')}&" + "assort=" + assort);
+    }
+
+    $("#logger-datatable_length").after($("#type-select").tmpl());
+    $("#assort option[value='{$assort}']").prop("selected", true);
+
+</script>

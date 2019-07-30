@@ -1,0 +1,155 @@
+
+<script type="text/javascript">
+
+    $("#category_id").change(function(){
+        var val = $(this).val();
+        var serve_modality = $("#category_id  option:selected").attr("serve_modality");
+        if (val == 6 || val == 14 ) {
+            $("#money_input_tips").html("注:/天");
+            $("#period_input_tips").html("注:次");
+        } else {
+            if (val == 12) {
+                $("#money_input_tips").html("注: 总金额");
+            } else {
+                $("#money_input_tips").html(serve_modality == '0' ? "注:/26天" :"注:/次");
+            }
+            $("#period_input_tips").html(serve_modality == '0' ? "注:月" :"注:次");
+        }
+
+        if (val == 2 || val ==3) {
+            $("#recess_day").removeAttr("disabled");
+        } else {
+            $("#recess_day").attr("disabled", "disabled");
+            $("#recess_day").val("");
+
+        }
+    });
+
+    $("#owner_role_id").change(function(){
+        var role_id = $(this).val();
+        if (role_id) {
+            var url = "{:U('staff/getInfoByRole', 'id=')}" + role_id;
+            $.ajax({ url: url,
+                success: function (data) {
+                    if (data) {
+                        $("#branch_id option[value='"+data.branch_id+"']").prop("selected", true);
+                    }
+                },
+                cache: false
+            });
+        }
+    });
+
+    function on_click_quick_create_customer() {
+        art.dialog.open("{:U('market/quick_create_customer_dialog', 'id='.$market['market_id'])}", {
+            id: 'on_click_quick_create_customer_dialog',
+            title: "创建客户",
+            lock:true,
+            fixed:true,
+            width: '55em',
+            height: 240,
+            ok: function () {
+                if ($(this.iframe.contentWindow.document).find("#name").val() == "") {
+                    art.dialog.alert("客户名不可能为空");
+                    return false;
+                }
+
+                var telephone = $(this.iframe.contentWindow.document).find("#telephone").val();
+                if (telephone == "" || !isMobile(telephone)) {
+                    art.dialog.alert("联系电话错误");
+                    return false;
+                }
+
+                var channel_role_model = $(this.iframe.contentWindow.document).find("#channel_role_model").val();
+                if (channel_role_model == "") {
+                    art.dialog.alert("渠道不能为空");
+                    return false;
+                }
+
+                var telephone_valid = false;
+                $.ajax({
+                    url: "{:U('customer/getInfo', 'by=telephone&telephone=')}" + telephone,
+                    success: function (data) {
+                        telephone_valid = (data.data == null ? false:true);
+                    },
+                    cache: false,
+                    async: false
+                });
+                if (telephone_valid) {
+                    art.dialog.alert("联系电话已经注册过了");
+                    return false;
+                }
+
+                var telephone_check = false;
+                $.ajax({
+                    'type':'get',
+                    'dataType':'json',
+                    'url':'{:U("customer/check_commiss_info")}',
+                    'async':false,
+                    'data':{
+                        "telephone":telephone,
+                    },
+                    'success':function(data){
+                        if(data.status == 1 && data.data){
+                            telephone_check = true;
+                            return false;
+                        }
+                    }
+                });
+                if (telephone_check) {
+                    art.dialog.alert("这个客户的联系方式在客服模块有登记，请联系客服指派.客服电话: {:defaultinfo('commiss_telephone')}");
+                    return false;
+                }
+                var options = {
+                    success: function (data) {
+                        if (data) {
+                            on_customer_info(data);
+                        }
+                    }
+                };
+                $(this.iframe.contentWindow.document).find("#quick_create_customer_form").ajaxSubmit(options);
+                return true;
+            },
+            cancel: true
+        });
+        return false;
+    }
+
+    //初始化上传图片
+    $("body").on('click','input[type="file"]', function(){
+        var selector = $(this).attr('id');
+        var name = $(this).attr('name');
+        name = name.substring(0, 4);
+        var imgtype = [];
+        if (name == "vid_" ){
+            imgtype =["flv", "mp4", "3gp"];
+        } else if (name == "pic_") {
+            imgtype =["gif", "jpeg", "jpg", "bmp", "png"];
+        }
+        var opt = {
+            Img: selector+"_prev",
+            Width: 120,
+            Height: 120,
+            ImgType:imgtype
+        };
+        $("#"+selector).uploadPreview(opt);
+    });
+</script>
+
+<script>
+    $(function(){
+
+        $("#customer_id").formValidator({
+            onShow:"<span style='color:red;'>*必选项</span>",
+            empty:false,
+            onFocus:" ",
+            onCorrect:"<span style='color:green;'>√</span>"
+        }).inputValidator({
+            min:1,max:255,
+            onshow:"客户不能为空！",
+            onErrorMin:"客户不能为空！",
+            onErrorMax:""
+        });
+    });
+
+</script>

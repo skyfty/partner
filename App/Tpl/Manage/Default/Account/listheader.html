@@ -1,0 +1,52 @@
+<volist name="field_array" id="vo">
+    <th>
+        <if condition="$_GET['asc_order'] == $vo['field']">
+            <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'].'&t='.$t)}">
+                {$vo.name} &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+            </a>
+            <elseif condition="$_GET['desc_order'] == $vo['field']"/>
+            <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order='.$vo['field'].'&t='.$t)}">
+                {$vo.name}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+            </a>
+            <else/>
+            <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'].'&t='.$t)}">
+                {$vo.name}
+            </a>
+        </if>
+    </th>
+</volist>
+<th>
+    <if condition="$_GET['asc_order'] == 'income_or_expenses'">
+        <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=income_or_expenses&t='.$t)}">
+            {:L('PAY_TYPE')} &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+        </a>
+        <elseif condition="$_GET['desc_order'] == 'income_or_expenses'"/>
+        <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order=income_or_expenses&t='.$t)}">
+            {:L('PAY_TYPE')}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+        </a>
+        <else/>
+        <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=income_or_expenses&t='.$t)}">
+            {:L('PAY_TYPE')}
+        </a>
+    </if>
+</th>
+<th>{:L('CREATOR_ROLE')}</th>
+<th>
+    <if condition="$_GET['asc_order'] == 'create_time'">
+        <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order=create_time&t='.$t)}">
+            生成时间 &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+        </a>
+        <elseif condition="$_GET['desc_order'] == 'create_time'"/>
+        <a href="{:U('')}&{:FP($parameter, 'asc_order=create_time&desc_order=&t='.$t)}">
+            生成时间&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+        </a>
+        <else/>
+        <a href="{:U('')}&{:FP($parameter, 'desc_order=create_time&asc_order=&t='.$t)}">
+            生成时间
+        </a>
+    </if>
+</th>
+<th>
+    备注
+</th>
+<th>{:L('OPERATING')}</th>

@@ -1,0 +1,192 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="{:U('account/accounttype_edit')}" method="post" id="accounttype_form">
+                <input type="hidden" name="type_id" value="{$temp.type_id}"/>
+                <table class="table table-hover" style="border: none">
+                    <tr>
+                        <td width="100px">类别名:</td>
+                        <td>
+                            <input type="text" id="name" name="name" value="{$temp.name}"/>
+                        </td>
+                    </tr>
+                    <if condition="$_GET['assort'] neq 'cash'">
+                        <tr>
+                            <td>模型:</td>
+                            <td>
+                                <select name="module_id" id="module_id" onchange="on_module_change()">
+                                    <option value="customer">客户</option>
+                                    <option value="product">雇员</option>
+                                    <option value="inernal">阿姨汇</option>
+                                    <option value="staff">员工</option>
+                                    <option value="flow">流水</option>
+                                    <option value="market">客户服务</option>
+                                    <option value="cultivate">培训</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>类型:</td>
+                            <td>
+                                <input type="radio" d='edit' name="mold" value="-1" <if condition="$temp.mold == -1">checked</if> >支出
+                                <input type="radio" d='edit' name="mold" value="1" <if condition="$temp.mold != -1">checked</if> >收入
+                                <input type="radio" d='edit' name="mold" value="-3" <if condition="$temp.mold == -3">checked</if>>资金冻结
+                                <input type="radio" d='edit' name="mold" value="3" <if condition="$temp.mold == 3">checked</if>>资金解冻
+                            </td>
+                        </tr>
+
+                        <tr id="inflow_model_edit_tr">
+                            <td>相关方:</td>
+                            <td>
+                                <input type="radio" d='edit' id="def_inflow_model" name="inflow_model"  value="" <if condition="$temp.inflow_model == ''">checked</if> >无
+                                <input type="radio" d='edit' name="inflow_model" value="customer" <if condition="$temp.inflow_model == 'customer'">checked</if> >客户
+                                <input type="radio" d='edit' name="inflow_model" value="product" <if condition="$temp.inflow_model == 'product'">checked</if> >雇员
+                                <input type="radio" d='edit' name="inflow_model" value="inernal" <if condition="$temp.inflow_model == 'inernal'">checked</if>>阿姨汇
+                                <input type="radio" d='edit' name="inflow_model" value="staff" <if condition="$temp.inflow_model == 'staff'">checked</if>>员工
+                                <input type="radio" d='edit' name="inflow_model" value="flow" <if condition="$temp.inflow_model == 'flow'">checked</if>>公司流水
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>关联模型:</td>
+                            <td>
+                                <input type="radio" d='edit' name="related_model" value="" <if condition="$temp.related_model == ''">checked</if> >无
+                                <input type="radio" d='edit' name="related_model"  id="trade_related_model" value="trade" <if condition="$temp.related_model == 'trade'">checked</if> >产品订单
+                                <input type="radio" d='edit' name="related_model"  id="market_related_model" value="market" <if condition="$temp.related_model == 'market'">checked</if> >客户服务
+                                <input type="radio" d='edit' name="related_model"  id="cultivate_related_model" value="cultivate" <if condition="$temp.related_model == 'cultivate'">checked</if> >培训
+
+                            </td>
+                        </tr>
+                        <tr  id="related_model_type_edit_tr" style="display: none">
+                            <td>相关方类别:</td>
+                            <td id="related_model_type_edit">
+                            </td>
+                        </tr>
+                        <else/>
+                        <tr>
+                            <td>相关方:</td>
+                            <td>
+                                <input type="radio" d='edit' name="inflow_model" value="customer" <if condition="$temp.inflow_model == 'customer'">checked</if> >客户
+                                <input type="radio" d='edit' name="inflow_model" value="product" <if condition="$temp.inflow_model == 'product'">checked</if> >雇员
+                                <input type="radio" d='edit' name="inflow_model" value="staff" <if condition="$temp.inflow_model == 'staff'">checked</if> >员工
+                            </td>
+                        </tr>
+                        <input type="hidden" name="mold" value="-1">
+                        <input type="hidden" name="module_id" value="inernal">
+                        <tr>
+                            <td>关联模型:</td>
+                            <td>
+                                <input type="radio" name="related_model" value="" <if condition="$temp.related_model == ''">checked</if> >无
+                                <input type="radio" name="related_model" value="trade" <if condition="$temp.related_model == 'trade'">checked</if> >产品订单
+                                <input type="radio" name="related_model" value="market" <if condition="$temp.related_model == 'market'">checked</if> >客户服务
+                                <input type="radio" name="related_model" value="cultivate" <if condition="$temp.related_model == 'cultivate'">checked</if> >培训
+                            </td>
+                        </tr>
+                    </if>
+                    <tr>
+                        <td>{:L('DESCRIPTION')}:</td>
+                        <td>
+                            <textarea class="span4" name="description">{$temp.description}</textarea>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    $("#module_id option[value='{$temp.module_id}']").prop("selected", true);
+
+    function request_related_model_type_edit(mold) {
+        if (mold == -1 || mold == 1) {
+            $("#inflow_model_edit_tr").show();
+            var inflow_model = $('input:radio[name="inflow_model"][d="edit"]:checked').val();
+
+        }else {
+            $("#def_inflow_model").attr("checked",'checked');
+            $("#inflow_model_edit_tr").hide();
+            var inflow_model = $('#module_id').val();
+        }
+
+        var related_model = $('input:radio[name="related_model"][d="edit"]:checked').val();
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("account/getclausetype")}',
+            'data':{
+                'rm': related_model,
+                'im': inflow_model,
+                'mo': mold
+            },
+            'success':function(data){
+                if(data.status == 1){
+                    if (data.data) {
+                        $("#related_model_type_edit_tr").show();
+                        var opt = "<select d='edit' name='inflow_model_type_id' id='inflow_model_type_id'><option value=''>无</option>";
+                        $.each(data.data, function(k, v){
+                            opt += "<option value='"+ v.type_id+"'>" + v.name +"[" + v.description+"]" + "</option>";
+                        });
+                        opt += "</select>";
+                        $("#related_model_type_edit").html(opt);
+                        $("#inflow_model_type_id option[value='{$temp.inflow_model_type_id}']").prop("selected", true);
+
+                    } else {
+                        $("#related_model_type_edit").html("");
+                        $("#related_model_type_edit_tr").hide();
+                    }
+                } else {
+                    $("#related_model_type_edit").html("");
+                    $("#related_model_type_edit_tr").hide();
+                }
+            }
+        });
+        $("#related_model_type_edit").html("");
+        $("#related_model_type_edit_tr").hide();
+    }
+
+    $('input:radio[d="edit"]').click(function(){
+        var mold = $('input:radio[name="mold"][d="edit"]:checked').val();
+        request_related_model_type_edit(mold);
+    });
+    request_related_model_type_edit({$temp.mold});
+
+    function on_module_change(){
+        var module = $(this).val();
+        switch (module) {
+            case "customer": {
+                $("#mold_-2").removeAttr("disabled");
+                $("#mold_2").removeAttr("disabled");
+                $("#mold_3").removeAttr("disabled");
+                $("#mold_-3").removeAttr("disabled");
+                break;
+            }
+            case "product": {
+                $("#mold_-2").removeAttr("disabled");
+                $("#mold_2").removeAttr("disabled");
+                $("#mold_3").removeAttr("disabled");
+                $("#mold_-3").removeAttr("disabled");
+                break;
+            }
+            case "staff": {
+                $("#mold_-2").removeAttr("disabled");
+                $("#mold_2").removeAttr("disabled");
+                $("#mold_3").removeAttr("disabled");
+                $("#mold_-3").removeAttr("disabled");
+                break;
+            }
+            case "market":
+            case "cultivate":
+            case "flow":
+            case "inernal": {
+                $("#mold_-2").attr("disabled", "disabled");
+                $("#mold_2").attr("disabled", "disabled");
+                $("#mold_3").attr("disabled", "disabled");
+                $("#mold_-3").attr("disabled", "disabled");
+                break;
+            }
+        }
+    }
+</script>

@@ -1,0 +1,153 @@
+<include file="Public:header" />
+<div class="container">
+		<div class="page-header">
+			<h4>编辑员工</h4>
+		</div>
+		<div class="row">
+            <div class="span12">
+				<include file="Public:alert" />
+				<form action="{:U('staff/edit', 'id='.$staff['staff_id'])}" method="post" id="form1"  enctype="multipart/form-data">
+                <input type="hidden" name="staff_id" value="{$staff['staff_id']}">
+					<table class="table table-hover" width="95%" border="0" cellspacing="1" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <td style="text-align:center;" colspan="4" >
+                                <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tfoot>
+							<tr>
+								<td style="text-align:center;" colspan="4" >
+                                    <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                    <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                                </td>
+							</tr>
+						</tfoot>
+						<tbody>
+                            <tr><th  colspan="4">联系人头像</th></tr>
+                            <tr>
+                                <td class="tdleft" height="125">主图</td>
+                                <td colspan="3" height="125">
+                                    <input type="hidden" name="main_images_id" value="{$staff.images.main.images_id}"/>
+                                    <table  class="table table-striped">
+                                        <tbody>
+                                        <tr>
+                                            <td  height="135">
+                                                <input type="radio" name="main_pic" value="1" <if condition="$staff['main_pic'] == 1">checked</if> />主图
+                                                <div class="thumbnail cardpicthumb">
+                                                    <if condition="empty($staff['images']['main']['path'])">
+                                                        <img id="work_pic_prev" class="cardpicthumb" />
+                                                        <else />
+                                                        <a href="{$staff.images.main.path}" target="_self" data-lightbox="roadtrip">
+                                                            <img id="work_pic_prev" src="{$staff.images.main.path}" class="cardpicthumb" />
+                                                        </a>
+                                                    </if>
+
+                                                    <a href="javascript:del_img_main('{$staff.images.main.images_id}', 'work_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                                    <a href="javascript:void(0);" onclick="photograph_main('work_pic');">
+                                                        <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                                    </a>
+                                                </div>
+                                                <div class="btn btn-success fileinput-button">
+                                                    <span>选择头像文件</span>
+                                                    <input type="file" name="work_pic[]" id="work_pic">
+                                                    <input type="hidden" name="work_pic_base64" id="work_pic_base64">
+
+                                                </div>
+                                            </td>
+                                            <td  height="135">
+                                                <input type="radio" name="main_pic" value="2" <if condition="$staff['main_pic'] != 1">checked</if>/>主图
+
+                                                <div class="thumbnail cardpicthumb">
+                                                    <if condition="empty($staff['images']['cardpic']['path'])">
+                                                        <img id="card_pic_prev" class="cardpicthumb" />
+                                                        <else/>
+                                                        <img id="card_pic_prev" src="{$staff.images.cardpic.path}" class="cardpicthumb " />
+                                                    </if>
+                                                    <a href="javascript:del_img_main('{$staff.images.cardpic.images_id}', 'card_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                                    <a href="javascript:void(0);" onclick="photograph_main('card_pic');">
+                                                        <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                                    </a>
+                                                </div>
+                                                <div class="btn btn-success fileinput-button">
+                                                    <span>选择证件文件</span>
+                                                    <input type="file" name="card_pic[]" id="card_pic">
+                                                    <input type="hidden" name="card_pic_base64" id="card_pic_base64">
+                                                </div>
+                                            </td>
+                                            <input type="hidden" name="main_pic_type" id="main_pic_type" value="s"/>
+                                            <td width="70%"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <include file="Public:editfieldsgroup" />
+                        </tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    function del_img_main(param, pic_pre){
+        if(param){
+            if(confirm('{:L("CONFIRM_DELETE")}')){
+                $.ajax({
+                    'type':'get',
+                    'dataType':'json',
+                    'url':'{:U("staff/delImg")}',
+                    'data':{images_id:param},
+                    'success':function(data){
+                        if(data.status == 1){
+                            $('#'+pic_pre).attr("src", "");
+                        }else{
+                            alert(data.info);
+                        }
+                    }
+                });
+            }
+        }else{
+            $('#'+pic_pre).attr("src", "");
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    function changeRoleContent(){
+        var department_id = $('#department_id').val();
+        var position_id = $('#position_id').val();
+        if(department_id == ''){
+            $("#position_id").html('');
+        }else{
+            $.ajax({
+                type:'get',
+                url:'index.php?m=user&a=getpositionlist&id='+department_id,
+                async:false,
+                success:function(data){
+                    var options = '';
+                    $.each(data.data, function(k, v){
+                        options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+                    });
+                    $("#position_id").html(options);
+                },
+                dataType:'json'
+            });
+        }
+    }
+
+    $('#department_id').change(changeRoleContent);
+
+    var urge_position_ratio = eval('(' + '{$urge_position_ratio}' + ')');
+    $(function(){
+
+    });
+
+</script>
+<include file="Staff:cardread" />
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

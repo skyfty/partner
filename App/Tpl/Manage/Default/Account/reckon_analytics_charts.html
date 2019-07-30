@@ -1,0 +1,146 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Account:navtab" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <include file="Account:analytics_filter" />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2 knowledgecate">
+            <include file="Account:analycat" />
+        </div>
+        <div class="span10">
+            <div class="row-fluid">
+                <div class="span12">
+                    <include file="Account:analytics_nav" />
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="canvas_cycle" style="min-width: 500px; height: 500px;margin: 0 auto">{:L('TEMPORARILY_NO_DATA')}</div>
+                </div>
+                <div class="span12">
+                    <ul class="nav">
+                        <li >
+                            折线图&nbsp; <input type="radio" value="line" name="chart_t" class="chart_t" checked="checked"/>&nbsp;
+                            柱状图&nbsp;<input type="radio"  value="column" name="chart_t"  class="chart_t"/>&nbsp;
+                        </li>
+                    </ul>
+                </div>
+                <script src="__PUBLIC__/highcharts/highcharts.js"></script>
+                <script src="__PUBLIC__/highcharts/modules/exporting.js"></script>
+                <script src="__PUBLIC__/highcharts/modules/funnel.js"></script>
+                <script type="text/javascript" src="__PUBLIC__/highcharts/highcharts-3d.js"></script>
+
+
+                <script type="text/javascript">
+                    var charts_option = {
+                        chart: {
+                            type: 'line',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            renderTo:'canvas_cycle',
+                            options3d: {
+                                enabled: true,
+                                alpha: 10,
+                                depth: 70
+                            }
+                        },
+
+                        title: {
+                            text: '{$charts_title}'
+                        },
+                        xAxis: {
+                            categories: [{$cycle_count}],
+                            labels: {
+                                y:40,
+                                x:15
+                            }
+                        },
+                        yAxis: [
+                            {
+                                title: {
+                                    text: null
+                                }
+                            },
+                            {
+                                title: {
+                                    text: null
+                                },
+                                opposite: true
+                            }
+                        ],
+
+                        legend: {
+                            align: 'left',
+                            verticalAlign: 'top',
+                            y: 0,
+                            floating: true,
+                            borderWidth: 0
+                        },
+                        tooltip: {
+                            shared: true,
+                            crosshairs: true
+                        },
+                        plotOptions: {
+                            line: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
+                            series: {
+                                cursor: 'pointer',
+                                marker: {
+                                    lineWidth: 1
+                                }
+                            }
+                        },
+                        series: [
+                            {
+                                name: '{$cycle_title}',
+                                data: [
+                                    {$cycle_create_count}
+                                ]
+                            },
+                            {
+                                name: '{$yester_cycle_title}',
+                                data: [
+                                    {$yester_cycle_create_count}
+                                ]
+                            },
+                        ]
+                    };
+
+                    var chart = null;
+                    function switch_chart_type(chart_t) {
+                        charts_option.chart.type = chart_t;
+                        chart = new Highcharts.Chart(charts_option);
+                    }
+                    $(".chart_t").change(function(){
+                        switch_chart_type($(this).val());
+                    });
+                    switch_chart_type("line");
+
+                </script>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<include file="Public:footer" />

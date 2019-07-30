@@ -1,0 +1,25 @@
+<ul class="nav nav-list">
+    <li class="active">
+        <a href="{:U('product/index')}">类别</a>
+    </li>
+    <li>
+        <a href="{:U('')}&{:FP($parameter, 'category_id=')}" <if condition="($Think.get.category_id eq null)">class="active"</if>>
+        {:L('ALL')}
+        </a>
+    </li>
+    <volist name="categoryList" id="vo">
+        <li>
+            <a href="{:U('')}&{:FP($parameter, 'category_id='.$vo['category_id'])}" <if condition="$Think.get.category_id eq $vo['category_id']">class="active"</if>>
+            {$vo.name}
+            </a>
+        </li>
+    </volist>
+    <li>
+        <a href="{:U('product/index','category_id=-1')}" <if condition="$_GET['category_id'] eq -1">class="active"</if>>
+        未分类
+        </a>
+    </li>
+    <li class="active">
+        <a href="{:U('product/index')}&{:FP($parameter, 'act=group')}">分组</a>
+    </li>
+</ul>

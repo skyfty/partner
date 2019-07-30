@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+    <li <if condition="$_GET['assort'] eq 'basic' || $_GET['assort'] eq ''">class="active"</if> >
+    <a href="{:U('channel/view', 'id='.$channel['channel_id'])}">渠道详情</a>
+    </li>
+    <li <if condition="$_GET['assort'] eq 'permission'">class="active"</if> >
+    <a href="{:U('channel/view', 'assort=permission&id='.$channel['channel_id'])}">授权列表</a>
+    </li>
+</ul>

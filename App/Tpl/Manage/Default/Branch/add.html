@@ -1,0 +1,18 @@
+<include file="Public:header" />
+<div class="container">
+	<div class="page-header">
+		<h4>添加门店</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<form action="" method="post"  enctype="multipart/form-data">
+			    <input type="hidden" name="role_id" value="{$Think.session.user_id}"/>
+                <include file="Public:editfieldstable" />
+            </form>
+		</div>
+	</div>
+</div>
+
+<include file="Public:newfieldvalid" />
+<include file="Public:footer" />

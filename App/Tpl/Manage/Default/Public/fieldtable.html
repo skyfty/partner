@@ -1,0 +1,43 @@
+<php>$j=0;</php>
+<volist name="gvo['fields']" id="vo">
+    <php>$j++;</php>
+    <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['one_row'] == '1'">
+        <if condition="$i%2 == 0">
+            <td colspan="2">&nbsp;</td>
+            </tr>
+        </if>
+        <tr>
+            <td class="tdleft" width="15%">
+                <span style="<eq name='vo.color' value='FF0000'>;font-weight:bold</eq>">
+                {$vo.name}:
+                </span>
+            </td>
+            <td colspan="5" style="color:#{$vo['color']}<eq name='vo.color' value='FF0000'>;font-weight:bold</eq>">
+                {$vo.html}
+            </td>
+        </tr>
+        <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+            <php>$i++;</php>
+        </if>
+     <else/>
+        <if condition="$i%2 != 0">
+            <tr>
+        </if>
+        <td class="tdleft" width="15%">
+                            <span style="<eq name='vo.color' value='FF0000'>;font-weight:bold</eq>">
+            {$vo.name}:</span>
+        </td>
+        <td width="35%">
+            <span style="color:#{$vo['color']};<eq name='vo.color' value='FF0000'>;font-weight:bold</eq>">
+                {$vo.html}
+            </span>
+        </td>
+        <if condition="$i%2 == 0">
+            </tr>
+        </if>
+        <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+            <td colspan="3">&nbsp;</td>
+            </tr>
+        </if>
+    </if>
+</volist>

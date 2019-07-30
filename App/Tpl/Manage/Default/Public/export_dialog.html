@@ -1,0 +1,45 @@
+<a href="" id="excelexport_link_hide" style="visibility: hidden" target="_blank"><span id="excelexport_link_hide_span">EXPORT</span></a>
+<script>
+    $("#excelExport").click(function(){
+//        art.dialog.confirm("导出数据过多会的话， 会等待相当长时间", function(){
+//            var srcact = $("#act").val();
+//            $("#act").val("preexport");
+//            var url = '{:U("")}&{:FP($parameter, "export=excel")}&' + $('#searchForm').formSerialize();
+//            $("#excelexport_link_hide").attr("href", url);
+//            $("#excelexport_link_hide_span").click();
+//            $("#act").val(srcact);
+//        });
+
+        art.dialog.confirm("导出数据过多会的话， 会分开多个连接下载", function(){
+            var dialog = art.dialog({
+                id: 'N3690',
+                title: "导出EXCEL",
+                lock:true,
+                ok: function () {
+                    ExportAll();
+                },
+                cancel:true,
+            });
+            var url = '{:U("")}&{:FP($parameter, "p=-1&export=excel")}&' + $('#searchForm').formSerialize();
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        });
+
+    });
+    $("#excelImport").click(function(){
+        var url = '{:U($module_name."/excelimport")}&{:FP($parameter)}';
+        art.dialog.open(url, {
+            id: 'N3690',
+            title: "导出EXCEL",
+            lock:true,
+            width:"700px",
+            ok: false,
+            cancel: true
+        });
+    });
+</script>

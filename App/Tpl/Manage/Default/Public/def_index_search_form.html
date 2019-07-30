@@ -1,0 +1,89 @@
+<li id="conditionContent" class="pull-left">
+    &nbsp;<select id="condition" style="width:auto"   name="all[condition]" onchange="changeSearch()">
+        <option value="contains">{:L('INCLUDE')}</option>
+        <option value="is">{:L('YES')}</option>
+        <option value="start_with">{:L('BEGINNING_CHARACTER')}</option>
+        <option value="end_with">{:L('TERMINATION_CHARACTER')}</option>
+        <option value="is_empty">{:L('MANDATORY')}</option>
+    </select>
+    <script>
+        $(function() {
+            $("#condition").chosen({});
+        });
+    </script>
+</li>
+<li id="searchContent" class="pull-left">
+    <input id="search" type="text"  name="all[value]" placeholder="搜索关键字"  onkeypress="if(event.keyCode==13) {def_short_search_select();return false;}"/>
+</li>
+<li id="static_condition" class="pull-left"></li>
+<li class="pull-left">
+    <if condition="$Think.get.cat neq null">
+        <input type="hidden" name="cat" value="{$Think.get.cat}"/>
+    </if>
+    <input type="hidden" name="m" value="{$Think.MODULE_NAME|strtolower}"/>
+    <input type="hidden" name="a" value="{$Think.ACTION_NAME}"/>
+    <input type="hidden" name="act" id="act" value="{$Think.get.act}"/>
+
+    <if condition="$Think.get.by neq null">
+        <input type="hidden" name="by" value="{$Think.get.by}"/>
+    </if>
+    <if condition="$Think.get.module_group_id neq null">
+        <input type="hidden" name="module_group_id" value="{$Think.get.module_group_id}"/>
+    </if>
+    <if condition="$Think.get.group_type neq null">
+        <input type="hidden" name="group_type" value="{$Think.get.group_type}"/>
+    </if>
+
+    <if condition="$Think.get.pl neq null">
+        <input type="hidden" name="pl" value="{$Think.get.pl}"/>
+    </if>
+
+    {:search_form_default_param($parameter, $debar_search_field)}
+
+    <div class="btn-group" role="group">
+        <button type="submit" id="dosearch" class="btn btn-mini btn-default">
+            <img src="__PUBLIC__/img/search.png"/>
+        </button>
+        <button type="button" id="clean_search" class="btn btn-mini btn-default" style=";margin-right: 5px;">全部</button>
+    </div>
+</li>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script>
+    function def_short_search_select( val, label) {
+        $("#searchForm").submit();
+    }
+    $(function() {
+        $("#clean_search").click(function(){
+            var search_field_name = $("#search").attr("name");
+            var search_field_condition = $("#condition").attr("name");
+            $("#search").val('');$("input[name='"+search_field_name+"']").val('');
+            $("#condition").val('');$("input[name='"+search_field_condition+"']").val('');
+            $("#field").val('');
+            $("#wsbt").val('');
+            $("#wset").val('');
+            $("#nobd").val('');
+            $("#searchForm").submit();
+        });
+
+        $("#dosearch").click(function(){
+            $("#searchForm").submit();
+        });
+
+        $("#field option[value='{$search_field}']").prop("selected", true);changeCondition();$("#field").chosen({});
+        $("#condition option[value='{$search_condition}']").prop("selected", true);changeSearch();
+
+        <if condition="$search_date_field">
+            $("#search_bt").prop('value', '{$search_value[0]}');
+            $("#search_et").prop('value', '{$search_value[1]}');
+        <elseif condition="$Think.get.field"/>
+            $("#search").prop('value', '{$search_value}');
+            $("#search").focus();
+            var cb = typeof(short_search_format) == "function" ? short_search_format : null;
+            var scb = typeof(short_search_select) == "function" ? short_search_select : def_short_search_select;
+        </if>
+
+        <if condition="$Think.get.search_census">
+            $("#search_census").prop('value', '{$Think.get.search_census}');
+        </if>
+    });
+</script>

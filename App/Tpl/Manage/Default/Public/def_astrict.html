@@ -1,0 +1,106 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4>访问权限
+        </h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <form action="{:U(MODULE_NAME.'/remove_astrict_role')}" id="user_form" method="post">
+            <div class="span12" style="padding-bottom:10px">
+                <div class="pull-left">
+                    <a id="delete_user" class="btn btn-danger" style="margin-right: 8px;">
+                        <i class="icon-remove"></i>&nbsp;移除
+                    </a>
+                </div>
+                <div class="pull-right">
+                     <a class="btn btn-primary role_name"><i class="icon-plus"></i>&nbsp; 添加员工</a>
+                </div>
+            </div>
+            <div class="span12">
+                <table class="table table-hover table-striped table_thead_fixed">
+                    <thead>
+                    <tr>
+                        <th><input class="check_all" id="check_all" type="checkbox" /></th>
+                        <th>用户名</th>
+                        <th>岗位</th>
+                        <th>手机</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <volist name="user_list" id="vo">
+                        <tr>
+                            <td>
+                                <input class="check_list" name="astrict_id[]" type="checkbox" value="{$vo.astrict_id}"/>
+
+                            </td>
+                            <td>
+                                <if condition="$vo['category_id'] == 1">
+                                    <img style="width:16px;" src="__PUBLIC__/img/admin_img.png"/>
+                                <else />
+                                    <img style="width:16px;" src="__PUBLIC__/img/user_img.png"/>
+                                </if> &nbsp; <a href="{:U('user/view','id=' . $vo['user_id'])}">{$vo.name}</a>
+                            </td>
+                            <td>{$vo.department_name} - {$vo.role_name}</td>
+                            <td>{$vo.telephone}</td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+<include file="Public:footer" />
+<script type="text/javascript">
+
+    $(function(){
+        $("#check_all").click(function(){
+            $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+        });
+
+        $("#delete_user").click(function(){
+            if(confirm("确实要移除员工授权吗?")){
+                $('#user_form').submit();
+            }
+        });
+
+        $('.role_name').click(function(){
+            var dialog = art.dialog({
+                id: 'N3690',
+                title: "选择员工",
+                lock:true,
+                fixed:true,
+                ok: function () {
+                    var item = $('input:radio[name="owner"]:checked').val();
+                    if (item) {
+                        $.ajax({
+                            'type':'post',
+                            'dataType':'json',
+                            'url':'{:U(MODULE_NAME."/add_astrict_role")}',
+                            'data':{
+                                "id":"{$model_id}",
+                                "role_id":item
+                            },
+                            'success':function(data){
+                                alert(data.info);
+                                window.location.reload();
+                            }
+                        });
+                    }
+                },
+                cancel: true
+            });
+            $.ajax({
+                url: "{:U('user/listDialog')}",
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        }
+        );
+    });
+
+</script>

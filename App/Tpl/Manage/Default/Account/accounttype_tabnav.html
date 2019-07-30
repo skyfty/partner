@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs">
+    <li  <if condition="$_GET['assort'] eq 'basic' || $_GET['assort'] eq '' && $_GET['related_model'] eq ''">class="active"</if> >
+    <a href="{:U('account/accounttype', 'model=account&assort=basic')}">全部账目</a>
+    </li>
+    <li <if condition="$_GET['assort'] eq 'cash'">class="active"</if>>
+    <a href="{:U('account/accounttype', 'model=account&assort=cash')}">公司提现账目
+    </a>
+
+    <li <if condition="$_GET['related_model'] eq 'trade'">class="active"</if>>
+    <a href="{:U('account/accounttype', 'model=account&related_model=trade')}">产品订单账目
+    </a>
+    <li <if condition="$_GET['related_model'] eq 'market'">class="active"</if>>
+    <a href="{:U('account/accounttype', 'model=account&related_model=market')}">客户服务账目
+    </a>
+    <li <if condition="$_GET['related_model'] eq 'cultivate'">class="active"</if>>
+    <a href="{:U('account/accounttype', 'model=account&related_model=cultivate')}">培训账目
+    </a>
+    <li <if condition="$_GET['related_model'] eq 'other'">class="active"</if>>
+    <a href="{:U('account/accounttype', 'model=account&related_model=other')}">其他账目
+    </a>
+</ul>

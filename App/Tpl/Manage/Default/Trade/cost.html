@@ -1,0 +1,199 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<style>
+    .ui-autocomplete{
+        width: 250px;
+    }
+    .ui-autocomplete li{
+        width: 250px;
+    }
+    .ui-autocomplete li .short-search-label{
+        font-size: 16px;
+    }
+    .ui-autocomplete li .short-search-desc{
+        font-size: 11px;
+        color: #497F7F;
+    }
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+</style>
+<div class="container">
+    <div class="page-header" style="border:none; ">
+        <include file="Serve:navcat" />
+    </div>
+	<include file="Public:alert" />
+    <div class="row-fluid view">
+        <div class="span12">
+            <ul id="sddm" style="margin:0px 0px 0px 0px">
+                <li>
+                    <i class="icon-list"></i>
+                    <a href="{:U('')}&{:FP($parameter, 'by=')}" <if condition="$Think.get.by eq ''">class="active"</if>>
+                    {:L('ALL')}
+                    </a>
+                    <a href="{:U('')}&{:FP($parameter, 'by=su')}" <if condition="$Think.get.by eq 'su'">class="active"</if>>
+                    已提交
+                    </a>
+                    <a href="{:U('')}&{:FP($parameter, 'by=sc')}" <if condition="$Think.get.by eq 'sc'">class="active"</if>>
+                    已提现
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid" style="padding-top: 15px">
+        <div class="span1 knowledgecate">
+            <ul class="nav nav-list">
+                <li class="active">
+                    <a href="{:U('')}&{:FP($parameter, 'bf=')}" <if condition="($Think.get.bf eq null)">class="active"</if>>
+                    类别查看</a>
+                </li>
+                <li>
+                    <a href="{:U('')}&{:FP($parameter, 'bf=')}" <if condition="($Think.get.bf eq null)">class="active"</if>>
+                    {:L('ALL')}
+                    </a>
+                </li>
+                <foreach name="cost_catetory" item="vo">
+                    <li>
+                        <a href="{:U('')}&{:FP($parameter, 'bf='.$key)}" <if condition="$Think.get.bf eq $key">class="active"</if>>
+                        {$vo}
+                        </a>
+                    </li>
+                </foreach>
+            </ul>
+        </div>
+        <div class="span11">
+            <div class="pull-left">
+                <ul class="nav pull-left">
+                    <li class="pull-left">
+                        <div class="btn-group">
+                            <a class="btn btn-mini btn-primary" href="javascript:void(0);" id="cost_cash_all" class="link">
+                                提现
+                            </a>&nbsp;
+                            <button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="javascript:void(0);" id="cost_revoke_all" class="link">
+                                        撤回
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>&nbsp;
+                    </li>
+                    <li class="pull-left">
+                        <form class="form-inline" id="searchForm" action="{:U('')}" method="get">
+                            <if condition="$Think.get.by neq null">
+                                <input type="hidden" name="bf" id="bf" value="{$Think.get.bf}"/>
+                            </if>
+                            <ul class="nav pull-left">
+                                <li class="pull-left">
+                                    <select id="field" style="width:auto;margin-right: 5px;" onchange="changeCondition()" name="field">
+                                        <option class="text" value="trade_id" rel="trade">订单ID</option>
+                                    </select>
+                                </li>
+                                <include file="Public:def_index_search_form" />
+                            </ul>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+		<div class="span11">
+            <form id="form1" action="{:U('')}" method="Post">
+                <input type="hidden" name="m" value="Business"/>
+                <input type="hidden" name="a" id="active_name" value="cost"/>
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+                    <thead>
+                    <tr id="childNodes_num">
+                        <th>
+                            <input class="check_all" id="check_all" type="checkbox" /> &nbsp;
+                        </th>
+                        <th>订单编号</th><th>类型</th><th>金额</th><th>状态</th><th>责任人</th><th>相关方</th><th>服务类别</th><th>订单状态</th>
+                        <th style="width:50px;text-align: center">操作</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td id="td_colspan">{$page}</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="check_list" name="ids[]" value="{$vo.trade_cost_id}"/>
+                            </td>
+                            <td>
+                                <a href="{:U('trade/view', 'id='.$vo['trade_id'])}">{$vo['orderid']}</a>
+                            </td>
+                            <td>{$vo['cost_field']|cost_filed_map='trade',###}</td>
+                            <td>{$vo[$vo['cost_field']]|number_format=###,2}</td>
+                            <td>{$vo['cost_status']|cost_status_map}</td>
+                            <td>{$vo['owner']['user_name']}</td>
+                            <td>
+                                <if condition="$vo['corre_info'] neq null">
+                                    {$vo.corre_info}
+                                </if>
+                            </td>
+                            <td>{$vo['category_name']}</td>
+                            <td>{$vo['state']}</td>
+                            <td style="text-align: center">
+                                <if condition="$vo['cost_status'] gt 1">
+                                    <i class="icon-briefcase"></i>
+                                    <i class=" icon-share"></i>
+                                <else/>
+                                    <a class="cost_cash" href="{:U('trade/cost_cash', 'ids='.$vo['trade_cost_id'])}" title="提现" >
+                                        <i class="icon-briefcase"></i>
+                                    </a>
+                                    <a class="cost_revoke" href="{:U('trade/cost_revoke', 'ids='.$vo['trade_cost_id'])}" title="撤回">
+                                        <i class=" icon-share"></i>
+                                    </a>
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$(function(){
+    $("#check_all").click(function(){
+        $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+    });
+
+    $("#cost_cash_all").click(function(){
+        if (!confirm("确实要提现此成本字段吗?")) {
+            return false;
+        }
+        $("#active_name").val("cost_cash");
+        $("#form1").submit();
+    });
+
+    $("#cost_revoke_all").click(function(){
+        if (!confirm("确实要撤回此成本字段吗?")) {
+            return false;
+        }
+        $("#active_name").val("cost_revoke");
+        $("#form1").submit();
+    });
+
+    $(".cost_cash").click(function(){
+        return confirm("确实要提现此成本字段吗?");
+    });
+
+    $(".cost_revoke").click(function(){
+        return confirm("确实要撤回此成本字段吗?");
+    });
+})
+
+</script>
+
+<include file="Public:footer" />

@@ -1,0 +1,27 @@
+<include file="Public:header" />
+<script type="text/javascript" src="__PUBLIC__/chart/highcharts.js"></script>
+<div class="container">
+	<div class="page-header">
+		<p class="wel_h4">
+            <img style="height:30px;" src="__PUBLIC__/img/working_platform.png"/> &nbsp;
+            <span>
+                [{$Think.session.league_name}]{$Think.session.name}{:L('THE_WORKBENCH')}
+            </span>
+			<span style="float: right;font-size: smaller">
+		系统开发部张晓：18810561239
+	</span>
+        </p>
+	</div>
+	<include file="Public:alert" />
+	<div class="row" id="widgets">
+        <div class="span12">
+			<h3 style="color:#029BE2">欢迎使用阿姨汇管理平台!</h3>
+		</div>
+		<div class="wall">
+			{:W('Common',array('redirect'=>'Dashboard'))}
+			{:W('Common',array('redirect'=>'Announcement'))}
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />

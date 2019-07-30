@@ -1,0 +1,138 @@
+<include file="Public:header" />
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">{:L('PRODUCT_DETAILS')}</a></h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Product:navtab" />
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Product:basicinfo" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--  -->
+                <table class="display" cellspacing="0" width="100%" id="logger-datatable">
+                    <thead>
+                    <tr  class="tr-td"   style="font-size: 14px">
+                        <th>时间</th>
+                        <th>操作者 <div style="float:right;padding-right:7px;padding-left:2px;" id="staff_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_staff_id();"><i class="icon-filter"></i></a></th>
+                        <th>雇员 <div style="float:right;padding-right:7px;padding-left:2px;" id="product_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_product_id();"><i class="icon-filter"></i></a></th>
+
+                        <th>入退住</th>
+                        <th>入住时间</th>
+                        <th>退住时间</th>
+                        <th>天数</th>
+                        <th>宿舍</th>
+                        <th>床位</th>
+                        <th>备注</th>
+                    </tr>
+                    </thead>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var sel_product_id = null;
+    var sel_berth_id = null;
+    var sel_create_role_id = null;
+
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+                d.assort = "entrance"
+                d.berth_id = sel_berth_id;
+                d.create_role_id = sel_create_role_id;
+                d.product_id = {$product_id};
+                d.subject = $('#entry-type').val();
+            },
+            "url": "{:U('Berth/logtable')}"
+        },
+        "columnDefs": [
+            {
+                "targets": [1,2],
+                "bSortable": false,
+            },
+            {
+                "targets": [ 2 ],
+                "visible": false,
+                "searchable": false
+            },
+        ],
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 0, "desc" ]],
+        'language': def_dataTable_lang_opt,
+    }
+</script>
+<include file="Berth:logger_table_sel" />
+
+
+<script>
+    $("#logger-datatable_length").after($("#entry-type-select").tmpl());
+</script>
+
+
+<script id="remove_span_tmpl" type="text/x-jquery-tmpl">
+<a ref="${id}" refm="${model}"  href="javascript:void(0);" onclick="on_click_remove_id(this);">${name}<i class="icon-remove"></i></a>
+</script>
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info_by_logger(b) {
+        sel_create_role_id = b.role_id;
+        var data = {
+            "name": b.name,
+            "id": b.role_id,
+            "model":"create_role_id"
+        };
+        $("#staff_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_staff_id() {
+        select_staff(null, on_staff_info_by_logger);
+    }
+</script>
+
+<script type="text/javascript">
+
+    function on_click_remove_id(sef) {
+        var refm = $(sef).attr("refm");
+        if (refm == "create_role_id") {
+            sel_create_role_id = "";
+            $("#staff_id_remove_span").html("");
+        } else {
+            sel_berth_id = "";
+            $("#berth_id_remove_span").html("");
+        }
+        on_time_change();
+    }
+</script>
+
+<include file="Public:footer" />

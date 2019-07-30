@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="b.ourbaby.cc" overwriteAll="false" preserveTimestamps="false" promptOnLocalOverwrite="false" uploadOnCheckin="844c7a7f-2fae-4925-8c27-8aa37a64460d">
+    <serverData>
+      <paths name="b.ourbaby.cc">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myUploadOnCheckinName" value="b.ourbaby.cc" />
+  </component>
+</project>

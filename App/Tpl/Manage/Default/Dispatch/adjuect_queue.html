@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+
+    $(function(){
+        $(".entry_queue").click(function(){
+            var product_id = $(this).attr("rel");
+            var queue_branch_id = $(this).attr("queue_branch_id");
+            var dialog = art.dialog({
+                id: 'entry_queue',
+                title: (queue_branch_id == -2?"加入医院排岗":"加入总部排岗"),
+                lock:true,
+                ok: function () {
+                    if ($('#queue_category_id').val() == "") {
+                        alert("没有选择排队");
+                        return;
+                    }
+                    show_lock_tips("正在提交...");
+                    $('#adjuect_queue_category').submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url:'{:U("dispatch/adjuect_queue_category")}' + "&product_id=" + product_id + "&queue_branch_id=" + queue_branch_id,
+                success: function (data) {
+                    if (data == ""){
+                        window.location.reload();
+                    } else {
+                        dialog.content(data);
+                    }
+                },
+                cache: false
+            });
+            return false;
+        });
+
+    });
+
+</script>

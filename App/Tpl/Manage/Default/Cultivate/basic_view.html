@@ -1,0 +1,128 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">新培训订单信息</a>
+            <span style="font-size: medium;color: #0088cc;"> - {$cultivate['idcode']} - {$cultivate['currier_id']|currier_show_html} - {$cultivate['model_show_html']}</span>
+        </h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="Cultivate:tabnav" />
+    </div>
+    <div class="row">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+                                    <if condition="is_cultivate_settle($cultivate) or $cultivate['status_id'] == '0'">
+                                    <else/>
+                                    <a href="{:U('cultivate/edit', 'id='.$cultivate['cultivate_id'].'&assort='.$assort)}">编辑</a>&nbsp;|
+                                    </if>
+
+
+                                    <if condition="!session('?admin') and is_cultivate_settle($cultivate) or $cultivate['status_id'] == '0'">
+                                    <else/>
+                                    <a href="{:U('cultivate/delete', 'cultivate_id='.$cultivate['cultivate_id'])}" class="del_confirm">{:L('DELETE')}</a>&nbsp;|
+                                    </if>
+
+                                    <if condition="$per_edit and $cultivate_over and $cultivate['status_id'] != '0'">
+                                        <if condition="$cultivate['settle_state'] eq '917'">
+                                            <a href="{:U('cultivate/revoke_submit_settlement', 'id='.$cultivate['cultivate_id'])}" class="settlement_confirm" title="撤销结算提交">撤销结算提交</a> |
+                                        <elseif  condition="$cultivate['settle_state'] eq '918'"/>
+                                            <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">撤销结算提交</a> |
+                                        <elseif condition="in_array($cultivate['examine_state'], array(12, 10))"/>
+                                            <a href="{:U('cultivate/submit_settlement', 'id='.$cultivate['cultivate_id'])}" class="settlement_confirm" title="结算提交">结算提交</a> |
+                                        </if>
+                                    <else/>
+                                        <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">结算提交</a> |
+                                    </if>
+                                    <if condition="is_cultivate_settle($cultivate) or $cultivate['status_id'] == '0'">
+                                        <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">撤销</a> |
+                                    <else/>
+                                        <a href="{:U('cultivate/revoke', 'id='.$cultivate['cultivate_id'])}" class="revoke_confirm">撤销</a> |
+                                    </if>
+                                    <a href="javascript:void(0);" class="add_log" title="撤销结算提交">添加日志</a> |
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <include file="Public:defviewtable" />
+                    </tbody>
+                </table>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th>日志</th>
+                </tr>
+            </table>
+            <div id="log-tabs">
+                <script>
+                    function logger_data_cb(d) {
+                        d._string = "type=1";
+                    }
+                </script>
+                <include file="Cultivate:basic_view_logtable" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.renewal').click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要续约这个订单吗?", function(){
+            window.location.replace(href);
+        });
+        return false;
+    });
+    $(".settlement_confirm").click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要结算提交吗?", function(){
+            show_lock_tips("正在结算提交...");
+            window.location.replace(href);
+        });
+        return false;
+    });
+    $(".revoke_confirm").click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要撤销订单吗?", function(){
+            show_lock_tips("正在撤销订单...");
+            window.location.replace(href);
+        });
+        return false;
+    });
+
+    $(".cultivate_model_owner_role_id").click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要刷新订单责任人吗?", function(){
+            show_lock_tips("正在刷新订单...");
+            window.location.replace(href);
+        });
+        return false;
+    });
+
+</script>
+<script>
+    $(".add_log").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日志",
+            lock:true,
+            ok: function (data) {
+                $("#add-log").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("log/add","r=RCultivateLog&module=cultivate&type=1&assort=default&id=".$cultivate["cultivate_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+</script>
+<include file="Public:footer" />

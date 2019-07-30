@@ -1,0 +1,86 @@
+<script>
+
+    var blevelconfi = null;
+    var defbconf = eval('(' + '{$bconf}' + ')');
+    var bconf = defbconf;
+    function calculate_marked_price() {
+        var salary = $("#salary").val();
+        $('#costprice').val(bconf?salary * (1 - bconf.agency_scale / 100):"");
+    }
+    $('#costprice').attr("readonly", "readonly");
+    $('#salary').change(calculate_marked_price);
+
+    var e = eval('(' + '{$produt_level}' + ')');
+    function on_level_change() {
+        <if condition="$product.standard neq '是'">
+        var level = $("#level").val();
+        bconf = level&&blevelconfi ? blevelconfi[e[level]] : defbconf;
+        <else/>
+        bconf = blevelconfi?blevelconfi['s']:null;
+        </if>
+        $("#salary").val(bconf?bconf.salary:"");
+        calculate_marked_price();
+    }
+    $("#level").change(on_level_change);
+
+    function getcategory_response(data) {
+        blevelconfi = (data != null ?data.bconf:null);
+        var ability = "<span id='ability'></span>";
+        if (data != null && data.ability) {
+            data.ability.forEach(function(a){
+                ability += "<input type='checkbox' name='ability[]'  id='ability'";
+                if (a[1] == '1') {
+                    ability += " checked='checked' ";
+                }
+                ability += " value='"+a[0]+"'>"+a[0];
+            });
+        }
+        $("#ability").parent().html(ability);
+
+        var experience = "<span id='experience'></span>";
+        if (data != null && data.experience) {
+            data.experience.forEach(function(a){
+                experience += "<input type='checkbox' name='experience[]'  id='experience'";
+                if (a[1] == '1') {
+                    experience += " checked='checked' ";
+                }
+                experience += " value='"+a[0]+"'>"+a[0];
+            });
+        }
+        $("#experience").parent().html(experience);
+        on_level_change();
+
+
+    }
+
+    function category_id_change() {
+        var category_id = $('#category_id').val();
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("Product/getability")}',
+            'data':{
+                category_id:category_id,
+                product_id:{$product_id}
+            },
+            'success':function(data){
+                if(data.status == 1){
+                    getcategory_response(data.data);
+                }
+            }
+        });
+    }
+    <if condition="!vali_permission('product', 'categoryteshuadd')">
+    $("#category_id option[value='5']").remove();
+    $("#category_id option[value='9']").remove();
+    $("#category_id option[value='11']").remove();
+    $("#category_id option[value='12']").remove();
+    $("#category_id option[value='13']").remove();
+    </if>
+
+    $('#category_id').change(function(){
+        category_id_change();
+    });
+    category_id_change();
+
+</script>

@@ -1,0 +1,30 @@
+<include file="Public:header" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4><a name="tab">提醒详情</a></h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <a href="{:U('prompt/edit','id='.$prompt_id)}">编辑</a> |
+                                <a href="{:U('prompt/delete','id='.$prompt_id)}&refer_url={$refer_url|urlencode}" class="del_confirm">{:L('DELETE')}</a> |
+                            </p>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                <include file="Public:defviewtable" />
+                </tbody>
+            </table>
+            <!--  -->
+		</div>
+	</div>
+</div>
+<include file="Public:footer" />

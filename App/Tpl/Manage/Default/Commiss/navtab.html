@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs">
+    <li <if condition="$Think.get.assort eq 'basic' || $Think.get.assort  eq ''">class="active"</if> >
+    <a href="{:U('commiss/view', 'id='.$commiss_id)}">基本信息</a>
+    </li>
+    <if condition="vali_permission('commiss','view','prompt')">
+        <li <if condition="$Think.get.assort  eq 'prompt'">class="active"</if>>
+        <a href="{:U('commiss/view', 'id='.$commiss['commiss_id'].'&assort=prompt')}">提醒列表
+            <if condition="$promtp_count gt 0">
+                <div style="color: red;float:right" class="animated bounce infinite">({$promtp_count})</div>
+            </if>
+
+        </a>
+        </li>
+    </if>
+</ul>

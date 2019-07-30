@@ -1,0 +1,122 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<style>
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+    #jsmind_container{
+        height:600px;
+        border:solid 1px #ccc;
+        background:#f4f4f4;
+    }
+    .entry_status{
+        color: white;
+    }
+</style>
+
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/jsmind/style/jsmind.css" />
+<script type="text/javascript" src="__PUBLIC__/jsmind/js/jsmind.js"></script>
+<script type="text/javascript" src="__PUBLIC__/jsmind/js/jsmind.draggable.js"></script>
+<div class="container">
+<!-- Docs nav ================================================== -->
+	<div class="page-header">
+        <include file="Berth:navcat" />
+	</div>
+	<include file="Public:alert" />
+
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="pull-left">
+                <form class="form-inline" id="searchForm" action="index.php" method="get">
+                    <ul class="nav pull-left">
+                        <if condition="session('user_id') eq '1'">
+                            <li class="pull-left">
+                                {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                                <script>
+                                    $(function() {
+                                        $("#bylea").change(search_dorm);
+                                    });
+                                </script>
+                            </li>
+                        </if>
+                        <li class="pull-left">
+                            {:branch_select_html("bybr", $branch,true,true, null, $league['league_id'])}&nbsp;&nbsp;
+                            <script>
+                                $(function() {
+                                    $("#bybr").change(search_dorm);
+                                });
+                            </script>
+                        </li>
+                        <li class="pull-left">
+                            {:dorm_select_html("dorm_id", $dorm, $branch,true)}&nbsp;&nbsp;
+                            <script>
+                                $(function() {
+                                    $("#dorm_id").change(search_dorm);
+                                });
+
+                                function search_dorm() {
+                                    var bylea = $("#bylea").val();
+                                    var breach = $("#bybr").val();
+                                    var dorm_id = $("#dorm_id").val();
+                                    window.location.replace("{:U('')}&bybr=" + breach + "&dorm_id=" + dorm_id + "&bylea=" + bylea);
+                                }
+                            </script>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div id="jsmind_container"></div>
+
+            <script type="text/javascript">
+                var mind = {
+                    "meta":{
+                        "name":"demo",
+                        "author":"hizzgdev@163.com",
+                        "version":"0.2",
+                    },
+                    "format":"node_array",
+                    "data":{$mind_data|json_encode}
+                };
+                var options = {
+                    container: 'jsmind_container',
+                    editable: false,
+                    theme: 'primary'
+                }
+                jsMind.show(options,mind);
+
+                $(".entry_status").click(function(){
+                    var berth_id = $(this).attr("ref");
+                    var status = $(this).attr("status");
+                    var title = $(this).attr("title");
+
+                    var dialog = art.dialog({
+                        id: 'entry_status',
+                        title: title,
+                        lock:true,
+                        ok: function () {
+                            show_lock_tips("正在提交...");
+                            $('#entrance_form').submit();
+                        },
+                        cancel:true
+                    });
+
+                    $.ajax({
+                        url:'{:U("berth/entrance","berth_id=")}' + berth_id + "&status=" + status,
+                        success: function (data) {
+                            dialog.content(data);
+                        },
+                        cache: false
+                    });
+                });
+
+            </script>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />

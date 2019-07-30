@@ -1,0 +1,183 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$vo['field'] == 'skill'">
+            {$vo.name}
+            <a onmouseover="mopen('category_list')" onmouseout="mclosetime()" href="javascript:void(0);">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.category_id nheq '')">
+                <br/><span style="font-weight:normal">{$Think.get.category_id|proudct_category_map}</span>
+            </if>
+            <div  id="category_list" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.category_id heq '')"> href="{:U('')}&{:FP($parameter, 'category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'category_id=')}"</if>>
+                全部
+                </a>
+                <volist name="categoryList" id="vo">
+                    <a <if condition="($Think.get.category_id heq $vo['category_id'])"> href="{:U('')}&{:FP($parameter, 'category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'category_id='.$vo['category_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+
+        <elseif condition="$vo['field'] == 'owner_role_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('owner_role_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="owner_role_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.owner_role_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.owner_role_id|role_show}</span>
+            </if>
+            <div id="owner_role_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.owner_role_id heq '')"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":product_owner_staff_list($category_id, $branch)" id="vo">
+                    <a <if condition="($Think.get.owner_role_id heq $vo['role_id'])"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id='.$vo['role_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'creator_role_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('creator_role_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="creator_role_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.creator_role_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.creator_role_id|role_show}</span>
+            </if>
+            <div id="creator_role_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.creator_role_id heq '')"> href="{:U('')}&{:FP($parameter, 'creator_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'creator_role_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":product_owner_staff_list($category_id, $branch)" id="vo">
+                    <a <if condition="($Think.get.creator_role_id heq $vo['role_id'])"> href="{:U('')}&{:FP($parameter, 'creator_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'creator_role_id='.$vo['role_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'workstate_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('workstate_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="workstate_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.workstate_id nheq '')">
+                <br/><span style="font-weight:normal">{$Think.get.workstate_id}</span>
+            </if>
+            <div id="workstate_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.workstate_id heq '')"> href="{:U('')}&{:FP($parameter, 'workstate_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'workstate_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":product_workstate_list()" id="vo">
+                    <a <if condition="($Think.get.workstate_id heq $vo)"> href="{:U('')}&{:FP($parameter, 'workstate_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'workstate_id='.$vo)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'sign_style'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('sign_style_col')" onmouseout="mclosetime()"  href="javascript:void(0);" id="sign_style_col_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.sign_style neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.sign_style|proudct_category_map}</span>
+            </if>
+            <div id="sign_style_col" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.sign_style eq '')"> href="{:U('')}&{:FP($parameter, 'sign_style=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'sign_style=')}"</if>>
+                全部
+                </a>
+                <volist name="categoryList" id="vo">
+                    <a <if condition="($Think.get.sign_style eq $vo['category_id'])"> href="{:U('')}&{:FP($parameter, 'sign_style=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'sign_style='.$vo['category_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'queue_branch_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('queue_branch_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="queue_branch_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="ex_isset($_GET[queue_branch_id])">
+                <br/><span style="font-weight:normal">{$Think.get.queue_branch_id|queue_branch_html}</span>
+            </if>
+            <div id="queue_branch_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="!ex_isset($_GET[queue_branch_id])"> href="{:U('')}&{:FP($parameter, 'queue_branch_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_branch_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":queue_branch_list($queue_branch_where)" id="vo">
+                    <a <if condition="queue_branch_list_eq($_GET[queue_branch_id],$vo[branch_id])"> href="{:U('')}&{:FP($parameter, 'queue_branch_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_branch_id='.$vo[branch_id])}"</if>>
+                    {$vo[name]}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'queue_category_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('queue_category_id_list_header')" onmouseout="mclosetime()"  href="javascript:void(0);" id="queue_category_id_list_header_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="ex_isset($_GET[queue_category_id])">
+                <br/><span style="font-weight:normal">{$Think.get.queue_category_id|proudct_category_map}</span>
+            </if>
+            <div id="queue_category_id_list_header" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="!ex_isset($_GET[queue_category_id])"> href="{:U('')}&{:FP($parameter, 'queue_category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_category_id=')}"</if>>
+                全部
+                </a>
+                <volist name="queue_category" id="vo">
+                    <a <if condition="queue_branch_list_eq($_GET[queue_category_id],$vo[category_id])"> href="{:U('')}&{:FP($parameter, 'queue_category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_category_id='.$vo[category_id])}"</if>>
+                    {$vo[name]}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'station_state'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('station_state_list_header')" onmouseout="mclosetime()"  href="javascript:void(0);" id="station_state_list_header_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="ex_isset($_GET[station_state])">
+                <br/><span style="font-weight:normal">{$Think.get.station_state}</span>
+            </if>
+            <div id="station_state_list_header" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="!ex_isset($_GET[station_state])"> href="{:U('')}&{:FP($parameter, 'station_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'station_state=')}"</if>>
+                全部
+                </a>
+                <volist name="list_header_station_state" id="vo">
+                    <a <if condition="queue_branch_list_eq($_GET[station_state],$vo[category_id])"> href="{:U('')}&{:FP($parameter, 'station_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'station_state='.$vo)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'leave_state'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('leave_state')" onmouseout="mclosetime()"  href="javascript:void(0);" id="leave_state_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.leave_state neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.leave_state}</span>
+            </if>
+            <div id="leave_state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.leave_state eq '')"> href="{:U('')}&{:FP($parameter, 'leave_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'leave_state=')}"</if>>
+                全部
+                </a>
+                <volist name=":model_select_field_list(1030)" id="vo">
+                    <a <if condition="($Think.get.leave_state eq $vo)"> href="{:U('')}&{:FP($parameter, 'leave_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'leave_state='.$vo)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+                <a <if condition="($Think.get.leave_state eq '刚下户')"> href="{:U('')}&{:FP($parameter, 'leave_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'leave_state=刚下户')}"</if>>
+                刚下户
+                </a>
+            </div>
+        <elseif condition="($vo['field'] eq 'onstation_time') or ($vo['field'] eq 'holiday_time') or ($vo['field'] eq 'idle_time')"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('table_header_datetime_{$vo['field']}')" field="{$vo['field']}" onmouseout="mclosetime()" date_col_filter="{:U('Berth/list_col_filter_select','type=date&field_id='.$vo['field_id'].'&field='.$vo['field'])}" date_col_filter_call="filter_berth_date_field"  href="javascript:void(0);">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($_GET[$vo['field']]['value'] neq '')">
+                <br/>
+                <span style="font-weight:normal">{:format_table_head_date_col($vo['field'], $parameter)}</span>
+            </if>
+        <else/>
+            <include file="Public:def_index_list_col" />
+            <include file="Public:def_index_list_field_col" />
+        </if>
+    </th>
+</volist>

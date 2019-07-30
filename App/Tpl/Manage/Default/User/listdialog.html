@@ -1,0 +1,38 @@
+
+<table class="table table-hover" id="user_table">
+	<thead>
+		<tr>
+			<th>&nbsp;</th>
+            <th>员工</th>
+			<th>{:L('DEPARTMENT')}</th>
+			<th>{:L('POSITION')}</th>	
+			<th>{:L('SEX')}</th>
+			<th>{:L('TELPHONE')}</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<volist name="role_list" id="vo">
+		<tr>
+			<td>
+                <input name="owner" type="radio" value="{$vo.role_id}" />
+            </td>
+            <td>{$vo.user_name}[{$vo.idcode}]</td>
+			<td>{$vo.department_name}</td>
+			<td>{$vo.role_name}</td>	
+			<td><if condition="$vo['sex'] eq 1">{:L('MALE')}<elseif condition="$vo['sex'] eq 2"/>{:L('FEMALE')}</if></td>
+			<td>{$vo.telephone}</td>
+		</tr>
+		</volist>
+	</tbody>
+</table>
+
+<script>
+    $(function() {
+        $('#user_table').dataTable( {
+            "pageLength": 7,
+            "order": [[ 0, "desc" ]],
+            'language': def_dataTable_lang_opt
+        } );
+    });
+</script>

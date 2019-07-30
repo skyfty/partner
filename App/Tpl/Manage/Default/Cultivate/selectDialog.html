@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_cultivate_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("cultivate/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_cultivate(param, cb) {
+        art.dialog.data("reqparam", param ? param : {});
+        art.dialog.open('{:U("cultivate/listDialog")}', {
+            id: 'select_cultivate_dialog',
+            title: "选择新培训订单",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var cultivate_id = $(this.iframe.contentWindow.document).find('input:radio[name="cultivate_id"]:checked').val();
+                var data = {
+                    'id': cultivate_id
+                };
+                request_cultivate_info(data, cb?cb:on_cultivate_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

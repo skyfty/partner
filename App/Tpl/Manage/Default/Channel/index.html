@@ -1,0 +1,130 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px; ">
+        <ul class="nav nav-tabs">
+            <include file="Channel:navcat" />
+        </ul>
+    </div>
+    <include file="Public:alert" />
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="bulk-actions align-left">
+                <if condition="session('?admin')">
+                <div class="pull-left">
+                    <a id="delete" class="btn btn-danger" style="margin-right: 8px;">
+                        <i class="icon-remove"></i>&nbsp;{:L('DELETE')}
+                    </a>
+                </div>
+                </if>
+                <ul class="nav pull-left">
+                    <form class="form-inline" id="searchForm" action="" method="get">
+                        <if condition="session('user_id') eq '1'">
+                            <li class="pull-left">
+                                {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                                <script>
+                                    $(function() {
+                                        $("#bylea").change(def_short_search_select);
+                                    });
+                                </script>
+                            </li>
+                        </if>
+                        <li class="pull-left">
+                            <include file="Public:def_index_fields_filter_select" />
+                        </li>
+                        <include file="Public:def_index_search_form" />
+
+                    </form>
+                </ul>
+
+                <div class="pull-right">
+                    <if condition="session('?admin')">
+                    <a class="btn btn-primary" href="{:U('channel/add')}"  target="_blank"><i class="icon-plus"></i>&nbsp; 添加渠道</a>&nbsp;
+                    </if>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <form id="form1"  method="Post">
+                <table class="table table-hover table-striped table-condensed table_thead_fixed">
+                    <thead>
+                    <tr id="childNodes_num">
+                        <th>
+                            <input class="check_all" name="check_all" id="check_all" type="checkbox" />
+                        </th>
+                        <include file="Channel:model_list_header" />
+                        <th style="width:40px;text-align: center">{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td  id="td_colspan">
+                            {$page}
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                                <input type="checkbox"  <eq name="vo['is_permission']" value="true"> optstate="0" <else/> disabled="disabled" optstate="1"  </eq> class="check_list" name="channel_id[]" value="{$vo.channel_id}"/>
+                            </td>
+                            <include file="Channel:model_list_row" />
+                            <td style="text-align: center">
+                                <a href="{:U('channel/view', 'id='.$vo['channel_id'])}" title="查看详情"  target="_blank" >
+                                    <i class="icon-th-large"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+
+</script>
+
+<script type="text/javascript">
+
+    $(function(){
+
+        $("#check_all").click(function(){
+            $("input[class='check_list'][optstate='0']").prop('checked', $(this).prop("checked"));
+        });
+
+
+        $('#delete').click(function(){
+            art.dialog.confirm("{:L('ARE_YOU_SRUE_DELETE')}", function () {
+                $("#form1").attr('action', '{:U("channel/delete")}');
+                $("#form1").submit();
+            });
+
+        });
+
+    });
+</script>
+
+<include file="Channel:selectDialog" />
+<script type="text/javascript">
+    $("#parentid_filter").click(function(){
+        var param = {
+            "model":"Channel",
+            "showroot":0,
+            "query":"model='渠道库' and parentid=''"
+        };
+        select_channel(param, function(b){
+            window.location.replace("{:U('')}&{:FP($parameter)}&parentid=" + b.channel_id);
+        });
+    });
+</script>
+
+<include file="Public:footer" />
+

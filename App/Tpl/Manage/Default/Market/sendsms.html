@@ -1,0 +1,56 @@
+
+<div style="float: left;padding-right: 10px;display: none">
+    <div class="input-append">
+        <input class="span2" type="text" id="newphone">
+    </div>
+    <div>
+    <select  id="phonelist" multiple="multiple"  style="min-height: 270px;width:220px;;font-size: 12px;">
+        <foreach name="list" item="vo">
+            <option value="{$vo.phone}">{$vo.info}</option>
+        </foreach>
+    </select>
+    </div>
+</div>
+
+<div><pre>{$vo.info}</pre></div>
+
+<div>
+    <div>
+        <textarea id="smsContent"  style="min-height: 270px;width:520px;" placeholder="输入短信内容...">{$smsContent}</textarea>
+        <p>您还可以输入<span id="contentCount" style="color:red;">500</span> 个字……</p>
+    </div>
+</div>
+<script>
+
+function add_phone() {
+    var newphone = $("#newphone").val();
+    if (newphone) {
+        var exp = new RegExp(regexEnum.mobile);
+        var res = exp.test(newphone);
+        if (res === true) {
+            $("#newphone").val("");
+            $("#phonelist").append("<option phone='"+newphone+"'>"+newphone+"</option>");
+        } else {
+            alert("错误的手机号");
+        }
+    }
+}
+
+$(document).ready(function(){
+    function on_content_change() {
+        var curLength=$("#smsContent").val().length;
+        if(curLength == 500){
+            alert("{:L('SEND_SPLIT_TIPS')}" );
+            $("#contentCount").hide();
+        }else if(curLength < 500){
+            $("#contentCount").html(500-$("#smsContent").val().length);
+            $("#contentCount").show();
+        }else{
+            $("#contentCount").hide();
+        }
+    }
+    $("#smsContent").keydown(on_content_change)
+    on_content_change();
+})
+
+</script>

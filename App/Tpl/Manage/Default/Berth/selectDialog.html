@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_berth_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("berth/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_berth(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("berth/listDialog")}', {
+            id: 'select_berth_dialog',
+            title: "选择床位",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var berth_id = $(this.iframe.contentWindow.document).find('input:radio[name="berth"]:checked').val();
+                var data = {
+                    'id': berth_id
+                };
+                request_berth_info(data, cb?cb:on_berth_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

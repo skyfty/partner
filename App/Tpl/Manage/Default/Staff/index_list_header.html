@@ -1,0 +1,86 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$_GET['asc_order'] == $vo['field']">
+            <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'])}"  title="{$vo.link_title}">
+                {$vo.name} &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+            </a>
+        <elseif condition="$_GET['desc_order'] == $vo['field']"/>
+            <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order='.$vo['field'])}"  title="{$vo.link_title}">
+                {$vo.name}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+            </a>
+        <else/>
+            <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'])}"  title="{$vo.link_title}">
+                {$vo.name}
+            </a>
+        </if>
+
+        <if condition="$vo['field'] == 'position_id'">
+        <if condition="($Think.get.position_id neq '')"><span style="font-weight:normal">[{$Think.get.position_id|position_html}]</span></if>
+        <a onmouseover="mopen('position_id')" onmouseout="mclosetime()" href="javascript:void(0);">
+            <i class="icon-filter"></i>
+        </a>
+        <div  id="position_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+            <a <if condition="($Think.get.position_id eq '')"> href="{:U('')}&{:FP($parameter, 'position_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'position_id=')}"</if>>
+            全部
+            </a>
+            <volist name=":position_list($_GET['department_id'])" id="vo">
+                <a <if condition="($Think.get.position_id eq $vo['position_id'])"> href="{:U('')}&{:FP($parameter, 'position_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'position_id='.$vo['position_id'])}"</if>>
+                {$vo['name']}
+                </a>
+            </volist>
+        </div>
+        </if>
+
+        <if condition="$vo['field'] == 'department_id'">
+            <if condition="($Think.get.department_id neq '')"><span style="font-weight:normal">[{$Think.get.department_id|department_html}]</span></if>
+            <a onmouseover="mopen('department_id')" onmouseout="mclosetime()" href="javascript:void(0);">
+                <i class="icon-filter"></i>
+            </a>
+            <div  id="department_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.department_id eq '')"> href="{:U('')}&{:FP($parameter, 'department_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'department_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":department_list()" id="vo">
+                    <a <if condition="($Think.get.department_id eq $vo['department_id'])"> href="{:U('')}&{:FP($parameter, 'department_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'department_id='.$vo['department_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        </if>
+
+        <if condition="$vo['field'] == 'sex'">
+            <if condition="($Think.get.sex neq '')"><span style="font-weight:normal">[{$Think.get.sex}]</span></if>
+            <a onmouseover="mopen('sex')" onmouseout="mclosetime()" href="javascript:void(0);">
+                <i class="icon-filter"></i>
+            </a>
+            <div  id="sex" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.sex eq '')"> href="{:U('')}&{:FP($parameter, 'sex=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'sex=')}"</if>>
+                全部
+                </a>
+                <a <if condition="($Think.get.sex eq '男')"> href="{:U('')}&{:FP($parameter, 'sex=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'sex='.'男')}"</if>>
+                男
+                </a>
+                <a <if condition="($Think.get.sex eq '女')"> href="{:U('')}&{:FP($parameter, 'sex=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'sex='.'女')}"</if>>
+                女
+                </a>
+            </div>
+        </if>
+
+        <if condition="$vo['field'] == 'user_state'">
+            <if condition="($Think.get.user_state neq '')"><span style="font-weight:normal">[{$Think.get.user_state}]</span></if>
+            <a onmouseover="mopen('user_state')" onmouseout="mclosetime()" href="javascript:void(0);">
+                <i class="icon-filter"></i>
+            </a>
+            <div  id="user_state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.user_state eq '')"> href="{:U('')}&{:FP($parameter, 'user_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'user_state=')}"</if>>
+                全部
+                </a>
+                <volist name=":user_state_list()" id="vo">
+                    <a <if condition="($Think.get.user_state eq $vo)"> href="{:U('')}&{:FP($parameter, 'user_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'user_state='.$vo)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+            </div>
+        </if>
+    </th>
+</volist>

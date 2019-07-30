@@ -1,0 +1,38 @@
+<table  class="table"  style="border: 0px;margin-bottom:0px">
+    <tbody>
+    <tr>
+
+        <td>
+            <table class="table">
+                <tr>
+                    <td class="tdleft" width="16%">编号:</td>
+                    <td width="16%">
+                        {$commiss['idcode']}
+                        <if condition="$commiss['wechat']">
+                            <a href="{:U('sms/sendDialog', 'model=commiss&ids='.$commiss['commiss_id'].'&by=model&mobile='.$commiss['telephone'])}" class="smsphone">
+                                <img src='/Public/images/wxb.png'>
+                            </a>
+                        </if>
+                    </td>
+                    <td class="tdleft" width="16%">客服名称:</td>
+                    <td width="16%">{$commiss['name']}</td>
+                    <td class="tdleft" width="16%">性别:</td>
+                    <td width="16%">{$commiss['sex']}</td>
+
+                </tr>
+                <tr>
+                    <td class="tdleft" width="16%">手机号码:</td>
+                    <td width="16%">
+                        {$commiss['telephone']}
+                    </td>
+                    <td class="tdleft" width="16%">QQ:</td>
+                    <td width="16%">{$commiss['qq']}</td>
+                    <td class="tdleft" width="16%">微信:</td>
+                    <td width="16%">{$commiss['wechat']}</td>
+
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_customer_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("customer/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_customer(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("customer/listDialog")}', {
+            id: 'select_customer_dialog',
+            title: "选择客户",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var customer_id = $(this.iframe.contentWindow.document).find('input:radio[name="customer"]:checked').val();
+                var data = {
+                    'id': customer_id
+                };
+                request_customer_info(data, cb?cb:on_customer_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

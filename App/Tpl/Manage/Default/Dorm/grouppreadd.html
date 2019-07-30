@@ -1,0 +1,136 @@
+<include file="Public:header" />
+
+<script type="text/javascript" src="__PUBLIC__/daterangepicker/moment.js"></script>
+<script type="text/javascript" src="__PUBLIC__/daterangepicker/daterangepicker.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/daterangepicker/daterangepicker-bs3.css" type="text/css" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>添加分组</h4>
+    </div>
+
+    <include file="Public:alert" />
+    <div class="span12">
+        <form class="form-horizontal" action="{:U('dorm/groupadd')}" method="post" name="form1" id="form1">
+            <input type="hidden" name="refer_url" value="{$refer_url}"/>
+            分组名：
+            <input type="text" name="group_name" id="name" class="span7" value=""/>&nbsp;&nbsp;
+            <input type="radio"  class="group_radio" name="group_type" value="0" checked=checked>条件分组
+            <input type="radio" class="group_radio" name="group_type" value="1">固定分组
+
+            <input class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>
+            <button type="button" class="btn" id="return_btn">&nbsp;返回</button>&nbsp;
+
+            <ul class="nav pull-left span11" >
+                <volist name="field_list" id="v" key="k">
+                <li class="<if condition="$v['form_type'] eq 'address'">span8<else/>span5</if> pull-left" style="height:26px;margin-top:20px;">
+                    <if condition="$k%2 eq 0">&nbsp;&nbsp;</if>{$v[name]}：
+                    <if condition="$v.form_type eq 'number'">
+                        <select style="width:auto" name="{$v[field]}[condition]">
+                            <option value="gt" <if condition="$_GET[$v[field]][condition] eq 'gt'">selected="selected"</if>>{:L('GREATER THAN')}</option>
+                            <option value="lt" <if condition="$_GET[$v[field]][condition] eq 'lt'">selected="selected"</if>>{:L('LESS THAN')}</option>
+                            <option value="eq" <if condition="$_GET[$v[field]][condition] eq 'eq'">selected="selected"</if>>{:L('EQUAL')}</option>
+                            <option value="neq" <if condition="$_GET[$v[field]][condition] eq 'neq'">selected="selected"</if>>{:L('UNEQUAL')}</option>
+                        </select>
+                    <elseif condition="$v.form_type eq 'box'" />
+                        <span id="{$v[field]}"></span>
+                        <script type="text/javascript">
+                            var b = '{$v[field]}';
+                            var c = 'product';
+                            $.ajax({
+                                type:'get',
+                                url:'index.php?m=setting&a=boxfield&model='+c+'&field='+b,
+                                async:false,
+                                success:function(data){
+                                    var options = '';
+                                    $.each(data.data, function(k, v){
+                                        options += "<option value='"+v+"'>"+v+"</option>";
+                                    });
+                                    $("#{$v[field]}").html('<select class="{$v[field]}" style="width:auto" name="{$v[field]}"><option value="">--{:L('PLEASE_CHOOSE')}--</option>' + options + '</select>&nbsp;&nbsp;');
+                                },
+                                dataType:'json'
+                            });
+                            <if condition="!empty($_GET[$v[field]])">
+                            $(".{$v[field]} option[value='{$_GET[$v[field]]}']").attr('selected','selected');
+                            </if>
+                        </script>
+                    <elseif condition="$v.form_type eq 'address'" />
+                        <select style="width:auto" name="{$v[field]}[condition]">
+                            <option value="start_with" <if condition="$_GET[$v[field]][condition] eq 'start_with'">selected="selected"</if>>{:L('IN')}</option>
+                            <option value="not_start_with" <if condition="$_GET[$v[field]][condition] eq 'not_start_with'">selected="selected"</if>>{:L('NOTIN')}</option>
+                        </select>
+                        <select name="{$v['field']}[value][state]" id="{$v['field']}_state" onchange="area_change(this.value, 1,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area');" class="ddlbox"   style='width:90px'>
+                            <option value="0">选择省份
+                            </option>
+                        </select>
+                        <select name="{$v['field']}[value][city]" onchange="area_change(this.value, 2,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area');" id="{$v['field']}_city" class="ddlbox"   style='width:90px'>
+                            <option value="0">选择城市</option>
+                        </select>
+                        <select name="{$v['field']}[value][area]" onchange="area_change(this.value, 3,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area');" id="{$v['field']}_area" class="ddlbox"   style='width:90px'>
+                            <option value="0">选择地区</option>
+                        </select>
+                        <input type="text" id="{$v['field']}_street" name="{$v['field']}[value][street]" placeholder="详细地址" class="input-large" style='width:300px'>
+                        <script>area_change(0, 0,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area','','','');</script>
+
+                    <elseif condition="$v.form_type eq 'datetime'" />
+                        <select style="width:auto" name="{$v[field]}[condition]" onchange="{$v['field']}_onchange_datepicker(this);">
+                            <option value="gt" <if condition="$_GET[$v[field]][condition] eq 'gt'">selected="selected"</if>>大于</option>
+                            <option value="lt" <if condition="$_GET[$v[field]][condition] eq 'lt'">selected="selected"</if>>小于</option>
+                            <option value="eq" <if condition="$_GET[$v[field]][condition] eq 'eq'">selected="selected"</if>>等于</option>
+                            <option value="neq" <if condition="$_GET[$v[field]][condition] eq 'neq'">selected="selected"</if>>不等于</option>
+                        </select>
+                        <span id="{$v['field']}_span"></span>
+                        <script type="text/javascript">
+                            $(function(){
+                                {$v['field']}_create_datepicer(true);
+                            });
+
+                            function {$v['field']}_onchange_datepicker(s) {
+                                 var v = $(s).val();
+                                {$v['field']}_create_datepicer(v == "gt" || v == "lt" || v=="eq" || v=="neq");
+                            }
+
+                            function {$v['field']}_create_datepicer(b) {
+                                var span_div = "#{$v['field']}_span";
+                                $(span_div).html("<input id=\"{$v['field']}_value\" name=\"{$v['field']}[value]\" type=\"text\" class=\"{$v['form_type']}\" value=\"\" rel=\"product\">");
+                                $('#{$v['field']}_value').daterangepicker({singleDatePicker: b});
+                            }
+                        </script>
+                    <elseif condition="$v.field eq 'is_verify'" />
+                        <select id="is_verify" style="width:auto" name="is_verify">
+                            <option value="">{:L('ALL')}</option>
+                            <option value="-1">审核未通过</option>
+                            <option value="0">待审核</option>
+                            <option value="1">审核通过</option>
+                        </select>
+                    <else />
+                        <select style="width:auto" name="{$v[field]}[condition]">
+                            <option value="contains" <if condition="$_GET[$v[field]][condition] eq 'contains'">selected="selected"</if>>{:L('INCLUDE')}</option>
+                            <option value="not_contain" <if condition="$_GET[$v[field]][condition] eq 'not_contain'">selected="selected"</if>>{:L('EXCLUSIVE')}</option>
+                            <option value="is" <if condition="$_GET[$v[field]][condition] eq 'is'">selected="selected"</if>>{:L('YES')}</option>
+                            <option value="isnot" <if condition="$_GET[$v[field]][condition] eq 'isnot'">selected="selected"</if>>{:L('NO')}</option>
+                            <option value="start_with" <if condition="$_GET[$v[field]][condition] eq 'start_with'">selected="selected"</if>>{:L('BEGINNING_CHARACTER')}</option>
+                            <option value="end_with" <if condition="$_GET[$v[field]][condition] eq 'end_with'">selected="selected"</if>>{:L('TERMINATION_CHARACTER')}</option>
+                            <option value="is_empty" <if condition="$_GET[$v[field]][condition] eq 'is_empty'">selected="selected"</if>>{:L('MANDATORY')}</option>
+                            <option value="is_not_empty" <if condition="$_GET[$v[field]][condition] eq 'is_not_empty'">selected="selected"</if>>{:L('ISNOTEMPTY')}</option>
+                        </select>
+                    </if>
+                    <if condition="$v.field neq 'is_verify' && $v.form_type neq 'datetime' && $v.form_type neq 's_box' && $v.form_type neq 'box' && $v.form_type neq 'address'" >
+                        <input name="{$v['field']}[value]" type="text" class="{$v['form_type']}" value="{$_GET[$v['field']][value]}" rel="product">
+                    </if>
+                </li>
+                <if condition="$k%2 eq 0"></if>
+                </volist>
+            </ul>
+        </form>
+    </div>
+</div>
+<script>
+    $("#return_btn").click(function(){
+        window.location.assign("{:U('dorm/group')}");
+    });
+    $(".group_radio").change(function(b){
+        window.location.assign("{:U('dorm/groupadd', 'group_type')}" + $(this).val());
+    });
+</script>
+<include file="Public:footer" />

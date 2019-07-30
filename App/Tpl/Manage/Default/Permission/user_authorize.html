@@ -1,0 +1,1442 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white;padding-top:5px">
+<script>
+    $(function() {
+        $('#tabs a:first').tab('show');
+    });
+</script>
+<style type="text/css">
+    .container {
+        width: 1000px;
+    }
+</style>
+<div class="container">
+<div class="row-fluid">
+<div class="span12">
+<div></div>
+<form action="{:U('Permission/user_authorize')}" method="post" id="form1">
+<input type="hidden" name="position_id" value="{$position_id}"/>
+
+    <div >
+        <ul class="nav nav-tabs" id="tabs">
+            <li><a href="#tabs-1"    data-toggle="tab">基本</a></li>
+            <li><a href="#tabs-2"    data-toggle="tab">雇员</a></li>
+            <li><a href="#tabs-18"    data-toggle="tab">调度</a></li>
+            <li><a href="#tabs-4"    data-toggle="tab">客户</a></li>
+            <li><a href="#tabs-11"    data-toggle="tab">员工</a></li>
+            <li><a href="#tabs-17"    data-toggle="tab">门店</a></li>
+            <li><a href="#tabs-12"    data-toggle="tab">住宿</a></li>
+            <li><a href="#tabs-5"    data-toggle="tab">账户</a></li>
+            <li><a href="#tabs-7"    data-toggle="tab">产品</a></li>
+            <li><a href="#tabs-10"    data-toggle="tab">客户服务</a></li>
+            <li><a href="#tabs-14"    data-toggle="tab">客服</a></li>
+            <li><a href="#tabs-15"    data-toggle="tab">培训</a></li>
+            <li><a href="#tabs-13"    data-toggle="tab">门店限制</a></li>
+
+        </ul>
+
+
+        <div class="tab-content">
+            <div id="tabs-18" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{:L('MODULE')}</th>
+                        <th>{:L('VISIBLE')}</th>
+                        <th>编辑注释</th>
+                        <th>排岗</th>
+                        <th>调度门店</th>
+                        <th>退出排岗</th>
+                        <th>退出门店</th>
+                        <th>暂停</th>
+                        <th>调位置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><input type="checkbox" rel="1801" class="check_all" name="check_product"/></td>
+                        <td>入职总表</td>
+                        <td><input  <php>if(in_array('dispatch/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1801" type="checkbox" name="per[]" value="dispatch/index"></td>
+                        <td><input <php>if(in_array('dispatch/edit_queue_describe/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1801" type="checkbox" name="per[]" value="dispatch/edit_queue_describe/index"></td>
+                        <td><input <php>if(in_array('dispatch/adjuect_branch_queue/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1801" type="checkbox" name="per[]" value="dispatch/adjuect_branch_queue/index"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('dispatch/exit_branch_queue/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1801" type="checkbox" name="per[]" value="exit_branch_queue/index"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1802" class="check_all" name="check_product"/></td>
+                        <td>总部调度</td>
+                        <td><input  <php>if(in_array('dispatch/branch/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1802" type="checkbox" name="per[]" value="dispatch/branch/zb"></td>
+                        <td><input <php>if(in_array('dispatch/edit_queue_describe/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1802" type="checkbox" name="per[]" value="dispatch/edit_queue_describe/zb"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('dispatch/adjuect_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1802" type="checkbox" name="per[]" value="dispatch/adjuect_branch_queue/zb"></td>
+                        <td><input <php>if(in_array('dispatch/exit_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1802" type="checkbox" name="per[]" value="dispatch/exit_branch_queue/zb"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('dispatch/pause_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1802" type="checkbox" name="per[]" value="dispatch/pause_branch_queue/zb"></td>
+                        <td><input <php>if(in_array('dispatch/pos_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1802" type="checkbox" name="per[]" value="dispatch/pos_branch_queue/zb"></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1803" class="check_all" name="check_product"/></td>
+                        <td>门店调度</td>
+                        <td><input  <php>if(in_array('dispatch/branch/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1803" type="checkbox" name="per[]" value="dispatch/branch/md"></td>
+                        <td><input <php>if(in_array('dispatch/edit_queue_describe/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1803" type="checkbox" name="per[]" value="dispatch/edit_queue_describe/md"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><input <php>if(in_array('dispatch/exit_branch_queue/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1803" type="checkbox" name="per[]" value="dispatch/exit_branch_queue/md"></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1804" class="check_all" name="check_product"/></td>
+                        <td>医院调度</td>
+                        <td><input  <php>if(in_array('dispatch/hospital', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1804" type="checkbox" name="per[]" value="dispatch/hospital"></td>
+                        <td><input <php>if(in_array('dispatch/edit_queue_describe/hospital', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1804" type="checkbox" name="per[]" value="dispatch/edit_queue_describe/hospital"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('dispatch/adjuect_branch_queue/hospital', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1804" type="checkbox" name="per[]" value="dispatch/adjuect_branch_queue/hospital"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('dispatch/exit_branch_queue/hospital', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1804" type="checkbox" name="per[]" value="dispatch/exit_branch_queue/hospital"></td>
+                        <td><input <php>if(in_array('dispatch/pause_branch_queue/hospital', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1804" type="checkbox" name="per[]" value="dispatch/pause_branch_queue/hospital"></td>
+                        <td><input <php>if(in_array('dispatch/pos_branch_queue/hospital', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1804" type="checkbox" name="per[]" value="dispatch/pos_branch_queue/hospital"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="tabs-16" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{:L('MODULE')}</th>
+                        <th>{:L('VISIBLE')}</th>
+                        <th>编辑注释</th>
+                        <th>加入排岗</th>
+                        <th>调度门店</th>
+                        <th>退出排岗</th>
+                        <th>退出门店</th>
+                        <th>暂停</th>
+                        <th>调位置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox" rel="1601" class="check_all" name="check_product"/><input type="checkbox" name="per[]" value="account/index" checked="checked" style="display: none"/> </td>
+                        <td>总部调度</td>
+                        <td><input  <php>if(in_array('product/index/dispatch/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/index/dispatch/zb"></td>
+
+                        <td><input <php>if(in_array('product/edit_queue_describe/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/edit_queue_describe/zb"></td>
+                        <td><input <php>if(in_array('product/adjuect_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/adjuect_branch_queue/zb"></td>
+                        <td><input <php>if(in_array('product/adjuect_branch_queue/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/adjuect_branch_queue/md"></td>
+                        <td><input <php>if(in_array('product/exit_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/exit_branch_queue/zb"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('product/pause_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/pause_branch_queue/zb"></td>
+                        <td><input <php>if(in_array('product/pos_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1601" type="checkbox" name="per[]" value="product/pos_branch_queue/zb"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1602" class="check_all" name="check_product"/></td>
+                        <td>门店调度</td>
+                        <td><input  <php>if(in_array('product/index/dispatch/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1602" type="checkbox" name="per[]" value="product/index/dispatch/md"></td>
+                        <td><input <php>if(in_array('product/edit_queue_describe/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1602" type="checkbox" name="per[]" value="product/edit_queue_describe/md"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><input <php>if(in_array('product/exit_branch_queue/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1602" type="checkbox" name="per[]" value="product/exit_branch_queue/md"></td>
+                        <td><input <php>if(in_array('product/pause_branch_queue/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1602" type="checkbox" name="per[]" value="product/pause_branch_queue/md"></td>
+                        <td><input <php>if(in_array('product/pos_branch_queue/md', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1602" type="checkbox" name="per[]" value="product/pos_branch_queue/md"></td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="tabs-15" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{:L('MODULE')}</th>
+                        <th>{:L('VISIBLE')}</th>
+                        <th>{:L('BROWSE')}</th>
+                        <th>{:L('CREATE')}</th>
+                        <th>{:L('EDIT')}</th>
+                        <th>{:L('DELETE')}</th>
+                        <th>导出</th>
+                        <th>负责人分配</th>
+                        <th>门店修改</th>
+                        <th>撤销</th>
+                        <th>销售视图</th>
+                        <th>成本视图</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><input type="checkbox" rel="1501" class="check_all" name="check_cultivate"/></td>
+                        <td>基本信息</td>
+                        <td><input <php>if(in_array('cultivate/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/index"></td>
+                        <td><input <php>if(in_array('cultivate/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/view"></td>
+                        <td><input <php>if(in_array('cultivate/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/add"></td>
+                        <td><input <php>if(in_array('cultivate/edit/basic', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/edit/basic"></td>
+                        <td><input <php>if(in_array('cultivate/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/delete"></td>
+                        <td><input <php>if(in_array('cultivate/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/export"></td>
+                        <td><input <php>if(in_array('cultivate/change_owner_id', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/change_owner_id"></td>
+                        <td><input <php>if(in_array('cultivate/change_branch_id', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/change_branch_id"></td>
+                        <td><input <php>if(in_array('cultivate/revoke', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/revoke"></td>
+                        <td><input <php>if(in_array('cultivate/index/xs', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/index/xs"></td>
+                        <td><input <php>if(in_array('cultivate/index/cb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/index/cb"></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1510" class="check_all" name="check_cultivate"/></td>
+                        <td>状态信息</td>
+                        <td></td>
+                        <td><input <php>if(in_array('cultivate/view/state', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1510" type="checkbox" name="per[]" value="cultivate/view/state"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('cultivate/edit/state', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1501" type="checkbox" name="per[]" value="cultivate/edit/state"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1502" class="check_all" name="check_cultivate"/></td>
+                        <td>培训项目</td>
+                        <td><input <php>if(in_array('currier/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1502" type="checkbox" name="per[]" value="currier/index"></td>
+                        <td><input <php>if(in_array('currier/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1502" type="checkbox" name="per[]" value="currier/view"></td>
+                        <td><input <php>if(in_array('currier/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1502" type="checkbox" name="per[]" value="currier/add"></td>
+                        <td><input <php>if(in_array('currier/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1502" type="checkbox" name="per[]" value="currier/edit"></td>
+                        <td><input <php>if(in_array('currier/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1502" type="checkbox" name="per[]" value="currier/delete"></td>
+                        <td><input <php>if(in_array('currier/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1502" type="checkbox" name="per[]" value="currier/export"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1503" class="check_all" name="check_cultivate"/></td>
+                        <td>渠道信息</td>
+                        <td><input  <php>if(in_array('cultivate/view/channel', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1503" type="checkbox" name="per[]" value="cultivate/view/channel"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('cultivate/channel_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1503" type="checkbox" name="per[]" value="cultivate/channel_add"></td>
+                        <td><input <php>if(in_array('cultivate/channel_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1503" type="checkbox" name="per[]" value="cultivate/channel_edit"></td>
+                        <td><input <php>if(in_array('cultivate/channel_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1503" type="checkbox" name="per[]" value="cultivate/channel_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1504" class="check_all" name="check_cultivate"/></td>
+                        <td>付款信息</td>
+                        <td><input  <php>if(in_array('cultivate/view/account', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1504" type="checkbox" name="per[]" value="cultivate/view/account"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('cultivate/account_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1504" type="checkbox" name="per[]" value="cultivate/account_add"></td>
+                        <td><input <php>if(in_array('cultivate/account_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1504" type="checkbox" name="per[]" value="cultivate/account_edit"></td>
+                        <td><input <php>if(in_array('cultivate/account_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1504" type="checkbox" name="per[]" value="cultivate/account_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1505" class="check_all" name="check_cultivate"/></td>
+                        <td>结算页面</td>
+                        <td><input  <php>if(in_array('cultivate/view/cost', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1505" type="checkbox" name="per[]" value="cultivate/view/cost"></td>
+                        <td></td>
+                        <td></td>
+                        <td><input <php>if(in_array('cultivate/view/cost/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1505" type="checkbox" name="per[]" value="cultivate/view/cost/edit"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1506" class="check_all" name="check_cultivate"/></td>
+                        <td>促单费</td>
+                        <td></td>
+                        <td></td>
+                        <td><input <php>if(in_array('cultivate/urge_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1506" type="checkbox" name="per[]" value="cultivate/urge_add"></td>
+                        <td><input <php>if(in_array('cultivate/urge_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1506" type="checkbox" name="per[]" value="cultivate/urge_edit"></td>
+                        <td><input <php>if(in_array('cultivate/urge_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1506" type="checkbox" name="per[]" value="cultivate/urge_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1507" class="check_all" name="check_cultivate"/></td>
+                        <td>提醒列表</td>
+                        <td><input  <php>if(in_array('cultivate/view/prompt', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1507" type="checkbox" name="per[]" value="cultivate/view/prompt"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1508" class="check_all" name="check_cultivate"/></td>
+                        <td>分组</td>
+                        <td><input <php>if(in_array('cultivate/index/group', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1508" type="checkbox" name="per[]" value="cultivate/index/group"></td>
+                        <td><input <php>if(in_array('cultivate/index/groupsearch', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1508" type="checkbox" name="per[]" value="cultivate/index/groupsearch"></td>
+                        <td><input <php>if(in_array('cultivate/groupadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1508" type="checkbox" name="per[]" value="cultivate/groupadd"></td>
+                        <td><input <php>if(in_array('cultivate/groupedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1508" type="checkbox" name="per[]" value="cultivate/groupedit"></td>
+                        <td><input <php>if(in_array('cultivate/groupdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1508" type="checkbox" name="per[]" value="cultivate/groupdelete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1509" class="check_all" name="check_cultivate"/></td>
+                        <td>日志视图</td>
+                        <td><input  <php>if(in_array('cultivate/view/logger', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1509" type="checkbox" name="per[]" value="cultivate/view/logger"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="tabs-14" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{:L('MODULE')}</th>
+                        <th>{:L('VISIBLE')}</th>
+                        <th>{:L('BROWSE')}</th>
+                        <th>{:L('CREATE')}</th>
+                        <th>{:L('EDIT')}</th>
+                        <th>{:L('DELETE')}</th>
+                        <th>{:L('EXPORT')}</th>
+                        <th>导入</th>
+                        <th>日志</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox" rel="1401" class="check_all" name="check_leads"/></td>
+                        <td>客服</td>
+                        <td><input <php>if(in_array('commiss/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/index"></td>
+                        <td><input <php>if(in_array('commiss/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/view"></td>
+                        <td><input <php>if(in_array('commiss/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/add"></td>
+                        <td><input <php>if(in_array('commiss/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/edit"></td>
+                        <td><input <php>if(in_array('commiss/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/delete"></td>
+                        <td><input <php>if(in_array('commiss/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/export"></td>
+                        <td><input <php>if(in_array('commiss/import', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/import"></td>
+                        <td><input <php>if(in_array('commiss/logger/kf', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1401" type="checkbox" name="per[]" value="commiss/logger/kf"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1402" class="check_all" name="check_leads"/></td>
+                        <td>销售</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><input <php>if(in_array('commiss/salesedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1402" type="checkbox" name="per[]" value="commiss/salesedit"></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><input <php>if(in_array('commiss/logger/xs', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1402" type="checkbox" name="per[]" value="commiss/logger/xs"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1403" class="check_all" name="check_leads"/></td>
+                        <td>雇员</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><input <php>if(in_array('commiss/product_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1403" type="checkbox" name="per[]" value="commiss/product_add"></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1404" class="check_all" name="check_leads"/></td>
+                        <td>客户</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><input <php>if(in_array('commiss/customer_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1404" type="checkbox" name="per[]" value="commiss/customer_add"></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="tabs-13" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>客户服务</th>
+                        <th>宿舍</th>
+                        <th>雇员</th>
+                        <th>客户</th>
+                        <th>客服</th>
+                        <th>账目</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox" rel="1301" class="check_all" name="check_leads"/></td>
+                        <td><input  <php>if(in_array('branchlock/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/market">　<input  <php>if(in_array('branchlock/market_product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/market_product">全部授权</td>
+                        <td><input  <php>if(in_array('branchlock/dorm', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/dorm"></td>
+                        <td><input  <php>if(in_array('branchlock/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/product"></td>
+                        <td><input  <php>if(in_array('branchlock/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/customer"></td>
+                        <td><input  <php>if(in_array('branchlock/commiss', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/commiss"></td>
+                        <td><input  <php>if(in_array('branchlock/account', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1301" type="checkbox" name="per[]" value="branchlock/account"></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        <div id="tabs-1" class="tab-pane">
+        <table class="table">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>{:L('MODULE')}</th>
+                <th>{:L('VISIBLE')}</th>
+                <th>{:L('BROWSE')}</th>
+                <th>{:L('CREATE')}</th>
+                <th>{:L('EDIT')}</th>
+                <th>{:L('DELETE')}</th>
+                <th>{:L('EXPORT')}</th>
+                <th>审核</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="checkbox" rel="12" class="check_all" name="check_leads"/></td>
+                <td>{:L('USER')}</td>
+                <td><input <php>if(in_array('user/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list12" type="checkbox" name="per[]" value="user/index"></td>
+                <td><input <php>if(in_array('user/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list12" type="checkbox" name="per[]" value="user/view"></td>
+                <td><input <php>if(in_array('user/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list12" type="checkbox" name="per[]" value="user/add"></td>
+                <td><input <php>if(in_array('user/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list12" type="checkbox" name="per[]" value="user/edit"></td>
+                <td><input <php>if(in_array('user/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list12" type="checkbox" name="per[]" value="user/delete"></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="6" class="check_all" name="check_task"/></td>
+                <td>{:L('TASK')}</td>
+                <td><input <php>if(in_array('task/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list6" type="checkbox" name="per[]" value="task/index"></td>
+                <td><input <php>if(in_array('task/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list6" type="checkbox" name="per[]" value="task/view"></td>
+                <td><input <php>if(in_array('task/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list6" type="checkbox" name="per[]" value="task/add"></td>
+                <td><input <php>if(in_array('task/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list6" type="checkbox" name="per[]" value="task/edit"></td>
+                <td><input  <php>if(in_array('task/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list6" type="checkbox" name="per[]" value="task/delete"></td>
+                <td><input <php>if(in_array('task/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list6" type="checkbox" name="per[]" value="task/export"></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="11" class="check_all" name="check_announce"/></td>
+                <td>{:L('announcement manager')}</td>
+                <td><input <php>if(in_array('announcement/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list11" type="checkbox" name="per[]" value="announcement/index"></td>
+                <td><input <php>if(in_array('announcement/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list11" type="checkbox" name="per[]" value="announcement/view"></td>
+                <td><input <php>if(in_array('announcement/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list11" type="checkbox" name="per[]" value="announcement/add"></td>
+                <td><input <php>if(in_array('announcement/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list11" type="checkbox" name="per[]" value="announcement/edit"></td>
+                <td><input <php>if(in_array('announcement/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list11" type="checkbox" name="per[]" value="announcement/delete"></td>
+                <td>&nbsp;</td>
+                <td></td>
+
+            </tr>
+        </tbody>
+        </table>
+        </div>
+        <div id="tabs-2" class="tab-pane">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>{:L('MODULE')}</th>
+                <th>{:L('VISIBLE')}</th>
+                <th>{:L('BROWSE')}</th>
+                <th>{:L('CREATE')}</th>
+                <th>{:L('EDIT')}</th>
+                <th>{:L('DELETE')}</th>
+                <th>{:L('EXPORT')}</th>
+                <th>审核</th>
+                <th>负责人分配</th>
+                <th>加入排岗</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                <td><input type="checkbox" rel="21" class="check_all" name="check_product"/></td>
+                <td>基本信息</td>
+                <td><input  <php>if(in_array('product/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/index"></td>
+                <td><input <php>if(in_array('product/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/view"></td>
+                <td><input <php>if(in_array('product/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/add"></td>
+                <td><input <php>if(in_array('product/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/edit"></td>
+                <td><input <php>if(in_array('product/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/delete"></td>
+                <td><input <php>if(in_array('product/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/export"></td>
+                <td><input <php>if(in_array('product/verify', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/verify"></td>
+                <td><input <php>if(in_array('product/change_owner_id', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/change_owner_id"></td>
+                <td><input <php>if(in_array('product/adjuect_branch_queue/zb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list21" type="checkbox" name="per[]" value="product/adjuect_branch_queue/zb"></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="22" class="check_all" name="check_product"/></td>
+                <td>鉴定信息</td>
+                <td><input  <php>if(in_array('product/skillindex', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list22" type="checkbox" name="per[]" value="product/skillindex"></td>
+                <td><input <php>if(in_array('product/skillview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list22" type="checkbox" name="per[]" value="product/skillview"></td>
+                <td></td>
+                <td><input <php>if(in_array('product/skilledit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list22" type="checkbox" name="per[]" value="product/skilledit"></td>
+                <td></td>
+                <td></td>
+                <td><input <php>if(in_array('product/skillverify', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list22" type="checkbox" name="per[]" value="product/skillverify"></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="23" class="check_all" name="check_product"/></td>
+                <td>账户信息</td>
+                <td><input  <php>if(in_array('product/accountindex', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list23" type="checkbox" name="per[]" value="product/accountindex"></td>
+                <td><input <php>if(in_array('product/accountview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list23" type="checkbox" name="per[]" value="product/accountview"></td>
+                <td><input <php>if(in_array('product/accountadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list23" type="checkbox" name="per[]" value="product/accountadd"></td>
+                <td></td>
+                <td><input <php>if(in_array('product/accountdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list23" type="checkbox" name="per[]" value="product/accountdelete"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+            <tr>
+                <td><input type="checkbox" rel="27" class="check_all" name="check_product"/></td>
+                <td>调度信息</td>
+                <td></td>
+                <td><input <php>if(in_array('product/eventview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list27" type="checkbox" name="per[]" value="product/eventview"></td>
+                <td><input <php>if(in_array('product/eventadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list27" type="checkbox" name="per[]" value="product/eventadd"></td>
+                <td><input <php>if(in_array('product/eventedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list27" type="checkbox" name="per[]" value="product/eventedit"></td>
+                <td><input <php>if(in_array('product/eventdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list27" type="checkbox" name="per[]" value="product/eventdelete"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="26" class="check_all" name="check_product"/></td>
+                <td>任务信息</td>
+                <td></td>
+                <td><input <php>if(in_array('product/taskview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list26" type="checkbox" name="per[]" value="product/taskview"></td>
+                <td><input <php>if(in_array('product/taskvadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list26" type="checkbox" name="per[]" value="product/taskvadd"></td>
+                <td><input <php>if(in_array('product/taskvedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list26" type="checkbox" name="per[]" value="product/taskvedit"></td>
+                <td><input <php>if(in_array('product/taskvdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list26" type="checkbox" name="per[]" value="product/taskvdelete"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="28" class="check_all" name="check_product"/></td>
+                <td>缴费信息</td>
+                <td></td>
+                <td><input <php>if(in_array('product/tradeview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list28" type="checkbox" name="per[]" value="product/tradeview"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                <td></td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="29" class="check_all" name="check_product"/></td>
+                <td>面试信息</td>
+                <td></td>
+                <td><input <php>if(in_array('product/leadsview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list29" type="checkbox" name="per[]" value="product/leadsview"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="31" class="check_all" name="check_product"/></td>
+                <td>客户服务</td>
+                <td></td>
+                <td><input <php>if(in_array('product/marketview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list31" type="checkbox" name="per[]" value="product/marketview"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="32" class="check_all" name="check_product"/></td>
+                <td>培训订单</td>
+                <td></td>
+                <td><input <php>if(in_array('product/cultivateview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list32" type="checkbox" name="per[]" value="product/cultivateview"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="33" class="check_all" name="check_product"/></td>
+                <td>住宿日志</td>
+                <td></td>
+                <td><input <php>if(in_array('product/berthview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list33" type="checkbox" name="per[]" value="product/berthview"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="34" class="check_all" name="check_product"/></td>
+                <td>分组</td>
+                <td><input <php>if(in_array('product/index/group', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list34" type="checkbox" name="per[]" value="product/index/group"></td>
+                <td><input <php>if(in_array('product/index/groupsearch', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list34" type="checkbox" name="per[]" value="product/index/groupsearch"></td>
+                <td><input <php>if(in_array('product/groupadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list34" type="checkbox" name="per[]" value="product/groupadd"></td>
+                <td><input <php>if(in_array('product/groupedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list34" type="checkbox" name="per[]" value="product/groupedit"></td>
+                <td><input <php>if(in_array('product/groupdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list34" type="checkbox" name="per[]" value="product/groupdelete"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+            <tr>
+                <td><input type="checkbox" rel="35" class="check_all" name="check_product"/></td>
+                <td>渠道</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input <php>if(in_array('product/channeledit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list35" type="checkbox" name="per[]" value="product/channeledit"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+            <tr>
+                <td><input type="checkbox" rel="36" class="check_all" name="check_product"/></td>
+                <td>评价</td>
+                <td></td>
+                <td><input <php>if(in_array('product/evaluatemarket_view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list36" type="checkbox" name="per[]" value="product/evaluatemarket_view"></td>
+                <td><input <php>if(in_array('product/evaluate_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list36" type="checkbox" name="per[]" value="product/evaluate_add"></td>
+                <td><input <php>if(in_array('product/evaluate_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list36" type="checkbox" name="per[]" value="product/evaluate_edit"></td>
+                <td><input <php>if(in_array('product/evaluate_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list36" type="checkbox" name="per[]" value="product/evaluate_delete"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><input type="checkbox" rel="37" class="check_all" name="check_product"/></td>
+                <td>特殊类别</td>
+                <td></td>
+                <td></td>
+                <td><input <php>if(in_array('product/categoryteshuadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list37" type="checkbox" name="per[]" value="product/categoryteshuadd"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div id="tabs-4" class="tab-pane">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>{:L('MODULE')}</th>
+                    <th>{:L('VISIBLE')}</th>
+                    <th>{:L('BROWSE')}</th>
+                    <th>{:L('CREATE')}</th>
+                    <th>{:L('EDIT')}</th>
+                    <th>{:L('DELETE')}</th>
+                    <th>{:L('EXPORT')}</th>
+                    <th>审核</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td><input type="checkbox" rel="401" class="check_all" name="check_product"/></td>
+                    <td>基本信息</td>
+                    <td><input  <php>if(in_array('customer/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/index"></td>
+                    <td><input <php>if(in_array('customer/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/view"></td>
+                    <td><input <php>if(in_array('customer/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/add"></td>
+                    <td><input <php>if(in_array('customer/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/edit"></td>
+                    <td><input <php>if(in_array('customer/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/delete"></td>
+                    <td><input <php>if(in_array('customer/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/export"></td>
+                    <td><input <php>if(in_array('customer/verify', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list401" type="checkbox" name="per[]" value="customer/verify"></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="402" class="check_all" name="check_product"/></td>
+                    <td>账户信息</td>
+                    <td><input  <php>if(in_array('customer/accountindex', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list402" type="checkbox" name="per[]" value="customer/accountindex"></td>
+                    <td><input <php>if(in_array('customer/accountview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list402" type="checkbox" name="per[]" value="customer/accountview"></td>
+                    <td><input <php>if(in_array('customer/accountadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list402" type="checkbox" name="per[]" value="customer/accountadd"></td>
+                    <td></td>
+                    <td><input <php>if(in_array('customer/accountdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list402" type="checkbox" name="per[]" value="customer/accountdelete"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="403" class="check_all" name="check_product"/></td>
+                    <td>订单信息</td>
+                    <td></td>
+                    <td><input <php>if(in_array('customer/busineseview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list403" type="checkbox" name="per[]" value="customer/busineseview"></td>
+                    <td><input <php>if(in_array('customer/busineseadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list403" type="checkbox" name="per[]" value="customer/busineseadd"></td>
+                    <td><input <php>if(in_array('customer/busineseedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list403" type="checkbox" name="per[]" value="customer/busineseedit"></td>
+                    <td><input <php>if(in_array('customer/businesedelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list403" type="checkbox" name="per[]" value="customer/businesedelete"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="404" class="check_all" name="check_product"/></td>
+                    <td>产品信息</td>
+                    <td></td>
+                    <td><input <php>if(in_array('customer/tradeview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list404" type="checkbox" name="per[]" value="customer/tradeview"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="406" class="check_all" name="check_product"/></td>
+                    <td>客户服务</td>
+                    <td></td>
+                    <td><input <php>if(in_array('customer/marketview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list406" type="checkbox" name="per[]" value="customer/marketview"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="406" class="check_all" name="check_product"/></td>
+                    <td>培训订单</td>
+                    <td></td>
+                    <td><input <php>if(in_array('customer/cultivateview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list406" type="checkbox" name="per[]" value="customer/cultivateview"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="405" class="check_all" name="check_product"/></td>
+                    <td>分组</td>
+                    <td><input <php>if(in_array('customer/index/group', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list405" type="checkbox" name="per[]" value="customer/index/group"></td>
+                    <td><input <php>if(in_array('customer/index/groupsearch', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list405" type="checkbox" name="per[]" value="customer/index/groupsearch"></td>
+                    <td><input <php>if(in_array('customer/groupadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list405" type="checkbox" name="per[]" value="customer/groupadd"></td>
+                    <td><input <php>if(in_array('customer/groupedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list405" type="checkbox" name="per[]" value="customer/groupedit"></td>
+                    <td><input <php>if(in_array('customer/groupdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list405" type="checkbox" name="per[]" value="customer/groupdelete"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="tabs-5" class="tab-pane">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>{:L('MODULE')}</th>
+                    <th>{:L('VISIBLE')}</th>
+                    <th>{:L('BROWSE')}</th>
+                    <th>一般创建</th>
+                    <th>关联创建</th>
+                    <th>{:L('EDIT')}</th>
+                    <th>{:L('DELETE')}</th>
+                    <th>{:L('EXPORT')}</th>
+                    <th>审核</th>
+                    <th>时间覆盖</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="checkbox" rel="501" class="check_all" name="check_product"/><input type="checkbox" name="per[]" value="account/index" checked="checked" style="display: none"/> </td>
+                    <td>公司账户</td>
+                    <td><input  <php>if(in_array('account/inernal/inernal', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/inernal/inernal"></td>
+                    <td><input <php>if(in_array('account/view/inernal', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/view/inernal"></td>
+                    <td>
+                        <input <php>if(in_array('account/add/inernal', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/add/inernal">
+                    </td>
+                    <td>
+                        <input <php>if(in_array('account/add/inernal_ea', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/add/inernal_ea">
+                    </td>
+                    <td><input <php>if(in_array('account/edit/inernal', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/edit/inernal"></td>
+                    <td><input <php>if(in_array('account/delete/inernal', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/delete/inernal"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/create_time_reset/inernal', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list501" type="checkbox" name="per[]" value="account/create_time_reset/inernal"></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="502" class="check_all" name="check_product"/></td>
+                    <td>客户账户</td>
+                    <td><input  <php>if(in_array('account/customer/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/customer/customer"></td>
+                    <td><input <php>if(in_array('account/view/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/view/customer"></td>
+                    <td><input <php>if(in_array('account/add/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/add/customer"></td>
+                    <td><input <php>if(in_array('account/add/customer_ea', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/add/customer_ea"></td>
+                    <td><input <php>if(in_array('account/edit/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/edit/customer"></td>
+                    <td><input <php>if(in_array('account/delete/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/delete/customer"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/create_time_reset/customer', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list502" type="checkbox" name="per[]" value="account/create_time_reset/customer"></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="503" class="check_all" name="check_product"/></td>
+                    <td>雇员账户</td>
+                    <td><input  <php>if(in_array('account/product/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/product/product"></td>
+                    <td><input <php>if(in_array('account/view/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/view/product"></td>
+                    <td><input <php>if(in_array('account/add/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/add/product"></td>
+                    <td><input <php>if(in_array('account/add/product_ea', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/add/product_ea"></td>
+                    <td><input <php>if(in_array('account/edit/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/edit/product"></td>
+                    <td><input <php>if(in_array('account/delete/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/delete/product"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/create_time_reset/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list503" type="checkbox" name="per[]" value="account/create_time_reset/product"></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="508" class="check_all" name="check_product"/></td>
+                    <td>员工账户</td>
+                    <td><input  <php>if(in_array('account/staff/staff', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/staff/staff"></td>
+                    <td><input <php>if(in_array('account/view/staff', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/view/staff"></td>
+                    <td><input <php>if(in_array('account/add/staff', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/add/staff"></td>
+                    <td><input <php>if(in_array('account/add/staff_ea', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/add/staff_ea"></td>
+                    <td><input <php>if(in_array('account/edit/staff', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/edit/staff"></td>
+                    <td><input <php>if(in_array('account/delete/staff', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/delete/staff"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/create_time_reset/staff', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list508" type="checkbox" name="per[]" value="account/create_time_reset/staff"></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="506" class="check_all" name="check_product"/></td>
+                    <td>资金流水</td>
+                    <td><input  <php>if(in_array('account/flow/flow', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list506" type="checkbox" name="per[]" value="account/flow/flow"></td>
+                    <td><input <php>if(in_array('account/view/flow', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list506" type="checkbox" name="per[]" value="account/view/flow"></td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/edit/flow', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list506" type="checkbox" name="per[]" value="account/edit/flow"></td>
+                    <td><input <php>if(in_array('account/delete/flow', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list506" type="checkbox" name="per[]" value="account/delete/flow"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="507" class="check_all" name="check_product"/></td>
+                    <td>客户服务收入确认</td>
+                    <td>
+                        <input id="account_market_market"   <php>if(in_array('account/market/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/market/market">
+                        <input id="account_market_market_owner"  <php>if(in_array('account/market/market/owner', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/market/market/owner">仅负责
+
+                    </td>
+                    <td>
+                        <input id="account_view_market"  <php>if(in_array('account/view/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/view/market">
+                        <input id="account_view_market_owner"   <php>if(in_array('account/view/market/owner', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/view/market/owner">仅负责
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/edit/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/edit/market"></td>
+                    <td><input <php>if(in_array('account/delete/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/delete/market"></td>
+                    <td><input <php>if(in_array('account/export/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/export/market"></td>
+                    <td><input <php>if(in_array('account/change_payment_verify/market', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list507" type="checkbox" name="per[]" value="account/change_payment_verify/market"></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="509" class="check_all" name="check_product"/></td>
+                    <td>培训收入确认</td>
+                    <td>
+                        <input id="account_cultivate_cultivate"   <php>if(in_array('account/cultivate/cultivate', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/cultivate/cultivate">
+                        <input id="account_cultivate_cultivate_owner"  <php>if(in_array('account/cultivate/cultivate/owner', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/cultivate/cultivate/owner">仅负责
+
+                    </td>
+                    <td>
+                        <input id="account_view_cultivate"  <php>if(in_array('account/view/cultivate', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/view/cultivate">
+                        <input id="account_view_cultivate_owner"   <php>if(in_array('account/view/cultivate/owner', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/view/cultivate/owner">仅负责
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td><input <php>if(in_array('account/edit/cultivate', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/edit/cultivate"></td>
+                    <td><input <php>if(in_array('account/delete/cultivate', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/delete/cultivate"></td>
+                    <td><input <php>if(in_array('account/export/cultivate', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/export/cultivate"></td>
+                    <td><input <php>if(in_array('account/change_payment_verify/cultivate', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list509" type="checkbox" name="per[]" value="account/change_payment_verify/cultivate"></td>
+                    <td></td>
+
+                </tr>
+                </tbody>
+            </table>
+            <script>
+                $("#account_view_market_owner").click(function(){
+                    if(true == $(this).is(":checked")) {
+                        $("#account_view_market").prop("checked", "checked");
+                    }
+                });
+                $("#account_view_market").click(function(){
+                    if(false == $(this).is(":checked") && $("#account_view_market_owner").is(":checked")) {
+                        alert("仅负责有效必须俱备可见权限");
+                        return false;
+                    }
+                });
+                $("#account_market_market_owner").click(function(){
+                    if(true == $(this).is(":checked")) {
+                        $("#account_market_market").prop("checked", "checked");
+                    }
+                });
+                $("#account_market_market").click(function(){
+                    if(false == $(this).is(":checked") && $("#account_market_market_owner").is(":checked")) {
+                        alert("仅负责有效必须俱备可见权限");
+                        return false;
+                    }
+                });
+            </script>
+        </div>
+
+
+        <div id="tabs-12" class="tab-pane">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>{:L('MODULE')}</th>
+                    <th>{:L('VISIBLE')}</th>
+                    <th>{:L('BROWSE')}</th>
+                    <th>{:L('CREATE')}</th>
+                    <th>{:L('EDIT')}</th>
+                    <th>{:L('DELETE')}</th>
+                    <th>导出</th>
+                    <th>入退住</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td><input type="checkbox" rel="1201" class="check_all" name="check_dorm"/></td>
+                    <td>宿舍管理</td>
+                    <td><input  <php>if(in_array('dorm/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1201" type="checkbox" name="per[]" value="dorm/index"></td>
+                    <td><input <php>if(in_array('dorm/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1201" type="checkbox" name="per[]" value="dorm/view"></td>
+                    <td><input <php>if(in_array('dorm/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1201" type="checkbox" name="per[]" value="dorm/add"></td>
+                    <td><input <php>if(in_array('dorm/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1201" type="checkbox" name="per[]" value="dorm/edit"></td>
+                    <td><input <php>if(in_array('dorm/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1201" type="checkbox" name="per[]" value="dorm/delete"></td>
+                    <td><input <php>if(in_array('dorm/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1201" type="checkbox" name="per[]" value="dorm/export"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="1202" class="check_all" name="check_trade"/></td>
+                    <td>床位管理</td>
+                    <td><input  <php>if(in_array('berth/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/index"></td>
+                    <td><input <php>if(in_array('berth/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/view"></td>
+                    <td><input <php>if(in_array('berth/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/add"></td>
+                    <td><input <php>if(in_array('berth/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/edit"></td>
+                    <td><input <php>if(in_array('berth/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/delete"></td>
+                    <td><input <php>if(in_array('berth/entrance', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/entrance"></td>
+                    <td><input <php>if(in_array('berth/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1202" type="checkbox" name="per[]" value="berth/export"></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="1203" class="check_all" name="check_product"/></td>
+                    <td>分组</td>
+                    <td><input <php>if(in_array('berth/index/group', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1203" type="checkbox" name="per[]" value="berth/index/group"></td>
+                    <td><input <php>if(in_array('berth/index/groupsearch', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1203" type="checkbox" name="per[]" value="berth/index/groupsearch"></td>
+                    <td><input <php>if(in_array('berth/groupadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1203" type="checkbox" name="per[]" value="berth/groupadd"></td>
+                    <td><input <php>if(in_array('berth/groupedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1203" type="checkbox" name="per[]" value="berth/groupedit"></td>
+                    <td><input <php>if(in_array('berth/groupdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1203" type="checkbox" name="per[]" value="berth/groupdelete"></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tabs-7" class="tab-pane">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>{:L('MODULE')}</th>
+                    <th>{:L('VISIBLE')}</th>
+                    <th>{:L('BROWSE')}</th>
+                    <th>{:L('CREATE')}</th>
+                    <th>{:L('EDIT')}</th>
+                    <th>{:L('DELETE')}</th>
+                    <th>导出</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td><input type="checkbox" rel="701" class="check_all" name="check_serve"/></td>
+                    <td>产品管理</td>
+                    <td><input  <php>if(in_array('serve/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list701" type="checkbox" name="per[]" value="serve/index"></td>
+                    <td><input <php>if(in_array('serve/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list701" type="checkbox" name="per[]" value="serve/view"></td>
+                    <td><input <php>if(in_array('serve/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list701" type="checkbox" name="per[]" value="serve/add"></td>
+                    <td><input <php>if(in_array('serve/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list701" type="checkbox" name="per[]" value="serve/edit"></td>
+                    <td><input <php>if(in_array('serve/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list701" type="checkbox" name="per[]" value="serve/delete"></td>
+                    <td><input <php>if(in_array('serve/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list701" type="checkbox" name="per[]" value="serve/export"></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="702" class="check_all" name="check_trade"/></td>
+                    <td>产品订单</td>
+                    <td><input  <php>if(in_array('trade/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list702" type="checkbox" name="per[]" value="trade/index"></td>
+                    <td><input <php>if(in_array('trade/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list702" type="checkbox" name="per[]" value="trade/view"></td>
+                    <td><input <php>if(in_array('trade/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list702" type="checkbox" name="per[]" value="trade/add"></td>
+                    <td><input <php>if(in_array('trade/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list702" type="checkbox" name="per[]" value="trade/edit"></td>
+                    <td><input <php>if(in_array('trade/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list702" type="checkbox" name="per[]" value="trade/delete"></td>
+                    <td><input <php>if(in_array('trade/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list702" type="checkbox" name="per[]" value="trade/export"></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="703" class="check_all" name="check_trade"/></td>
+                    <td>成本</td>
+                    <td><input  <php>if(in_array('trade/cost', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list703" type="checkbox" name="per[]" value="trade/cost"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td><input type="checkbox" rel="704" class="check_all" name="check_product"/></td>
+                    <td>分组</td>
+                    <td><input <php>if(in_array('trade/index/group', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list704" type="checkbox" name="per[]" value="trade/index/group"></td>
+                    <td><input <php>if(in_array('trade/index/groupsearch', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list704" type="checkbox" name="per[]" value="trade/index/groupsearch"></td>
+                    <td><input <php>if(in_array('trade/groupadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list704" type="checkbox" name="per[]" value="trade/groupadd"></td>
+                    <td><input <php>if(in_array('trade/groupedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list704" type="checkbox" name="per[]" value="trade/groupedit"></td>
+                    <td><input <php>if(in_array('trade/groupdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list704" type="checkbox" name="per[]" value="trade/groupdelete"></td>
+                    <td></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+            <div id="tabs-9" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>登录</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><input type="checkbox" rel="901" class="check_all" name="check_leads"/></td>
+                        <td><input  <php>if(in_array('home/admin', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list901" type="checkbox" name="per[]" value="home/admin"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="tabs-10" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{:L('MODULE')}</th>
+                        <th>{:L('VISIBLE')}</th>
+                        <th>{:L('BROWSE')}</th>
+                        <th>{:L('CREATE')}</th>
+                        <th>{:L('EDIT')}</th>
+                        <th>{:L('DELETE')}</th>
+                        <th>导出</th>
+                        <th>负责人分配</th>
+                        <th>门店修改</th>
+                        <th>撤销</th>
+                        <th>销售视图</th>
+                        <th>成本视图</th>
+                        <th>回访-修改</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><input type="checkbox" rel="1001" class="check_all" name="check_market"/></td>
+                        <td>基本设置</td>
+                        <td><input <php>if(in_array('market/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/index"></td>
+                        <td><input <php>if(in_array('market/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/view"></td>
+                        <td><input <php>if(in_array('market/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/add"></td>
+                        <td><input <php>if(in_array('market/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/edit"></td>
+                        <td><input <php>if(in_array('market/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/delete"></td>
+                        <td><input <php>if(in_array('market/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/export"></td>
+                        <td><input <php>if(in_array('market/change_owner_id', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/change_owner_id"></td>
+                        <td><input <php>if(in_array('market/change_branch_id', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/change_branch_id"></td>
+                        <td><input <php>if(in_array('market/revoke', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/revoke"></td>
+                        <td><input <php>if(in_array('market/index/xs', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/index/xs"></td>
+                        <td><input <php>if(in_array('market/index/cb', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1001" type="checkbox" name="per[]" value="market/index/cb"></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1003" class="check_all" name="check_market"/></td>
+                        <td>雇员服务信息</td>
+                        <td><input  <php>if(in_array('market/view/product', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1003" type="checkbox" name="per[]" value="market/view/product"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('market/product_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1003" type="checkbox" name="per[]" value="market/product_add"></td>
+                        <td><input <php>if(in_array('market/product_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1003" type="checkbox" name="per[]" value="market/product_edit"></td>
+                        <td><input <php>if(in_array('market/product_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1003" type="checkbox" name="per[]" value="market/product_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <input <php>if(in_array('market/survey', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1003" type="checkbox" name="per[]" value="market/survey"> -
+                            <input <php>if(in_array('market/survey_change', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1003" type="checkbox" name="per[]" value="market/survey_change">
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1004" class="check_all" name="check_market"/></td>
+                        <td>渠道信息</td>
+                        <td><input  <php>if(in_array('market/view/channel', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1004" type="checkbox" name="per[]" value="market/view/channel"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('market/channel_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1004" type="checkbox" name="per[]" value="market/channel_add"></td>
+                        <td><input <php>if(in_array('market/channel_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1004" type="checkbox" name="per[]" value="market/channel_edit"></td>
+                        <td><input <php>if(in_array('market/channel_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1004" type="checkbox" name="per[]" value="market/channel_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1005" class="check_all" name="check_market"/></td>
+                        <td>付款信息</td>
+                        <td><input  <php>if(in_array('market/view/account', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1005" type="checkbox" name="per[]" value="market/view/account"></td>
+                        <td></td>
+                        <td><input <php>if(in_array('market/account_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1005" type="checkbox" name="per[]" value="market/account_add"></td>
+                        <td><input <php>if(in_array('market/account_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1005" type="checkbox" name="per[]" value="market/account_edit"></td>
+                        <td><input <php>if(in_array('market/account_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1005" type="checkbox" name="per[]" value="market/account_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1002" class="check_all" name="check_market"/></td>
+                        <td>结算页面</td>
+                        <td><input  <php>if(in_array('market/view/cost', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1002" type="checkbox" name="per[]" value="market/view/cost"></td>
+                        <td></td>
+                        <td></td>
+                        <td><input <php>if(in_array('market/view/cost/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1002" type="checkbox" name="per[]" value="market/view/cost/edit"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1007" class="check_all" name="check_market"/></td>
+                        <td>促单费</td>
+                        <td></td>
+                        <td></td>
+                        <td><input <php>if(in_array('market/urge_add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1007" type="checkbox" name="per[]" value="market/urge_add"></td>
+                        <td><input <php>if(in_array('market/urge_edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1007" type="checkbox" name="per[]" value="market/urge_edit"></td>
+                        <td><input <php>if(in_array('market/urge_delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1007" type="checkbox" name="per[]" value="market/urge_delete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1006" class="check_all" name="check_market"/></td>
+                        <td>提醒列表</td>
+                        <td><input  <php>if(in_array('market/view/prompt', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1006" type="checkbox" name="per[]" value="market/view/prompt"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1008" class="check_all" name="check_product"/></td>
+                        <td>分组</td>
+                        <td><input <php>if(in_array('market/index/group', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1008" type="checkbox" name="per[]" value="market/index/group"></td>
+                        <td><input <php>if(in_array('market/index/groupsearch', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1008" type="checkbox" name="per[]" value="market/index/groupsearch"></td>
+                        <td><input <php>if(in_array('market/groupadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1008" type="checkbox" name="per[]" value="market/groupadd"></td>
+                        <td><input <php>if(in_array('market/groupedit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1008" type="checkbox" name="per[]" value="market/groupedit"></td>
+                        <td><input <php>if(in_array('market/groupdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1008" type="checkbox" name="per[]" value="market/groupdelete"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" rel="1009" class="check_all" name="check_market"/></td>
+                        <td>日志视图</td>
+                        <td><input  <php>if(in_array('market/view/logger', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1009" type="checkbox" name="per[]" value="market/view/logger"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        <div id="tabs-11" class="tab-pane">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>{:L('MODULE')}</th>
+                    <th>{:L('VISIBLE')}</th>
+                    <th>{:L('BROWSE')}</th>
+                    <th>{:L('CREATE')}</th>
+                    <th>{:L('EDIT')}</th>
+                    <th>密码重置</th>
+                    <th>{:L('DELETE')}</th>
+                    <th>{:L('EXPORT')}</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td><input type="checkbox" rel="1101" class="check_all" name="check_product"/></td>
+                    <td>基本信息</td>
+                    <td><input  <php>if(in_array('staff/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/index"></td>
+                    <td><input <php>if(in_array('staff/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/view"></td>
+                    <td><input <php>if(in_array('staff/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/add"></td>
+                    <td><input <php>if(in_array('staff/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/edit"></td>
+                    <td><input <php>if(in_array('staff/repassword', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/repassword"></td>
+
+                    <td><input <php>if(in_array('staff/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/delete"></td>
+                    <td><input <php>if(in_array('staff/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1101" type="checkbox" name="per[]" value="staff/export"></td>
+
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox" rel="1102" class="check_all" name="check_product"/></td>
+                    <td>账户信息</td>
+                    <td><input  <php>if(in_array('staff/accountindex', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1102" type="checkbox" name="per[]" value="staff/accountindex"></td>
+                    <td><input <php>if(in_array('staff/accountview', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1102" type="checkbox" name="per[]" value="staff/accountview"></td>
+                    <td><input <php>if(in_array('staff/accountadd', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1102" type="checkbox" name="per[]" value="staff/accountadd"></td>
+                    <td></td>
+                    <td></td>
+
+                    <td><input <php>if(in_array('staff/accountdelete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1102" type="checkbox" name="per[]" value="staff/accountdelete"></td>
+                    <td></td>
+
+                </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+            <div id="tabs-17" class="tab-pane">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{:L('MODULE')}</th>
+                        <th>{:L('VISIBLE')}</th>
+                        <th>{:L('BROWSE')}</th>
+                        <th>{:L('CREATE')}</th>
+                        <th>{:L('EDIT')}</th>
+                        <th>{:L('DELETE')}</th>
+                        <th>{:L('EXPORT')}</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td><input type="checkbox" rel="1701" class="check_all" name="check_product"/></td>
+                        <td>基本信息</td>
+                        <td><input  <php>if(in_array('branch/index', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1701" type="checkbox" name="per[]" value="branch/index"></td>
+                        <td><input <php>if(in_array('branch/view', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1701" type="checkbox" name="per[]" value="branch/view"></td>
+                        <td><input <php>if(in_array('branch/add', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1701" type="checkbox" name="per[]" value="branch/add"></td>
+                        <td><input <php>if(in_array('branch/edit', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1701" type="checkbox" name="per[]" value="branch/edit"></td>
+
+                        <td><input <php>if(in_array('branch/delete', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1701" type="checkbox" name="per[]" value="branch/delete"></td>
+                        <td><input <php>if(in_array('branch/export', $owned_permission)){ echo 'checked="checked"';}</php> class="check_list1701" type="checkbox" name="per[]" value="branch/export"></td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    </div>
+</form>
+</div>
+</div>
+</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		$(".check_all").click(function(){
+			var rel = $(this).attr('rel');
+			$("input[class='check_list"+rel+"']").prop('checked', $(this).prop("checked"));
+            if (rel == 21) {
+                check_product($(this).prop("checked"));
+            }
+		});
+	});
+
+    function check_product(b) {
+        $("input[value='product/accountdelete']").prop("checked", b);
+        $("input[value='product/businesedelete']").prop("checked", b);
+        $("input[value='product/traindelete']").prop("checked", b);
+        $("input[value='product/eventdelete']").prop("checked", b);
+        $("input[value='product/taskvdelete']").prop("checked", b);
+    }
+
+    $("input[value='product/delete']").change(function(){
+        check_product($(this).prop("checked"));
+
+    });
+
+    function market_scettp_per() {
+        var tpl = "{:U('product/market_scettp_per')}";
+        art.dialog.open(tpl, {
+            id: 'market_scettp_per',
+            title: "雇员门店授权",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var product_ids = {"set":[], "unset":[]};
+                $(this.iframe.contentWindow.document).find('input:checkbox[name="product_id"]').each(function(){
+                    var product_id = $(this).val();
+                    if ($(this).prop('checked') ==true) {
+                        product_ids["set"].push(product_id);
+                    } else {
+                        product_ids["unset"].push(product_id);
+                    }
+                });
+                $.ajax({
+                    url: "{:U('product/market_scettp_per')}",
+                    data:product_ids,
+                    success: function (data) {
+                        alert("操作完成");
+                    },
+                    cache: false
+                });
+                return false;
+            },
+            cancel:true
+        });
+    }
+</script>

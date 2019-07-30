@@ -1,0 +1,158 @@
+<include file="Public:header" />
+<div class="container">
+		<div class="page-header">
+			<h4>{:L('EDIT_THE_CUSTOMER')}</h4>
+		</div>
+		<div class="row">
+            <div class="span12">
+				<include file="Public:alert" />
+				<form action="{:U('customer/edit', 'id='.$customer['customer_id'])}" method="post" id="form1"  enctype="multipart/form-data">
+                <input type="hidden" name="customer_id" value="{$customer['customer_id']}">
+					<table class="table table-hover" width="95%" border="0" cellspacing="1" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <td style="text-align:center;" colspan="4" >
+                                <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tfoot>
+							<tr>
+								<td style="text-align:center;" colspan="4" >
+                                    <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                    <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                                </td>
+							</tr>
+						</tfoot>
+						<tbody>
+                            <tr><th  colspan="4">联系人头像</th></tr>
+                            <tr>
+                                <td class="tdleft" height="125">主图</td>
+                                <td colspan="3" height="125">
+                                    <input type="hidden" name="main_images_id" value="{$customer.images.main.images_id}"/>
+                                    <table  class="table table-striped">
+                                        <tbody>
+                                        <tr>
+                                            <td  height="135">
+                                                <input type="radio" name="main_pic" value="1" <if condition="$customer['main_pic'] == 1">checked</if> />主图
+                                                <div class="thumbnail cardpicthumb">
+                                                    <if condition="empty($customer['images']['main']['path'])">
+                                                        <img id="work_pic_prev" class="cardpicthumb" />
+                                                        <else />
+                                                        <a href="{$customer.images.main.path}" target="_self" data-lightbox="roadtrip">
+                                                            <img id="work_pic_prev" src="{$customer.images.main.path}" class="cardpicthumb" />
+                                                        </a>
+                                                    </if>
+
+                                                    <a href="javascript:del_img_main('{$customer.images.main.images_id}', 'work_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                                    <a href="javascript:void(0);" onclick="photograph_main('work_pic');">
+                                                        <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                                    </a>
+                                                </div>
+                                                <div class="btn btn-success fileinput-button">
+                                                    <span>选择头像文件</span>
+                                                    <input type="file" name="work_pic[]" id="work_pic">
+                                                    <input type="hidden" name="work_pic_base64" id="work_pic_base64">
+
+                                                </div>
+                                            </td>
+                                            <td  height="135">
+                                                <input type="radio" name="main_pic" value="2" <if condition="$customer['main_pic'] != 1">checked</if>/>主图
+
+                                                <div class="thumbnail cardpicthumb">
+                                                    <if condition="empty($customer['images']['cardpic']['path'])">
+                                                        <img id="card_pic_prev" class="cardpicthumb" />
+                                                        <else/>
+                                                        <img id="card_pic_prev" src="{$customer.images.cardpic.path}" class="cardpicthumb " />
+                                                    </if>
+                                                    <a href="javascript:del_img_main('{$customer.images.cardpic.images_id}', 'card_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                                    <a href="javascript:void(0);" onclick="photograph_main('card_pic');">
+                                                        <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                                    </a>
+                                                </div>
+                                                <div class="btn btn-success fileinput-button">
+                                                    <span>选择证件文件</span>
+                                                    <input type="file" name="card_pic[]" id="card_pic">
+                                                    <input type="hidden" name="card_pic_base64" id="card_pic_base64">
+                                                </div>
+                                            </td>
+                                            <input type="hidden" name="main_pic_type" id="main_pic_type" value="s"/>
+                                            <td width="70%"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <include file="Public:editfieldsgroup" />
+                        </tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    function del_img_main(param, pic_pre){
+        if(param){
+            if(confirm('{:L("CONFIRM_DELETE")}')){
+                $.ajax({
+                    'type':'get',
+                    'dataType':'json',
+                    'url':'{:U("customer/delImg")}',
+                    'data':{images_id:param},
+                    'success':function(data){
+                        if(data.status == 1){
+                            $('#'+pic_pre).attr("src", "");
+                        }else{
+                            alert(data.info);
+                        }
+                    }
+                });
+            }
+        }else{
+            $('#'+pic_pre).attr("src", "");
+        }
+    }
+</script>
+<script type="application/javascript">
+
+    function channel_role_model_change() {
+        $('#telephone').qtip('destroy', true);
+        var telephone = $("#telephone").val();
+        if (!isMobile(telephone)) {
+            return;
+        }
+
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("customer/check_commiss_info")}',
+            'data':{
+                "telephone":telephone,
+                "customer_id":{$customer.customer_id},
+            },
+            'success':function(data){
+                if(data.status == 1 && data.data){
+                    $('#telephone').qtip(
+                    {
+                        hide: 'unfocus',
+                        show:true,
+                        style: 'qtip-bootstrap',
+                        content: '这个客户的联系方式在客服模块有登记，请联系客服指派.客服电话: {:defaultinfo("commiss_telephone")}'
+                    });
+                }
+            }
+        });
+    }
+    $("#telephone").blur(function(){
+        channel_role_model_change();
+    });
+
+</script>
+<include file="Customer:cardread" />
+<include file="Public:editfieldvalid" />
+<include file="Public:channel_datapick"/>
+<include file="Public:def_channel_datapick"/>
+<include file="Public:footer" />

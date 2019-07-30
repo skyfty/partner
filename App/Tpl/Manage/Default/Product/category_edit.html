@@ -1,0 +1,241 @@
+<include file="Public:header" />
+<script type="text/javascript" src="__PUBLIC__/js/kindeditor-all-min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/zh_CN.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/kindeditor.css" type="text/css" />
+<script>
+    $(function() {
+        $('#tabs a:first').tab('show');
+    });
+</script>
+<div class="container">
+    <div class="page-header">
+        <h4>{:L('SYSTEM_SETTINGS')}</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="tabbable">
+        <include file="Setting:settingnav" />
+
+    </div>
+    <div class="row">
+        <div class="span12">
+            <p>
+            </p>
+        </div>
+        <div class="span12">
+            <form class="form-horizontal" action="{:U('product/category_edit')}" method="post" >
+                <input type="hidden" name="category_id" value="{$temp.category_id}"/>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="reset" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="reset" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="fields_group" id="gvo">
+                        <tr><th colspan="4">{$gvo.name}</th></tr>
+                        <php>$j=0;</php>
+                        <volist name="gvo['fields']" id="vo">
+                            <if condition="$vo['operating'] != '4'">
+                                <php>$j++;</php>
+                                <if condition="$vo['one_row'] == '1' or $vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address'">
+                                    <if condition="$i%2 == 0">
+                                        <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </if>
+                                    <tr>
+                                        <td class="tdleft" width="15%">{$vo.name}:</td>
+                                        <td colspan="3">{$vo.html}</td>
+                                    </tr>
+                                    <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                                        <php>$i++;</php>
+                                    </if>
+                                    <else/>
+                                    <if condition="$i%2 != 0">
+                                        <tr>
+                                    </if>
+                                    <td class="tdleft" width="15%">{$vo.name}:</td>
+                                    <td width="35%">{$vo.html}</td>
+                                    <if condition="$i%2 == 0">
+                                        </tr>
+                                    </if>
+                                    <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                                        <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </if>
+                                </if>
+                            </if>
+                        </volist>
+                    </volist>
+                    <tr>
+                        <td colspan="4">
+                            <div >
+                                <ul class="nav nav-tabs" id="tabs">
+                                    <li><a href="#tabs-1"    data-toggle="tab">未定级</a></li>
+                                    <li><a href="#tabs-2"    data-toggle="tab">一星</a></li>
+                                    <li><a href="#tabs-3"    data-toggle="tab">二星</a></li>
+                                    <li><a href="#tabs-4"    data-toggle="tab">三星</a></li>
+                                    <li><a href="#tabs-5"    data-toggle="tab">四星</a></li>
+                                    <li><a href="#tabs-6"    data-toggle="tab">五星</a></li>
+                                    <li><a href="#tabs-7"    data-toggle="tab">金牌</a></li>
+                                    <li><a href="#tabs-8"    data-toggle="tab">标准化</a></li>
+                                </ul>
+                                <div class="tab-content">
+
+                                <volist name="catepct" id="c">
+                                    <div id="tabs-{$i}" class="tab-pane">
+                                        <table class="table">
+                                            <tbody>
+
+                                            <tr>
+                                                <td class="tdleft">客户定金</td>
+                                                <td>
+                                                    <table class="table">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                收取时限
+                                                                <input name="customer_earnest_limit_{$c}" id="customer_earnest_limit_{$c}" type="text" value="{$bconf[$c]['customer_earnest_limit']}">
+                                                                <span style="color:red;">该天数之前收取定金，在该天数以内收取全额</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="radio" id="customer_earnest_type_scale_{$c}" name="customer_earnest_type_{$c}" value="0" <eq name="bconf[$c]['customer_earnest_type']" value="0">checked="checked"</eq> >按比例
+                                                                <input type="number" id="customer_earnest_scale_{$c}" name="customer_earnest_scale_{$c}" value="{$bconf[$c]['customer_earnest_scale']}" style="width: 60px" <neq name="bconf[$c]['customer_earnest_type']" value="0">readonly="readonly"</neq>>% <em>（订单总金额的百分比）</em>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="radio" id="customer_earnest_type_fasten_{$c}" name="customer_earnest_type_{$c}" value="1" <eq name="bconf[$c]['customer_earnest_type']" value="1">checked="checked"</eq>>固&nbsp; &nbsp;额
+                                                                <input type="number" id="customer_earnest_fasten_{$c}" name="customer_earnest_fasten_{$c}" value="{$bconf[$c]['customer_earnest_fasten']}" style="width: 60px" <neq name="bconf[$c]['customer_earnest_type']" value="1">readonly="readonly"</neq>>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <script>
+                                                        $("#customer_earnest_type_scale_{$c}").click(function(){
+                                                            $("#customer_earnest_fasten_{$c}").attr({"readonly":"readonly"});
+                                                            $("#customer_earnest_scale_{$c}").removeAttr("readonly");
+                                                        });
+                                                        $("#customer_earnest_type_fasten_{$c}").click(function(){
+                                                            $("#customer_earnest_scale_{$c}").attr({"readonly":"readonly"});
+                                                            $("#customer_earnest_fasten_{$c}").removeAttr("readonly");
+                                                        });
+                                                    </script>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tdleft">标价</td>
+                                                <td>
+                                                    <input name="salary_{$c}" id="salary_{$c}" type="text" value="{$bconf[$c]['salary']}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tdleft">保证金</td>
+                                                <td>
+                                                    <input name="deposit_{$c}" id="deposit_{$c}" type="text" value="{$bconf[$c]['deposit']}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tdleft">中介费</td>
+                                                <td>
+                                                    <input type="text" id="agency_scale_{$c}" name="agency_scale_{$c}" value="{$bconf[$c]['agency_scale']}" style="width: 60px">% <em>（订单总金额的百分比）</em>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tdleft">中介费收取方式</td>
+                                                <td>
+                                                    <select id="agency_gather_{$c}" name="agency_gather_{$c}">
+                                                        <option value="首月收取" <eq name="bconf[$c]['agency_gather']" value="首月收取">selected="selected"</eq>>首月收取</option>
+                                                        <option value="整单收取" <eq name="bconf[$c]['agency_gather']" value="整单收取">selected="selected"</eq>>整单收取</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="tdleft" >雇员定金</td>
+                                                <td>
+                                                    <table class="table">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="radio" id="freeze_type_scale_{$c}" name="freeze_type_{$c}" value="0" <eq name="bconf[$c]['freeze_type']" value="0">checked="checked"</eq>>按比例
+                                                                <input type="number" id="freeze_scale_{$c}" name="freeze_scale_{$c}" value="{$bconf[$c]['freeze_scale']}" style="width: 60px"  <neq name="bconf[$c]['freeze_type']" value="0">readonly="readonly"</neq> >% <em>（订单总金额的百分比）</em>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="radio" id="freeze_type_fasten_{$c}" name="freeze_type_{$c}" value="1" <eq name="bconf[$c]['freeze_type']" value="1">checked="checked"</eq> >固&nbsp; &nbsp;额
+                                                                <input type="number" id="freeze_fasten_{$c}" name="freeze_fasten_{$c}" value="{$bconf[$c]['freeze_fasten']}" style="width: 60px" <neq name="bconf[$c]['freeze_type']" value="1">readonly="readonly"</neq>>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <script>
+                                                $("#freeze_type_scale_{$c}").click(function(){
+                                                    $("#freeze_fasten_{$c}").attr({"readonly":"readonly"});
+                                                    $("#freeze_scale_{$c}").removeAttr("readonly");
+                                                });
+                                                $("#freeze_type_fasten_{$c}").click(function(){
+                                                    $("#freeze_scale_{$c}").attr({"readonly":"readonly"});
+                                                    $("#freeze_fasten_{$c}").removeAttr("readonly");
+                                                });
+                                            </script>
+                                            <tr>
+                                                <td class="tdleft">月休息天数</td>
+                                                <td>
+                                                    <input type="number" id="recess_day_{$c}" name="recess_day_{$c}" value="{$bconf[$c]['recess_day']}" style="width: 60px">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </volist>
+                                    </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<include file="Serve:selectDialog" />
+<script type="text/javascript">
+    function on_serve_info(b) {
+        $('input:text[name="serve_name"]').val(b.serve_name);
+        $('input:hidden[name="serve_id"]').val(b.serve_id);
+    }
+
+    $('#serve_name').click(function(){
+        var param = {
+            "corre":"product"
+        };
+        select_serve(param);
+    });
+
+    var serve_id = $("#serve_id").val();
+    if (serve_id) {
+        var data = {
+            'id': serve_id
+        };
+        request_serve_info(data, on_serve_info);
+    }
+</script>
+
+<include file="Public:footer" />

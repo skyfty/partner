@@ -1,0 +1,44 @@
+<script type="text/javascript">
+    function request_trade_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("trade/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+    function select_trade(corre, corre_id) {
+        var query_id = "";
+        if(corre_id){
+            query_id += "&id=" + corre_id;
+        }
+        if(corre){
+            query_id += "&corre=" + corre;
+        }
+        art.dialog.open( "{:U('trade/listDialog')}" + query_id, {
+            id: 'select_trade_dialog',
+            title: "选择产品订单",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 800,
+            height: 510,
+            ok: function () {
+                var trade_id = $(this.iframe.contentWindow.document).find('input:radio[name="trade_id"]:checked').val();
+                var data = {
+                    'id': trade_id
+                };
+                request_trade_info(data, on_trade_info);
+                return true;
+            },
+            cancel: function () {
+                return true;
+            }
+        });
+    }
+</script>

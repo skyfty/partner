@@ -1,0 +1,176 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<style>
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+</style>
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px; ">
+        <include file="Dispatch:navcat" />
+
+    </div>
+    <include file="Public:alert" />
+    <div class="row-fluid view">
+        <div class="span12">
+            <ul id="sddm" style="margin:0px 0px 0px 0px">
+                <li>
+                    <i class="icon-tags"></i>
+                </li>
+
+                <volist name="queue_category" id="cat">
+                    <li>
+                        &nbsp; <a <if condition="($cat['category_id'] eq $queue_category_id)"> href="{:U('')}&{:FP($parameter, 'queue_category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_category_id='.$cat['category_id'])}"</if>>
+                        {$cat['name']}
+                        </a>
+                    </li>
+                </volist>
+                <li>
+                    &nbsp; <a    <if condition="($_GET['queue_category_id'] eq 'all')"> href="{:U('')}&{:FP($parameter, 'queue_category_id=all')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_category_id=all')}"</if>>
+                    全部
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid" style="padding-top: 15px">
+        <div class="span12">
+            <div class="bulk-actions align-left">
+                <div class="pull-left">
+
+                </div>
+                <ul class="nav pull-left">
+                    <form class="form-inline" id="searchForm" action="" method="get">
+                        <if condition="session('user_id') eq '1'">
+                            <li class="pull-left">
+                                {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                                <script>
+                                    $(function() {
+                                        $("#bylea").change(def_short_search_select);
+                                    });
+                                </script>
+                            </li>
+                        </if>
+                        <li class="pull-left">
+                            {:branch_hospital_select_html("queue_branch_id", $queue_branch_id,true, false, null, "branch_hospital_queue_branch_id", $league['league_id'])}&nbsp;&nbsp;
+                            <script>
+                                $(function() {
+                                    $("#branch_hospital_queue_branch_id").change(def_short_search_select);
+                                });
+                            </script>
+                        </li>
+                        <li class="pull-left">
+                            <include file="Public:def_index_fields_filter_select" />
+
+                        </li>
+                        <include file="Public:def_index_search_form" />
+
+                    </form>
+                </ul>
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-mini btn-primary" href="javascript:void(0);" id="excelExport">导出Excel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <form id="form1"class="form-inline"  method="Post">
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+                    <thead>
+                    <tr  id="childNodes_num">
+                        <include file="Dispatch:model_list_header" />
+                        <th>{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td  id="td_colspan">
+                            {$page}
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr <eq name="vo['dispatch_flag']" value="1"> class="warning"</eq> >
+
+                            <volist name="field_array" id="v">
+                                <include file="Public:def_index_list" />
+                            </volist>
+                            <td>
+
+                                <!--<if condition="$vo['workstate_id'] neq '排岗'">-->
+                                <!--<a  style="padding-right:5px" href="{:U('dispatch/adjuect_branch_queue','queue_branch_id='.$vo['queue_branch_id'].'&workstate_id=排岗&product_id='.$vo['product_id'])}" data-toggle="tooltip" class="adjuect_branch_paigang"  title="设置排岗">-->
+                                    <!--<i class="icon-tag"></i>-->
+                                <!--</a>-->
+                                <!--</if>-->
+
+                                <if condition="vali_permission('dispatch','pos_branch_queue/hospital')">
+                                <a rel="{$vo['product_id']}" href="javascript:void(0)" data-toggle="tooltip" class="adjuect_pos" style="padding-right:5px"  title="调整位置">
+                                    <i class="icon-resize-vertical"></i>
+                                </a>
+                                </if>
+
+                                <if condition="vali_permission('dispatch','pause_branch_queue/hospital')">
+                                <a  href="{:U('dispatch/pause_queue','product_id='.$vo['product_id'])}" data-toggle="tooltip" class="pause_queue"  style="padding-right:5px"  title="<eq name="vo['queue_state']" value="1">暂停<else/>开始</eq>">
+                                <eq name="vo['queue_state']" value="1"><i class="icon-pause"></i><else/><i class="icon-play"></i></eq>
+                                </a>
+                                </if>
+
+                                <if condition="vali_permission('dispatch','exit_branch_queue/hospital')">
+                                <a href="{:U('dispatch/exit_branch_queue','product_id='.$vo['product_id'])}" data-toggle="tooltip" style="padding-right:5px"  class="adjuect_branch_reset"  title="退出医院排岗">
+                                    <i class="icon-retweet"></i>
+                                </a>
+                                </if>
+
+                                <a  rel="{$vo['product_id']}" href="javascript:void(0);" title="修改状态" data-toggle="tooltip" style="padding-right:5px"  class="edit_state">
+                                    <i class=" icon-bookmark"></i>
+                                </a>
+                                <if condition="vali_permission('dispatch','edit_queue_describe/hospital')">
+                                    <a rel="{$vo['product_id']}" cq="1" href="javascript:void(0);"  data-toggle="tooltip" class="edit_queue_describe"  title="修改备注"><i class="icon-edit"></i></a>
+                                </if>
+                                <if condition="$vo['dispatch_flag'] neq '1'">
+                                    <a  rel="{$vo['product_id']}"  href="{:U('dispatch/setflag','flag=1&product_id='.$vo['product_id'])}" title="标注" data-toggle="tooltip" class="set-flag">
+                                        <i class="icon-flag"></i>
+                                    </a>
+                                    <else/>
+                                    <a  rel="{$vo['product_id']}"  href="{:U('dispatch/setflag','flag=0&product_id='.$vo['product_id'])}" title="取消标注" data-toggle="tooltip" class="set-flag">
+                                        <i class="icon-flag"></i>
+                                    </a>
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function changeContent(){
+        var a = $("#select1  option:selected").val();
+        window.location.href="{:U('dispatch/index', 'by=')}"+a;
+    }
+    $(function(){
+        $(".adjuect_branch_reset").click(function(){
+            var href = $(this).attr("href");
+            art.dialog.confirm('确实要退出医院排岗吗', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+    });
+
+</script>
+<include file="Public:export_dialog" />
+<include file="Dispatch:adjuect_workstate" />
+<include file="Public:footer" />
+

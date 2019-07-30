@@ -1,0 +1,116 @@
+<table class="display" cellspacing="0" width="100%" id="logger-datatable">
+    <thead>
+    <tr  class="tr-td"   style="font-size: 14px">
+        <th style="width: 150px">时间</th>
+        <th width="140px">操作者 <div style="float:right;padding-right:7px;padding-left:2px;" id="staff_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_staff_id();"><i class="icon-filter"></i></a></th>
+        <if condition="ACTION_NAME eq 'logger'">
+            <th width="140px">订单号 <div style="float:right;padding-right:7px;padding-left:2px;" id="market_remove_span"></div><a href="javascript:void(0);" onclick="on_click_market_id();"><i class="icon-filter"></i></a></th>
+        </if>
+        <th width="100px">标题</th>
+        <th>内容</th>
+        <th width="80px">操作</th>
+    </tr>
+    </thead>
+</table>
+
+
+<script id="remove_span_tmpl" type="text/x-jquery-tmpl">
+<a ref="${id}" refm="${model}"  href="javascript:void(0);" onclick="on_click_remove_id(this);">${name}<i class="icon-remove"></i></a>
+</script>
+
+
+<script>
+    var sel_create_role_id = null;
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+                <if condition="$market">
+                d.id = "{$market['market_id']}";
+                </if>
+                d.create_role_id = sel_create_role_id;
+
+                if (typeof logger_data_cb == "function") {
+                    logger_data_cb(d);
+                }
+            },
+            "url": "{:U('Market/logtable')}"
+        },
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 0, "desc" ]],
+        'language': def_dataTable_lang_opt,
+    }
+
+    function delete_log(log_id) {
+        art.dialog.confirm('确实要删除吗?', function () {
+            $.ajax({
+                url: "{:U('log/log_delete', 'id=')}" + log_id,
+                success: function (data) {
+                    logger_table.fnClearTable(true);
+                },
+                cache: false
+            });
+        });
+    }
+</script>
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info_by_logger(b) {
+        sel_create_role_id = b.role_id;
+        var data = {
+            "name": b.name,
+            "id": b.role_id,
+            "model":"create_role_id"
+        };
+        $("#staff_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_staff_id() {
+        select_staff(null, on_staff_info_by_logger);
+    }
+</script>
+
+
+<script type="text/javascript">
+
+    function on_click_remove_id(sef) {
+        var refm = $(sef).attr("refm");
+        if (refm == "create_role_id") {
+            sel_create_role_id = "";
+            $("#staff_id_remove_span").html("");
+        } else {
+            sel_cultivate_id = "";
+            $("#cultivate_id_remove_span").html("");
+        }
+
+        on_time_change();
+    }
+</script>
+
+
+
+<include file="Market:selectDialog" />
+<script type="text/javascript">
+    function on_market_info_by_logger(b) {
+        sel_market_id = b.market_id;
+        var data = {
+            "name": b.name,
+            "id": b.market_id,
+            "model":"market_id"
+
+        };
+        $("#market_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_market_id() {
+        select_market(null, on_market_info_by_logger);
+    }
+</script>
+
+
+<include file="Public:def_logger_table" />

@@ -1,0 +1,74 @@
+
+<script type="text/javascript">
+    $("#add_department").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "{:L('ADD_DEPARTMENT')}",
+            lock:true,
+            ok: function () {
+                $("#department_add").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url:'{:U("user/department_add")}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+
+    });
+
+
+    $("#add_role").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "{:L('ADD_POSITION')}",
+            lock:true,
+            ok: function () {
+                $("#role_add").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url:'{:U("user/role_add")}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+
+    });
+
+
+    $(".position_edit").click(function(){
+        var id = $(this).attr('rel');
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "授权",
+            lock:true,
+            ok: function () {
+                $("#roleedit").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url:'{:U("user/roleedit","id=")}'+id,
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+
+    $(".position_delete").click(function(){
+        var self = this;
+        art.dialog.confirm("{:L('CONFIRM_TO_DELETE_POSITION')}", function () {
+            id = $(self).attr('rel');
+            window.location="{:U('user/role_delete','id=')}"+id;
+        });
+
+    });
+
+</script>

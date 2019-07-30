@@ -1,0 +1,116 @@
+
+<include file="Public:header" />
+<div class="container">
+	<div class="page-header">
+		<h4>新建产品订单</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<form action="" method="post"  enctype="multipart/form-data" id="form1">
+                <input type="hidden" name="corre" id="corre" value=""/>
+                <include file="Public:editfieldstable" />
+			</form>   
+		</div>
+	</div>
+</div>
+
+<include file="Serve:selectDialog" />
+<script type="text/javascript">
+    $("#serve_name").after("<span id='serve_span'></span>");
+
+    function on_click_product_name() {
+        select_product();
+    }
+
+    function on_serve_info(b) {
+        $('#price').val(b.price);
+        $('input:text[name="serve_name"]').val(b.serve_name);
+        $('input:hidden[name="serve_id"]').val(b.serve_id);
+        if (b.corre == "product") {
+            var htmltext = "&nbsp;&nbsp;&nbsp;&nbsp;<span>雇员：<input type='text' name='product_name' id='product_name' value='' onclick='on_click_product_name()'/>";
+            htmltext += "<input type='hidden' id='product_id' name='product_id' value=''/></span>";
+            $("#serve_span").html(htmltext);
+            $('#product_name').click(on_click_product_name);
+
+        <if condition="$Think.get.product_id">
+            var data = {
+                'product_id': "{$Think.get.product_id}"
+            };
+            request_product_info(data, on_product_info);
+        <else/>
+            select_product();
+        </if>
+
+        } else {
+            var htmltext = "&nbsp;&nbsp;&nbsp;&nbsp;<span>客户：<input type='text' name='customer_name' id='customer_name' value='' onclick='select_customer()'/>";
+            htmltext += "<input type='hidden' id='customer_id' name='customer_id' value=''/></span>";
+            $("#serve_span").html(htmltext);
+            $('#customer_name').click(function(){
+                select_customer();
+            });
+        <if condition="$Think.get.customer_id">
+            var data = {
+                'id': "{$Think.get.customer_id}"
+            };
+            request_customer_info(data, on_customer_info);
+        <else/>
+            select_customer();
+        </if>
+        }
+        $("#corre").val(b.corre);
+        calculate_trade_sum_price();
+    }
+    $('#serve_name').click(function(){
+        select_serve({});
+    });
+
+    <if condition="$Think.get.serve_id">
+        var data = {
+            'id': "{$Think.get.serve_id}"
+        };
+        request_serve_info(data, on_serve_info);
+    </if>
+
+    <if condition="($_GET['ytime'] neq '')">
+        var ytime = "{$_GET['ytime']}";
+        $("#begin_date").val(moment(ytime).format('YYYY-MM-DD'));
+        $("#end_date").val(moment(ytime).add(1, 'year').format('YYYY-MM-DD'));
+    <else/>
+        $("#begin_date").val(moment().format('YYYY-MM-DD'));
+        $("#end_date").val(moment().add(1, 'year').format('YYYY-MM-DD'));
+    </if>
+</script>
+
+<include file="Customer:selectDialog" />
+<script type="text/javascript">
+    function on_customer_info(b) {
+        $('#customer_name').val(b.name);
+        $('#customer_id').val(b.customer_id);
+    }
+</script>
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    function on_product_info(b) {
+        $('#product_name').val(b.name);
+        $('#product_id').val(b.product_id);
+    }
+
+</script>
+
+<script>
+    function calculate_trade_sum_price() {
+        var price = $("#price").val();
+        var amount = $("#amount").val();
+        $("#sum_price").val((price * amount).toFixed(2));
+    }
+    $("#price").change(calculate_trade_sum_price);
+    $("#amount").change(calculate_trade_sum_price);
+    $("#state option[value='自动设置']").prop("selected", true);
+
+
+</script>
+
+<include file="Public:newfieldvalid" />
+<include file="Public:footer" />

@@ -1,0 +1,91 @@
+
+<include file="Customer:selectDialog" />
+<script type="text/javascript">
+    function on_channel_datapick_customer_info(b) {
+        $('#channel_role_id_name').val(b.name);
+        $('#channel_role_id_name').change();
+        $('#channel_role_id').val(b.customer_id);
+        if(channel_datapick_change &&typeof(channel_datapick_change)=="function"){
+            channel_datapick_change();
+        }
+    }
+</script>
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    function on_channel_datapick_product_info(b) {
+        $('#channel_role_id_name').val(b.name);
+        $('#channel_role_id_name').change();
+        $('#channel_role_id').val(b.product_id);
+        if(channel_datapick_change &&typeof(channel_datapick_change)=="function"){
+            channel_datapick_change();
+        }
+    }
+</script>
+
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_channel_datapick_staff_info(b) {
+        $('#channel_role_id_name').val(b.name);
+        $('#channel_role_id_name').change();
+        $('#channel_role_id').val(b.staff_id);
+        if(channel_datapick_change &&typeof(channel_datapick_change)=="function"){
+            channel_datapick_change();
+        }
+    }
+</script>
+
+
+<include file="Channel:selectDialog" />
+<script type="text/javascript">
+    function on_channel_datapick_channel_info(b) {
+        $('#channel_role_id_name').val(b.name);
+        $('#channel_role_id_name').change();
+        $('#channel_role_id').val(b.channel_id);
+        if(channel_datapick_change &&typeof(channel_datapick_change)=="function"){
+            channel_datapick_change();
+        }
+    }
+</script>
+
+<script>
+    $("#channel_role_model").change(function(){
+        var model = $("#channel_role_model  option:selected").attr("model");
+        if (model == "渠道库") {
+            var model_value = $("#channel_role_model  option:selected").attr("value");
+            var model_html = $("#channel_role_model  option:selected").html();
+            $("#channel_role_id").val(model_value);
+            $("#channel_role_id_name").val(model_html);
+        } else {
+            $("#channel_role_id").val("");
+            $("#channel_role_id_name").val("");
+            $("#channel_role_id_name").removeAttr("disabled");
+            $("#channel_role_id_name").attr("placeholder", "请点击选择");
+        }
+        if(typeof(channel_datapick_change)=="function"){
+            channel_datapick_change();
+        }
+    });
+
+    $("#channel_role_id_name").click(function(){
+        var option_select = $("#channel_role_model  option:selected");
+        var child_channel_ids = option_select.attr("child_channel_ids");
+        var model = option_select.attr("model");
+        if (model == "客户库") {
+            select_customer({}, on_channel_datapick_customer_info);
+        } else if (model == "雇员库") {
+            select_product({}, on_channel_datapick_product_info);
+        } else if(model == "员工库") {
+            select_staff({}, on_channel_datapick_staff_info);
+        } else if (child_channel_ids != "" && child_channel_ids != undefined) {
+            var model_value = option_select.attr("value");
+            var param = {
+                "model":"Channel",
+                "module":"{$Think.MODULE_NAME|strtolower}",
+                "query":"parentid=" +model_value
+            };
+            select_channel(param, on_channel_datapick_channel_info);
+        }
+    });
+</script>

@@ -1,0 +1,105 @@
+<include file="Public:header" />
+	<link rel="stylesheet" href="__PUBLIC__/treeview/jquery.treeview.css" type="text/css">
+	<script type="text/javascript" src="__PUBLIC__/treeview/jquery.treeview.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/treeview/jquery.treeview.edit.js"></script>
+	
+	<script type="text/javascript">
+		$(function() {
+			$("#browser").treeview();
+			$("#add").click(function() {
+				var branches = $("<li><span class='folder'>New Sublist</span><ul>" +
+					"<li><span class='file'>Item1</span></li>" +
+					"<li><span class='file'>Item2</span></li></ul></li>").appendTo("#browser");
+				$("#browser").treeview({
+					add: branches
+				});
+				branches = $("<li class='closed'><span class='folder'>New Sublist</span><ul><li><span class='file'>Item1</span></li><li><span class='file'>Item2</span></li></ul></li>").prependTo("#folder21");
+				$("#browser").treeview({
+					add: branches
+				});
+			});
+		})
+	</script>
+	
+	<style type="text/css">
+.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+	</style>
+	<div class="container">
+		<div class="page-header">
+			<h4>{:L('STRUCTURE')} -
+				<small>
+				<a href="{:U('user/department')}" <if condition="ACTION_NAME eq 'department' or ACTION_NAME eq 'role'">class="active"</if>>{:L('STRUCTURE')}</a>
+
+                </small></h4>
+		</div>
+		<include file="Public:alert" />
+		<div class="row">
+			<form action="{:U('user/department_delete')}" method="post" onsubmit="return confirm('{:L('CONFIRM_DELETE')}')">
+			<div class="span12">
+				<div class="bulk-actions align-left">
+					<a href="{:U('user/department')}" <if condition="ACTION_NAME eq 'department'">class="active"</if>>{:L('DEPARTMENT_TREE')}</a> | 
+					<a href="{:U('user/role')}" <if condition="ACTION_NAME eq 'role'">class="active"</if>>{:L('SUPERIOR_SUBORDINATE_TREE')}</a>
+					<div class="pull-right">
+						<if condition="session('?admin')">
+							<a id="add_department" class="btn btn-primary"><i class="icon-plus"></i>&nbsp; {:L('ADD_DEPARTMENT')}</a>&nbsp;
+							<a id="add_role" class="btn btn-primary"><i class="icon-plus"></i>&nbsp; {:L('ADD_POSITION')}</a>
+						</if>
+					</div>
+				</div>
+			</div>
+			<div class="span12">
+				{$tree_code}
+			</div>
+		</div>
+	</div>
+<include file="User:def_department" />
+
+<script type="text/javascript">
+	$(function(){
+		$(".treeview .file").hover(function(){
+			rel = $(this).attr('rel');
+			$('#control_file' + rel).show();
+		},function(){
+			rel = $(this).attr('rel');
+			$('#control_file' + rel).hide();
+		});
+		$(".treeview .folder").hover(function(){
+			rel = $(this).attr('rel');
+			$('#control_folder' + rel).show();
+		},function(){
+			rel = $(this).attr('rel');
+			$('#control_folder' + rel).hide();
+		});
+
+		$(".department_edit").click(function(){
+            id = $(this).attr('rel');
+            var dialog = art.dialog({
+                id: 'N3690',
+                title: "{:L('ADD_POSITION')}",
+                lock:true,
+                ok: function () {
+                    $("#department_edit").submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url:'{:U("user/department_edit","id=")}'+id,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+		});
+
+        $(".department_delete").click(function(){
+            id = $(this).attr('rel');
+            art.dialog.confirm("{:L('CONFIRM_TO_DELETE_DEPARTMENT_PARAM')}", function () {
+                window.location="{:U('User/department_delete','id=')}"+id;
+            });
+
+        });
+	});
+
+
+</script>
+<include file="Public:footer" />	

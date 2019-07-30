@@ -1,0 +1,40 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Staff:navcat" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <table class="display" cellspacing="0" width="100%" id="logger-datatable">
+                <thead>
+                <tr  class="tr-td"   style="font-size: 14px">
+                    <th style="width: 150px">时间</th>
+                    <th width="100px">操作者</th>
+                    <th width="140px">员工</th>
+                    <th width="100px">标题</th>
+                    <th>内容</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+            },
+            "url": "{:U('Staff/logtable')}"
+        },
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 0, "desc" ]],
+        'language': def_dataTable_lang_opt,
+    }
+</script>
+<include file="Public:def_logger_table" />
+<include file="Public:footer" />

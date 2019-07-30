@@ -1,0 +1,54 @@
+<table class="display" cellspacing="0" width="100%" id="logger-datatable">
+    <thead>
+    <tr  class="tr-td"   style="font-size: 14px">
+        <th style="width: 150px">时间</th>
+        <th width="140px">操作者</th>
+        <th width="140px">雇员</th>
+        <th width="100px">标题</th>
+        <th>内容</th>
+    </tr>
+    </thead>
+</table>
+<script>
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+                d.assort = "dispatch"
+                <if condition="$product">
+                d.product_id = "{$product['product_id']}";
+                </if>
+
+                if (typeof logger_data_cb == "function") {
+                    logger_data_cb(d);
+                }
+            },
+            "url": "{:U('product/logtable')}"
+        },
+        "columnDefs": [
+            {
+                "targets": [2,3],
+                "visible": false,
+                "bSortable": false,
+            }
+        ],
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 0, "desc" ]],
+        'language': def_dataTable_lang_opt,
+    }
+
+    function delete_log(log_id) {
+        art.dialog.confirm('确实要删除吗?', function () {
+            $.ajax({
+                url: "{:U('log/log_delete', 'id=')}" + log_id,
+                success: function (data) {
+                    logger_table.fnClearTable(true);
+                },
+                cache: false
+            });
+        });
+    }
+</script>
+<include file="Public:def_logger_table" />

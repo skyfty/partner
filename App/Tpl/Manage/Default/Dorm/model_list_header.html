@@ -1,0 +1,27 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$vo['field'] == 'owner_role_id'">
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('owner_role_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="owner_role_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.owner_role_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.owner_role_id|role_show}</span>
+            </if>
+            <div id="owner_role_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.owner_role_id eq '')"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":dorm_owner_staff_list()" id="vo">
+                    <a <if condition="($Think.get.owner_role_id eq $vo['role_id'])"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id='.$vo['role_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+
+        <else/>
+            <include file="Public:def_index_list_col" />
+            <include file="Public:def_index_list_field_col" />
+        </if>
+    </th>
+</volist>

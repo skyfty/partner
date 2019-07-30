@@ -1,0 +1,29 @@
+<ul class="nav nav-tabs">
+    <li <eq name="Think.ACTION_NAME" value="index"><neq name="Think.get.act" value="group">class="active"</neq></eq>>
+        <a href="{:U('commiss/index')}">
+            <img src="__PUBLIC__/img/customer_icon.png"/>&nbsp; 客服
+            <if condition="$module_group neq null">
+                [{$module_group['type_name']}： {$module_group['name']}<i class="icon-remove remove-group"  style="color: red"></i>]
+            </if>
+        </a>
+    </li>
+    <li <eq name="Think.ACTION_NAME" value="demand">class="active"</eq>>
+    <a href="{:U('commiss/demand')}">
+        <img src="__PUBLIC__/img/my_log.png"/> &nbsp;
+        需求
+    </a>
+    </li>
+    <li <eq name="Think.get.act" value="group">class="active"</eq>>
+        <a href="{:U('commiss/index')}&{:FP($parameter, 'act=group')}">
+            <img src="__PUBLIC__/img/customer_source_icon.png"/> &nbsp;分组
+        </a>
+    </li>
+
+    <li <eq name="Think.ACTION_NAME" value="logger">class="active"</eq>>
+    <a href="{:U('commiss/logger')}">
+        <img src="__PUBLIC__/img/my_log.png"/> &nbsp;
+        日志
+    </a>
+    </li>
+</ul>
+

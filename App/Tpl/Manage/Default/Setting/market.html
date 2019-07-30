@@ -1,0 +1,75 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4>{:L('SYSTEM_SETTING')}</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="tabbable">
+        <include file="Setting:settingnav" />
+
+        <div class="row">
+            <form class="form-horizontal" enctype="multipart/form-data" action="{:U('setting/market')}" method="post">
+                <table class="span12 table">
+                    <thead>
+                    <tr>
+                        <th colspan="2">订单设置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tdleft" style="width: 10%;">促单费系数</td>
+                        <td>
+                            <table class="table table-hover">
+                                <tr>
+                                    <td>
+                                        首单
+                                        <input type="number" name="s_urge_position_ratio"   value="{$marketinfo.s_urge_position_ratio}"   style="width: 60px"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        非首单
+                                        <input type="number" name="ns_urge_position_ratio"   value="{$marketinfo.ns_urge_position_ratio}"   style="width: 60px"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft">被辅助系数</td>
+                        <td>
+                            <input type="number" name="bfz_urge_position_ratio"   value="{$marketinfo.bfz_urge_position_ratio}"   style="width: 60px"/>
+                            <span style="color:red;">有辅助老师乘这个参数、无辅助老师不乘这个参数</span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft">辅助系数</td>
+                        <td>
+                            <input type="number" name="fz_urge_position_ratio"   value="{$marketinfo.fz_urge_position_ratio}"   style="width: 60px"/>
+                            <span style="color:red;">有辅助对象（会在辅助对象的订单里，自动增加其作为第二促单人，加乘该系数）</span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft">临时系数</td>
+                        <td>
+                            <input type="number" name="ls_urge_position_ratio"   value="{$marketinfo.ls_urge_position_ratio}"   style="width: 60px"/>
+                            <span style="color:red;">临时调整系数（比如用于临时性的激励等等）</span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div> <!-- End #main-content -->
+</div>
+
+<include file="Public:footer" />

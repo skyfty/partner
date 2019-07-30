@@ -1,0 +1,23 @@
+<ul class="nav pull-left">
+    <li class="pull-left">
+        <form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="" method="get">
+            <ul class="nav pull-left">
+                <include file="Public:def_analy_search_from" />
+                <li class="pull-left">
+                    类别&nbsp;
+                    <select  name="acat" id="acat">
+                        <volist name="serve_category" id="vo">
+                            <option value="{$vo['serve_category_id']}">{$vo['name']}</option>
+                        </volist>
+                    </select>
+                    <script>
+                        $("#acat option[value='{$Think.get.acat}']").prop("selected", true);
+                        $("#acat").change(function(){
+                            $("#searchForm").submit();
+                        });
+                    </script>
+                </li>
+            </ul>
+        </form>
+    </li>
+</ul>

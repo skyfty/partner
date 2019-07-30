@@ -1,0 +1,21 @@
+<!-- navbar -->
+<div data-ng-include=" 'App/Tpl/Castle/Default/Index/tpl/blocks/header.html' " class="app-header navbar">
+</div>
+<!-- / navbar -->
+
+<!-- menu -->
+<div data-ng-include=" 'App/Tpl/Castle/Default/Index/tpl/blocks/aside.html' " class="app-aside hidden-xs {{app.settings.asideColor}}" ng-class="{'hide': app.hideAside }">
+</div>
+<!-- / menu -->
+
+<!-- view -->
+<div class="app-content">
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <a href class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside" ></a>
+    <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+    <div  uploader="uploader"  class="app-content-body app-content-full fade-in-up" ui-view></div>
+</div>
+<!-- / view -->
+<!-- navbar -->
+<div class="app-footer navbar navbar-fixed-bottom bg-light lt b-t" ng-class="{'m-n': app.hideAside}" ui-view="footer"></div>
+<!-- /navbar -->

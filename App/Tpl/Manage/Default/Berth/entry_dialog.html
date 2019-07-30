@@ -1,0 +1,54 @@
+<form class="form-horizontal" action="{:U('berth/entrance')}" method="post" id="entrance_form">
+    <table class="table">
+        <input type='hidden' name="berth_id" value="{$berth['berth_id']}"/>
+        <input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+        <input type='hidden' name="refer_url" value="{$refer_url}"/>
+        <input type='hidden' name="status" value="入住"/>
+        <tr>
+            <td>床位信息</td>
+            <td colspan="3">
+                {$berth['dorm_name']}, {$berth['berth_name']}, {$berth['place']}
+            </td>
+        </tr>
+        <tr>
+            <td>雇员</td>
+            <td colspan="3">
+                {:field_html_show("berth", "product_id")}
+            </td>
+        </tr>
+        <tr>
+            <td>入住时间</td>
+            <td colspan="3">
+                {:field_html_show("berth", "entry_time")}
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td colspan="3">
+                <textarea rows="6" style="width: 300px" id="content" name="content"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    function on_select_product() {
+        var data = {
+            "category_id":"{$market['category_id']}"
+        };
+        select_product(data);
+    }
+    $('#product_name').click(on_select_product);
+
+    function on_product_info(b) {
+        $('#product_name').val(b.name);
+        $('#product_id').val(b.product_id);
+    }
+
+    $(function(){
+
+    });
+
+</script>

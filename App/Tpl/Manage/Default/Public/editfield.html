@@ -1,0 +1,38 @@
+<php>$j=0;</php>
+<volist name="gvo['fields']" id="vo">
+    <if condition="$vo['operating'] != '4'">
+        <php>$j++;</php>
+        <if condition="$vo['one_row'] == '1' or $vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address'">
+            <if condition="$i%2 == 0">
+                <td colspan="2">&nbsp;</td>
+                </tr>
+            </if>
+            <tr>
+                <td class="tdleft" width="15%">{$vo.name}:</td>
+                <td colspan="3" id="{$vo['model']}_{$vo['field']}_{$vo['is_main']}_html">{$vo.html}</td>
+            </tr>
+            <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                <php>$i++;</php>
+            </if>
+        <else/>
+            <if condition="$i%2 != 0">
+                <tr>
+            </if>
+            <td class="tdleft" width="15%">
+                <if condition="$vo['field'] == 'demand_end_time'">
+                    <button id="minus_demand_end_time" type="button" style="width: 26px;height: 24px"><i class="icon-minus"></i></button>&nbsp;{$vo.name}&nbsp;<button id="plus_demand_end_time" type="button"  style="width: 26px;height: 24px"><i class="icon-plus"></i></button>:
+                <else/>
+                    {$vo.name}:
+                </if>
+            </td>
+            <td width="35%" id="{$vo['model']}_{$vo['field']}_{$vo['is_main']}_html">{$vo.html}</td>
+            <if condition="$i%2 == 0">
+                </tr>
+            </if>
+            <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                <td colspan="2">&nbsp;</td>
+                </tr>
+            </if>
+        </if>
+    </if>
+</volist>

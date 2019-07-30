@@ -1,0 +1,289 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+        <include file="Customer:navcat" />
+	</div>
+	<include file="Public:alert" />
+	<p class="view">
+		<img src=" __PUBLIC__/img/by_owner.png"/>
+        <a href="{:U('')}&{:FP($parameter, 'by=&lia=')}" <if condition="$Think.get.lia eq null">class="active"</if>>
+        {:L('ALL')}
+        </a>
+        <a href="{:U('')}&{:FP($parameter, 'lia=self')}" <if condition="$Think.get.lia eq 'self'">class="active"</if>>
+        我负责的
+        </a>
+        <a href="{:U('')}&{:FP($parameter, 'lia=belongs')}" <if condition="$Think.get.lia eq 'belongs'">class="active"</if>>
+        我管辖的
+        </a>
+        <img src="__PUBLIC__/img/by_time.png"/>
+		<a <if condition="$Think.get.byd eq 'today'">class="active"  href="{:U('')}&{:FP($parameter, 'byd=')} <else/> href="{:U('')}&{:FP($parameter, 'byd=today')}"</if>>{:L('TODAY_IS_NEW')}</a> |
+		<a <if condition="$Think.get.byd eq 'week'">class="active"  href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=week')}"</if>>{:L('THIS_WEEK_THE_NEW')}</a> |
+		<a <if condition="$Think.get.byd eq 'month'">class="active" href="{:U('')}&{:FP($parameter, 'byd=')}" <else/> href="{:U('')}&{:FP($parameter, 'byd=month')}"</if>>{:L('THIS_MONTH_THE_NEW')}</a>&nbsp;
+
+        <img src="__PUBLIC__/img/by_status.png"/>
+        <a <if condition="$Think.get.byv eq 'cv'">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>  href="{:U('')}&{:FP($parameter, 'byv=cv')}"</if>>待审核</a> |
+        <a <if condition="$Think.get.byv eq 'yv'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"  <else/> href="{:U('')}&{:FP($parameter, 'byv=yv')}" </if> >通过审核</a> |
+        <a <if condition="$Think.get.byv eq 'nv'">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}" <else/> href="{:U('')}&{:FP($parameter, 'byv=nv')}"</if>>未通过审核</a> |
+        <a <if condition="$Think.get.byv eq 'sbi'">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}" <else/> href="{:U('')}&{:FP($parameter, 'byv=sbi')}"</if>>未提交</a>
+
+        <img src="__PUBLIC__/img/by_status.png"/>
+        <a <if condition="$Think.get.service_state eq '未成单'">class="active"  href="{:U('')}&{:FP($parameter, 'service_state=')}"<else/> href="{:U('')}&{:FP($parameter, 'service_state=未成单')}"</if>>未成单</a> |
+        <a <if condition="$Think.get.service_state eq '服务前'">class="active"  href="{:U('')}&{:FP($parameter, 'service_state=')}"<else/> href="{:U('')}&{:FP($parameter, 'service_state=服务前')}"</if> >服务前</a> |
+        <a <if condition="$Think.get.service_state eq '服务中'">class="active"  href="{:U('')}&{:FP($parameter, 'service_state=')}"<else/> href="{:U('')}&{:FP($parameter, 'service_state=服务中')}"</if>>服务中</a> |
+        <a  <if condition="$Think.get.service_state eq '服务后'">class="active" href="{:U('')}&{:FP($parameter, 'service_state=')}"<else/>href="{:U('')}&{:FP($parameter, 'service_state=服务后')}"</if>>服务后</a>
+    </p>
+    <div class="row-fluid">
+		<div class="span12">
+            <div class="pull-left">
+            <form class="form-inline" id="searchForm" action="index.php" method="get">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <button  id="delete"  type="button" class="btn btn-mini  btn-danger" style="margin-right: 5px;"><i class="icon-remove"></i>{:L('DELETE')}</button >
+                </li>
+                <li class="pull-left">
+                    <if condition="($Think.get.customer_group_id neq null) and ($Think.get.group_type eq '1')">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-mini btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">组管理<span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a id="add_group" href="javascript:void(0);">添加到组</a></li>
+                                <li><a id="remove_group" href="javascript:void(0);">从本组移除</a></li>
+                            </ul>
+                        </div>
+                    <else/>
+                        <button  id="add_group" type="button"  class="btn btn-mini" style="margin-right: 5px;"><img src="__PUBLIC__/img/customer_source_icon.png"/>添加到组</button >
+                    </if>
+                </li>
+                <if condition="session('user_id') eq '1'">
+                    <li class="pull-left">
+                        {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                        <script>
+                            $(function() {
+                                $("#bylea").change(def_short_search_select);
+                            });
+                        </script>
+                    </li>
+                </if>
+                <li class="pull-left">
+                    {:branch_select_html("bybr", $branch,true, true, null, $league['league_id'])}&nbsp;&nbsp;
+                    <script>
+                        $(function() {
+                            $("#bybr").change(def_short_search_select);
+                        });
+                    </script>
+                </li>
+				<li class="pull-left">
+                    <ul class="nav pull-left">
+                        <li class="pull-left" >
+                            <include file="Public:def_index_fields_filter_select" />
+
+                        </li>
+                        <include file="Public:def_index_search_form" />
+                    </ul>
+				</li>
+			</ul>
+            </form>
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <a href="{:U('Customer/add')}" class="btn btn-mini btn-primary">
+                        <i class="icon-plus"></i>&nbsp; 添加
+                    </a>
+                    <button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu  pull-right">
+                        <li>
+                            <a href="javascript:void(0);" id="advanced_dosearch" class="link">
+                                {:L('ADVANCED_SEARCH')}
+                            </a>
+                        </li>
+                        <if condition="vali_permission('customer', 'export')">
+                        <li>
+                            <a href="javascript:void(0);" id="excelExport" class="link">
+                                </i>导出到Excel
+                            </a>
+                        </li>
+                        </if>
+                    </ul>
+                </div>
+			</div>
+		</div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+			<form id="form1" class="form-inline" action="" method="post">
+				<input type="hidden" name="owner_role" id="hidden_owner_id" value="0"/>
+				<input type="hidden" name="message_alert" id="hidden_message" value="0"/>
+				<input type="hidden" name="sms_alert" id="hidden_sms" value="0"/>
+				<input type="hidden" name="email_alert" id="hidden_email" value="0"/>
+				<input type="hidden" name="operating_type" id="operating_type" value=""/>
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+					<thead>
+						<tr id="childNodes_num">
+							<th><input type="checkbox" id="check_all"/></th>
+                            <include file="Customer:model_list_header" />
+							<th style="width:90px;text-align: center" >{:L('OPERATION')}</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td id="td_colspan">{$page}</td>
+						</tr>
+					</tfoot>
+					<tbody>
+						<volist name="list" id="vo">
+							<tr>
+								<td>
+									<input name="customer_id[]" class="check_list" type="checkbox" value="{$vo.customer_id}"/>
+								</td>
+                                <volist name="field_array" id="v">
+                                    <include file="Public:def_index_list" />
+                                </volist>
+								<td   style="text-align: center">
+                                    <a href="{:U('customer/view', 'id='.$vo['customer_id'])}" title="查看详情">
+                                        <i class="icon-th-large"></i>
+                                    </a>
+								</td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+<include file="Public:groupstance" />
+
+<include file="Public:export_dialog" />
+<include file="Public:adv_search" />
+<script>
+    $("#advanced_dosearch").click(function(){
+        advsearch('{:U("customer/search")}');
+    });
+</script>
+
+<script type="text/javascript">
+
+function changeContent(){
+	a = $("#select1  option:selected").val();
+	window.location.href="{:U('customer/index', 'by=')}"+a;
+}
+$(function(){
+
+    $("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked', $(this).prop("checked"));
+	});
+
+	$('#delete').click(function(){
+		if(confirm('{:L('Confirm_to_delete')}')){
+            $("#form1").attr('action', '{:U("customer/delete")}');
+            $("#form1").submit();
+		}
+	});
+	$('#remove').click(function(){
+		if(confirm('{:L('CONFIRMED_IN_THE_CUSTOMER_POOL')}')){
+			$("#form1").attr('action', '{:U("customer/remove")}');
+			$('#operating_type').attr('value', 'remove');
+			$("#form1").submit();
+		}
+	});
+
+    function showSmsDialog(id_array) {
+        var customer_ids = id_array.join(",");
+        $("#sms_open_url_a").attr("href", "{:U('sms/sendDialog', 'by=model&model=customer&ids=')}"+customer_ids);
+        $("#sms_open_url_span").click();
+    }
+
+	$("#check_send").click(function(){
+		var id_array = new Array();
+		$("input[class='check_list']:checked").each(function(){  
+			id_array.push($(this).val());
+		});
+        if (id_array.length == 0) {
+            alert("没有选择任何客户");
+        } else {
+            showSmsDialog(id_array);
+        }
+	});
+
+	$("#page_send").click(function(){
+		var id_array = new Array();
+		$("input[class='check_list']").each(function(){
+			id_array.push($(this).val());
+		});
+        showSmsDialog(id_array);
+	});
+
+    $("#all_send").click(function(){
+        $("#sms_open_url_a").attr("href", "{:U('sms/sendDialog', 'by=model&model=customer')}");
+        $("#sms_open_url_span").click();
+    });
+
+});
+</script>
+
+<object id="rcard" type="application/x-rcard"  width="0" height="0">
+    <param name="onload" value="pluginLoaded" />
+</object>
+<script>
+    $(function(){
+        function person_search(data, cardinfo) {
+            if (data) {
+                if (data.length == 1) {
+                    customer_url = "{:U('customer/view','id=')}" + data[0].customer_id;
+                } else {
+                    customer_url = "{:U('customer/index','field=cardid&condition=is&act=search&search=')}" + cardinfo.cardid;
+                }
+                window.location.href=customer_url;
+            } else {
+                var param = "&rcard";
+                window.location.href="{:U('customer/add')}" + param;
+            }
+        }
+
+        function person(p) {
+            if (p) {
+                var cardinfo = {
+                    name: p.name,
+                    address: p.address,
+                    cardid: p.cardid,
+                    police: p.police,
+                    pic: p.pic,
+                    birthday: p.birthday,
+                    nation: p.nation,
+                    sex: p.sex,
+                    validstart: p.validstart,
+                    validend: p.validend,
+                    nationcode: p.nationcode,
+                    msg: p.msg
+                };
+                $.ajax({
+                    type: 'get',
+                    url: "{:U('customer/changeContent', 'field=cardid&search=')}" + cardinfo.cardid,
+                    async: false,
+                    success: function (data) {
+                        if (data && data.data) {
+                            person_search(data.data.list, cardinfo);
+                        }
+                    },
+                    dataType:'json'
+                });
+            }
+        }
+
+        var rcard = document.getElementById('rcard');
+        if (rcard.valid) {
+            if (rcard.attachEvent) {
+                rcard.attachEvent("onperson", person);
+            } else {
+                rcard.addEventListener("person", person, false);
+            }
+            rcard.open();
+        }
+    });
+</script>
+<include file="Public:footer" />

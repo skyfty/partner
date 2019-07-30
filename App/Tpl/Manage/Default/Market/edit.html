@@ -1,0 +1,58 @@
+<include file="Public:header" />
+
+<div class="container">
+	<div class="page-header">
+		<h4>编辑客户服务</h4>
+	</div>
+    <div class="row-fluid">
+		<div class="span12">
+			<include file="Public:alert" />
+			<form  id="form1" action="{:U('')}" method="post"  enctype="multipart/form-data">
+				<input type="hidden" name="id" value="{$market['market_id']}" />
+				<input type="hidden" name="market_id" value="{$market['market_id']}" />
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="reset" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="reset" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <include file="Public:editfieldsgroup" />
+                    </tbody>
+                </table>
+            </form>
+		</div>
+	</div>
+</div>
+<script>
+    <if condition="$market['product_count'] gt 0">
+        $("#category_id").attr("disabled", "disabled");
+        $("#level").attr("disabled", "disabled");
+    </if>
+</script>
+<include file="Public:editfieldvalid"/>
+<include file="Market:public_edit"/>
+<script>
+    $(function(){
+        $("#category_id").change();
+        <if condition="$per_change_owner_id neq true">
+        $("#owner_role_id_name").attr("disabled", "disabled");
+        </if>
+        <if condition="$per_change_branch_id neq true">
+        $("#branch_id").attr("disabled", "disabled");
+        </if>
+    });
+</script>
+<include file="Public:footer" />

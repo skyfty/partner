@@ -1,0 +1,119 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>修改服务雇员信息</h4>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <include file="Public:alert" />
+            <form action="{:U('')}" method="post"  enctype="multipart/form-data">
+                <input type="hidden" name="id" value="{$market_product['market_product_id']}" />
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <input type="hidden" name="m" value="market"/>
+                <input type="hidden" name="a" value="product_edit"/>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="reset" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="reset" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="fields_group" id="gvo">
+                        <tr><th colspan="4">基本信息</th></tr>
+                        <php>$j=0;</php>
+                        <volist name="gvo['fields']" id="vo">
+                            <if condition="$vo['operating'] != '4'">
+                                <php>$j++;</php>
+                                <if condition="$vo['one_row'] == '1' or $vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address'">
+                                    <if condition="$i%2 == 0">
+                                        <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </if>
+                                    <tr>
+                                        <td class="tdleft" width="15%">
+                                            <if condition="($vo.field == 'settle_duration') and ($market_product['serve_modality'] == '1')">
+                                                结算次数
+                                            <elseif  condition="($vo.field == 'service_duration') and ($market_product['serve_modality'] == '1')"/>
+                                                服务次数
+                                            <else/>
+                                                {$vo.name}:
+                                            </if>
+
+                                        </td>
+                                        <td colspan="3" id="{$vo['model']}_{$vo['field']}_{$vo['is_main']}_html">
+                                            {$vo.html}
+                                            <if condition="($vo.field == 'product_id')">
+                                                <span id="deta_corss_id"></span>
+                                            </if>
+                                        </td>
+                                    </tr>
+                                    <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                                        <php>$i++;</php>
+                                    </if>
+                                    <else/>
+                                    <if condition="$i%2 != 0">
+                                        <tr>
+                                    </if>
+                                    <td class="tdleft" width="15%">
+                                        <if condition="($vo.field == 'settle_duration') and ($market_product['serve_modality'] == '1')">
+                                            结算次数
+                                        <elseif  condition="($vo.field == 'service_duration') and ($market_product['serve_modality'] == '1')"/>
+                                            服务次数
+                                        <else/>
+                                            {$vo.name}:
+                                        </if>                                    </td>
+                                    <td width="35%" id="{$vo['model']}_{$vo['field']}_{$vo['is_main']}_html">{$vo.html}</td>
+                                    <if condition="$i%2 == 0">
+                                        </tr>
+                                    </if>
+                                    <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                                        <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </if>
+                                </if>
+                            </if>
+                        </volist>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function  on_market_ready() {
+
+    }
+    <if condition="$lock_agency_scale eq true">
+    $("#agency_scale").attr("disabled", "disabled");
+    $("#agency").attr("disabled", "disabled");
+    </if>
+</script>
+
+<switch name="market['category_id']" >
+    <case value="12">
+        <include file="product_datapick_keepsake"/>
+    </case>
+    <default />
+    <if condition="$market['serve_modality'] == '1'">
+        <include file="product_datapick_special"/>
+        <else/>
+        <include file="product_datapick_general"/>
+    </if>
+</switch>
+
+<include file="Public:editfieldvalid"/>
+<include file="Public:footer" />

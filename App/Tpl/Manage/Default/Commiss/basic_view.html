@@ -1,0 +1,74 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">客服信息</a></h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="Commiss:navtab" />
+    </div>
+    <div class="row">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+                                    <a href="{:U('commiss/edit', 'id='.$commiss['commiss_id'].'&assort='.$assort)}">编辑</a>&nbsp;|
+                                    <a href="{:U('commiss/delete', 'commiss_id='.$commiss['commiss_id'])}&refer_url={$refer_url|urlencode}" class="del_confirm">{:L('DELETE')}</a>&nbsp;|
+                                    <if condition="($commiss['order_classify'] neq '') and in_array($commiss['order_classify'], array('product', 'customer'))">
+                                        <if condition="$commiss['related_model']">
+                                            {$commiss['related_model_id']} |
+                                        <else/>
+                                            {$commiss_add_href}
+                                        </if>
+                                    </if>
+                                    <a href="javascript:void(0);" class="add_log" title="撤销结算提交">添加日志</a> |
+
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Commiss:basicinfo" />
+                        </td>
+                    </tr>
+                    <include file="Public:defviewtable" />
+                    </tbody>
+                </table>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th>日志</th>
+                </tr>
+            </table>
+            <div id="log-tabs">
+                <include file="Commiss:basic_view_logtable" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".add_log").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日志",
+            lock:true,
+            ok: function (data) {
+                $("#add-log").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("log/add","r=RCommissLog&module=commiss&type=1&id=".$commiss["commiss_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+</script>
+<include file="Public:footer" />

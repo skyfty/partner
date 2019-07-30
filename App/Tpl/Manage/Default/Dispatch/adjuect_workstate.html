@@ -1,0 +1,143 @@
+
+<script id="workstate_tmpl" type="text/x-jquery-tmpl">
+
+<input id="wsbt" readonly="readonly" type="text" style="width:90px;background-color: white;cursor:default;" placeholder="开始时间" class="input-medium" name="wsbt" onfocus="WdatePicker()">
+-
+<input id="wset" readonly="readonly" type="text" style="width:90px;background-color: white;cursor:default;" placeholder="结束时间" class="input-medium" name="wset" onfocus="WdatePicker()">
+<input type="text" id="nobd" name="nobd"  placeholder="非空闲天数" style="width:70px">&nbsp;
+</script>
+<script language="JavaScript">
+    $("#static_condition").html($("#workstate_tmpl").tmpl());
+    $("#wsbt").prop('value', '{$Think.get.wsbt}');
+    $("#wset").prop('value', '{$Think.get.wset}');
+    $("#nobd").prop('value', '{$Think.get.nobd}');
+</script>
+<script type="text/javascript">
+
+    $(function(){
+
+        $(".adjuect_pos").click(function(){
+            var product_id = $(this).attr("rel");
+            var dialog = art.dialog({
+                id: 'adjuect_pos',
+                title: "调整位置",
+                lock:true,
+                ok: function () {
+                    show_lock_tips("正在提交...");
+                    $('#adjuect_queue_pos_form').submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url:'{:U("dispatch/adjuect_queue_pos","product_id=")}' + product_id,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        });
+        $(".edit_state").click(function(){
+            var product_id = $(this).attr("rel");
+            var dialog = art.dialog({
+                id: 'edit_state',
+                title: "修改工作状态",
+                lock:true,
+                ok: function () {
+                    show_lock_tips("正在提交...");
+                    $('#edit_workstate_form').submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url:'{:U("dispatch/edit_workstate")}' + "&act={$act}&assort={$assort}&product_id=" + product_id,
+                success: function (data) {
+                    if (data == ""){
+                        window.location.reload();
+                    } else {
+                        dialog.content(data);
+                    }
+                },
+                cache: false
+            });
+            return false;
+        });
+
+
+        $(".pause_queue").click(function(){
+            var href = $(this).attr("href");
+            var title = $(this).attr("title");
+            art.dialog.confirm('确实要'+title+'调度吗', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+
+        $(".exit_queue").click(function(){
+            var href = $(this).attr("href");
+            var title = $(this).attr("title");
+            art.dialog.confirm('确实要'+title+'吗？', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+        $(".edit_queue_describe").click(function(){
+            var product_id = $(this).attr("rel");
+            var dialog = art.dialog({
+                id: 'edit_queue_describe',
+                title: "修改备注",
+                lock:true,
+                ok: function () {
+                    show_lock_tips("正在提交...");
+                    $('#edit_queue_describe_form').submit();
+                },
+                cancel:true
+            });
+            var cq = $(this).attr("cq");
+
+            $.ajax({
+                url:'{:U("dispatch/edit_queue_describe","product_id=")}' + product_id + "&cq=" + cq,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        });
+
+
+        $(".adjuect_branch_reset").click(function(){
+            var href = $(this).attr("href");
+            var title = $(this).attr("title");
+            art.dialog.confirm('确实要'+title+'吗', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+
+        $(".adjuect_branch_paigang").click(function(){
+            var href = $(this).attr("href");
+            art.dialog.confirm('确实要设置排岗状态吗？', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+        $(".set-flag").click(function(){
+            var href = $(this).attr("href");
+            var title = $(this).attr("title");
+            art.dialog.confirm('确实要'+title+'吗', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+    });
+
+</script>

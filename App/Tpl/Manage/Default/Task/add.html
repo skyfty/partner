@@ -1,0 +1,111 @@
+<include file="Public:header" />
+<script type="text/javascript" src="__PUBLIC__/js/kindeditor-all-min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/zh_CN.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/kindeditor.css" type="text/css" />
+<script type="text/javascript">
+	var editor;
+		KindEditor.ready(function(K) {
+			editor = K.create('textarea[name="description"]', {
+				uploadJson:'{:U("file/editor")}',
+				allowFileManager : true,
+				loadStyleMode : false,
+				fileManagerJson: "{:U('file/manager')}"
+			});
+		});
+</script>
+<div class="container">
+	<div class="page-header">
+		<h4>{:L('ADD_TASK')}</h4>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<include file="Public:alert"/>
+			<form action="{:U('task/add')}" method="post">
+			<input type="hidden" name="creator_role_id" value="{$Think.session.role_id}"/>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>&nbsp;</td>						
+						<td>
+                            <input class="btn btn-primary" name="submit" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE AND NEW')}"/>&nbsp;
+                            <input class="btn" onclick="javascript:history.go(-1)" type="reset" value="{:L('RETURN')}"/>
+                        </td>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE AND NEW')}"/>&nbsp;
+                            <input onclick="javascript:history.go(-1)" class="btn" type="reset" value="{:L('RETURN')}"/>
+                        </td>
+					</tr>
+				</tfoot> 
+				<tbody>
+					<tr><th colspan="4">{:L('BASIC_INFO')}</th></tr>
+					<tr>
+						<td class="tdleft"  width="15%">{:L('THEME')}</td>
+						<td width="35%">
+                            <input type="text" name="subject" id="subject" />
+                        </td>
+						<td class="tdleft" width="15%">{:L('NOTIFICATION_METHODS')}</td>
+						<td width="35%">
+                            <input type="checkbox" name="message_alert" value="1" checked="checked">{:L('MESSAGE')} &nbsp;
+                            <input type="checkbox" name="email_alert" value="1">{:L('EMAIL')}
+                        </td>
+					</tr>
+					<tr>
+						<td class="tdleft"  width="15%">负责人</td>
+						<td width="35%">
+                            <input type="hidden" name="owner_role_id" id="owner_role_id"/>
+                            <input class="span6" type="text" id="owner_name" name="owner_name" />
+                        </td>
+                        <td class="tdleft"  width="15%">{:L('SELECT_RELATED')}</td>
+                        <td width="35%">
+                            <select name="module" class="span3" onchange="changeContent()" id="select1">
+                                <option value="">相关模型</option>
+                                <option value="customer">{:L('CUSTOMER')}</option>
+                                <option value="market">客户服务</option>
+                                <option value="product">{:L('PRODUCT')}</option>
+                            </select>
+                            <input type="hidden" id="module_id" name="module_id" id="select_content"/>
+                            <input type="text" name="module_name" id="module_name"/>
+                        </td>
+					</tr>
+					<tr>
+						<td class="tdleft">开始时间</td>
+						<td>
+                            <input type="text" id="start_time" onfocus="on_start_time_focus();" name="start_time" class="Wdate"/>
+                        </td>
+                        <td class="tdleft">结束时间</td>
+                        <td>
+                            <input type="text" id="end_time" onfocus="on_end_time_focus();" name="end_time" class="Wdate"/>
+                        </td>
+					</tr>
+					<tr>
+						<td class="tdleft" >{:L('PRECEDENCE')}</td>
+						<td colspan="3">
+                            <select name="priority">
+                                <option value="紧急任务">紧急任务</option>
+                                <option value="一般性任务">一般性任务</option>
+						    </select>
+                        </td>
+					</tr>
+					<tr>
+						<td class="tdleft">{:L('DESCRIPTION')}</td>
+						<td colspan="3">
+							<textarea rows="15" class="span10" name="description"></textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="hide" id="dialog-message7" title="{:L('SELECT_EXECUTOR')}">loading...</div>
+
+<include file="Task:datapick" />
+<include file="Public:footer" />

@@ -1,0 +1,34 @@
+<include file="User:selectDialog" />
+<script>
+    var role_field_name = "";
+    $(function(){
+        $('.role_name').click(
+            function(){
+                role_field_name = $(this).attr("rel");
+
+                var functionName =role_field_name + "_role_select_dialog";
+                if(typeof(window[functionName]) === "function") {
+                    eval(functionName + '(\''+role_field_name+'\')');
+                } else {
+                    var param = {};
+                    <eq name="Think.MODULE_NAME" value="Market">
+                    if (role_field_name == "owner_role_id") {
+                        param['branch_id'] = "{:session('branch_id')}";
+                    }
+                    </eq>
+                    user_select_dialog(function(name, item){
+                        $('#'+role_field_name+'_name').val(name);
+                        $('#' + role_field_name).val(item).change();
+                    }, param);
+                }
+            }
+        );
+        $('.role_name_remove').click(
+            function(){
+                role_field_name = $(this).attr("rel");
+                $('#'+role_field_name).attr('value', '');
+                $('#'+role_field_name+"_name").attr('value', "选择创建人");
+            }
+        );
+    });
+</script>

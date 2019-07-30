@@ -1,0 +1,23 @@
+<form class="form-horizontal" action="{:U('product/workstate_edit')}" method="post" >
+    <input type="hidden" name="workstate_id" value="{$temp.workstate_id}"/>
+    <div class="control-group">
+        <label class="control-label" for="name">{:L('WORKSTATE_NAME_OF')}</label>
+        <div class="controls">
+            <input type="text" id="name" name="name" value="{$temp.name}"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="name">{:L('DESCRIBE')}</label>
+        <div class="controls">
+            <textarea class="span4" name="description">{$temp.description}</textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="name"></label>
+        <div class="controls">
+            <input class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>
+            <input class="btn btn-primary" type="reset" value="{:L('CANCEL')}"/>
+        </div>
+    </div>
+</form>
+

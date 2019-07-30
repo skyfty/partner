@@ -1,0 +1,89 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<link type="text/css" href="__PUBLIC__/jstree/themes/default/style.css?t=20140830"  rel="stylesheet"/>
+<script src="__PUBLIC__/jstree/jstree.js"></script>
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px; ">
+        <ul class="nav nav-tabs">
+            <include file="Channel:navcat" />
+        </ul>
+    </div>
+    <include file="Public:alert" />
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="bulk-actions align-left">
+                <div class="pull-left">
+                    <select id="status" style="width: auto;" name="status" onchange="on_status_change()">
+                        <option value="">全部</option>
+                        <option value="启用" selected="selected">启用</option>
+                        <option value="禁用">禁用</option>
+                    </select>
+                </div>
+                <div class="pull-right">
+                    <if condition="session('?admin')">
+                    <a class="btn btn-primary" href="{:U('channel/add')}"  target="_blank"><i class="icon-plus"></i>&nbsp; 添加渠道</a>&nbsp;
+                    </if>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+
+            <div style="border: 1px solid #CCCCCC">
+                <div id="datatree"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    var options = {
+        'core': {
+            "animation": 1,
+            "check_callback": true,
+
+            "themes": {"stripes": true},
+            'data': {
+                "url": "{:U('channel/channel_tree')}",
+                "dataType": "json",
+                'data' : function (node) {
+                    return {
+                        'status' : $("#status").val()
+                    };
+                }
+            },
+            'multiple': false
+        },
+        "themes": {
+            "theme": "classic",
+            "dots": true,
+            "icons": true,
+            "variant": "large"
+        },
+        "types": {
+            "root": {
+                "icon": "/static/3.2.1/assets/images/tree_icon.png",
+                "valid_children": ["default"]
+            },
+            "default": {
+                "valid_children": ["default", "file"]
+            },
+            "file": {
+                "icon": "glyphicon glyphicon-file",
+                "valid_children": []
+            }
+        }
+    };
+    var jstree = $('#datatree').jstree(options);
+    function on_status_change() {
+        var tree = jQuery.jstree.reference("#datatree");
+        tree.refresh();
+    }
+
+</script>
+<include file="Public:footer" />
+

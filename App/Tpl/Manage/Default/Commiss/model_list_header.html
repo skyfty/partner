@@ -1,0 +1,41 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$vo['field'] == 'owner_role_id'">
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('owner_role_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="owner_role_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <div id="owner_role_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.owner_role_id eq '')"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":commiss_owner_staff_list()" id="vo">
+                    <a <if condition="($Think.get.owner_role_id eq $vo['role_id'])"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id='.$vo['role_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['form_type'] == 'order_classify'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('order_classify')" onmouseout="mclosetime()"  href="javascript:void(0);" id="order_classify_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.order_classify neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.order_classify|select_setting_key_show_html=###,794}</span>
+            </if>
+            <div id="order_classify" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.order_classify eq '')"> href="{:U('')}&{:FP($parameter, 'order_classify=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'order_classify=')}"</if>>
+                全部
+                </a>
+                <volist name=":model_select_field_list(794)" id="vo">
+                    <a <if condition="($Think.get.order_classify eq $key)"> href="{:U('')}&{:FP($parameter, 'order_classify=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'order_classify='.$key)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+            </div>
+        <else/>
+            <include file="Public:def_index_list_col" />
+            <include file="Public:def_index_list_field_col" />
+        </if>
+    </th>
+</volist>

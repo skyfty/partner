@@ -1,0 +1,73 @@
+<script type="text/javascript">
+    function request_product_info(p, cb, cp) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("product/getproduct")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data, cp);
+                }
+            }
+        });
+    }
+
+    function request_cat_info(i, cb, cp) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("product/getcategory")}',
+            'data':{
+                "id":i
+            },
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data[0], cp);
+                }
+            }
+        });
+    }
+
+    function request_skill_info(p,s, cb, cp) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("product/getskill")}',
+            'data':{
+                "product_id":p,
+                "category_id":s
+            },
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data, cp);
+                }
+            }
+        });
+    }
+
+    function select_product(param, cb, tpl) {
+        tpl = tpl ? tpl : '{:U("product/listDialog")}';
+        art.dialog.data('reqparam', param);
+        art.dialog.open(tpl, {
+            id: 'select_product_dialog',
+            title: "选择雇员",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var product_id = $(this.iframe.contentWindow.document).find('input:radio[name="product_id"]:checked').val();
+                var data = {
+                    'product_id': product_id
+                };
+                request_product_info(data, cb?cb:on_product_info);
+            },
+            cancel:true
+        });
+    }
+</script>
+
+
+

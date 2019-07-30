@@ -1,0 +1,49 @@
+<table  class="table"  style="border: 0px;margin-bottom:0px">
+    <tbody>
+    <tr>
+        <td>
+            <if condition="!empty($customer['images']['main'])">
+                <div class="box-secondary">
+                    <a href="{$customer.images.main.path}" data-lightbox="roadtrip">
+                        <img src="{$customer.images.main.path}" class="thumbnail cardpicthumb">
+                    </a>
+                </div>
+            </if>
+            <if condition="!empty($product['images']['cardpic'])">
+                <a href="{$customer.images.cardpic.path}" data-lightbox="roadtrip">
+                    <img src="{$customer.images.cardpic.path}" class="thumbnail cardpicthumb">
+                </a>
+            </if>
+        </td>
+        <td>
+            <table class="table">
+                <tr>
+                    <td class="tdleft" width="16%">编号:</td>
+                    <td width="16%">
+                        {$customer['idcode']}
+                    </td>
+                    <td class="tdleft" width="16%">客户名称:</td>
+                    <td width="16%">{$customer['name']}</td>
+                    <td class="tdleft" width="16%">性别:</td>
+                    <td width="16%">{$customer['sex']}</td>
+
+                </tr>
+                <tr>
+                    <td class="tdleft" width="16%">手机号码:</td>
+                    <td width="16%">
+                        {$customer['telephone']}
+                    </td>
+                    <td class="tdleft" width="16%">账户余额:</td>
+                    <td width="16%">
+                        {$customer.balance}
+                    </td>
+                    <td class="tdleft" width="16%">服务状态:</td>
+                    <td width="16%">
+                        {$customer.service_state}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>

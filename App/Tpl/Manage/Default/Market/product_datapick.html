@@ -1,0 +1,152 @@
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    var product_info = null;
+    function on_select_product() {
+        <if condition="($market['category_id'] == '6')">
+            var data = {
+                "category_id":["{$market['category_id']}",2]
+            };
+        <else/>
+            var data = {
+                "category_id":"{$market['category_id']}"
+            };
+        </if>
+        data['station_state'] = ['其他录用',"签约", "试用",  "无底薪签约"];
+        select_product(data);
+    }
+    $('#product_name').click(on_select_product);
+
+    function on_product_info(b) {
+        product_info = b;
+        $('#product_name').val(product_info.name);
+        $('#product_id').val(product_info.product_id);
+        if (product_info.skill == "") {
+            $("#deta_corss_id").html("&nbsp;<span style='color:red;'>选择的雇员没有服务类别， 不能创建订单</span>");
+            return;
+        }
+        var skill_cate = product_info.skill_info["{$market['category_id']}"];
+        if ($("#service_price").val() == "") {
+            $("#service_price").val(skill_cate.salary);
+        }
+        var html = "&nbsp;<input type='text' readonly='readonly' value='" +skill_cate.level+ "'/>";
+        html +="&nbsp;<input type='text' readonly='readonly' value='保险"+(product_info.insurance == "是"?"已上":"未上")+ "'/>";;
+        $("#deta_corss_id").html(html);
+
+        on_market_ready();
+    }
+
+
+    function on_real_start_time_focus() {
+        WdatePicker({
+            dateFmt: "yyyy-MM-dd HH:mm",
+            onpicked : on_real_start_time_picked,
+            oncleared:on_real_start_time_picked
+        });
+    }
+
+    function on_real_start_time_picked() {
+        var start_time = $("#real_start_time").val();
+        if (start_time) {
+            $("#real_end_time").removeAttr("disabled");
+        } else {
+            $("#real_end_time").val("");
+            $("#real_end_time").attr("disabled","disabled");
+        }
+        on_recess_day_change();
+    }
+
+    function on_real_end_time_focus() {
+        var mindate = $("#real_start_time").val();
+        WdatePicker({
+            dateFmt: "yyyy-MM-dd HH:mm",
+            minDate:mindate,
+            onpicked : on_recess_day_change,
+            oncleared:on_recess_day_change
+        });
+    }
+
+    function calculate_service_day() {
+        var start_time = $("#real_start_time").val();
+        if (start_time) {
+            var end_time = $("#real_end_time").val();
+        }
+        if (start_time == "" || end_time == "") {
+            return 0;
+        }
+        return moment(end_time, "YYYY-MM-DD HH:mm").diff(moment(start_time, "YYYY-MM-DD HH:mm"), 'hours');
+    }
+
+    function calculate_end_time(start_time, f) {
+        var service_duration = parseFloat($("#service_duration").val());
+        service_duration += parseInt($("#recess_day").val());
+        return moment(start_time, f).add('days',service_duration).format(f);
+    }
+
+    function on_recess_day_change() {
+        calculate_service_duration();
+    }
+
+    function calculate_agency_money() {
+        var agency_scale = $("#agency_scale").val();
+        if (!agency_scale) agency_scale = 0;
+        agency_scale = parseFloat(agency_scale);
+
+        var settle_price = $("#settle_price").val();
+        if (!settle_price) settle_price = 0;
+        settle_price = parseFloat(settle_price);
+
+        var agency = Math.ceil(settle_price * agency_scale / 100);
+        $("#agency").val(agency);
+        calculate_salary_money();
+    }
+
+    function on_agency_change() {
+            var settle_price = $("#settle_price").val();
+        if (!settle_price) settle_price = 0;
+        settle_price = parseFloat(settle_price);
+        if (settle_price != 0) {
+            var agency = $("#agency").val();
+            if (agency != 0) {
+                agency = Math.floor(parseFloat(agency));
+                var agency_scale = agency/settle_price * 100;
+                $("#agency_scale").val(agency_scale.toFixed(2));
+            }
+        }
+
+        calculate_salary_money();
+    }
+
+    function calculate_salary_money() {
+        var agency = $("#agency").val();
+        if (!agency) agency = 0;
+        agency = Math.floor(parseFloat(agency));
+
+        var settle_price = $("#settle_price").val();
+        if (!settle_price) settle_price = 0;
+        settle_price = parseFloat(settle_price);
+        $("#salary").val(settle_price - agency);
+    }
+
+    $(function(){
+        $("#sum_settle_price").attr("readonly","readonly");
+        $("#reality_price").attr("readonly","readonly");
+        $("#salary").attr("readonly","readonly");
+        $("#settle_price").attr("readonly","readonly");
+        $("#price").attr("readonly","readonly");
+        $("#service_duration").attr("readonly","readonly");
+
+        <if condition="$Think.get.product_id != ''">
+        var product_id = {$Think.get.product_id};
+        <else/>
+        var product_id = $('#product_id').val();
+        </if>
+        if (product_id) {
+            var data = {
+                'product_id': product_id
+            };
+            request_product_info(data, on_product_info);
+        }
+    });
+
+</script>

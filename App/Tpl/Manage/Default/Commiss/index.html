@@ -1,0 +1,304 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<style>
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+</style>
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+        <include file="Commiss:navcat" />
+	</div>
+	<include file="Public:alert" />
+    <div class="row-fluid view">
+        <div class="span12">
+            <ul id="sddm" style="margin:0px 0px 0px 0px">
+                <li>
+                    <i class="icon-list"></i>
+                    <a href="{:U('')}&{:FP($parameter, 'by=&lia=')}" <if condition="$Think.get.lia eq null">class="active"</if>>
+                    {:L('ALL')}
+                    </a>
+                    <a href="{:U('')}&{:FP($parameter, 'lia=self')}" <if condition="$Think.get.lia eq 'self'">class="active"</if>>
+                    我负责的
+                    </a>
+                    <a href="{:U('')}&{:FP($parameter, 'lia=belongs')}" <if condition="$Think.get.lia eq 'belongs'">class="active"</if>>
+                    我登记的
+                    </a>
+                </li>
+
+                <li>
+                    <i class="icon-time"></i>
+                </li>
+                <li>
+                    <a onmouseover="mopen('create_time')" onmouseout="mclosetime()" <if condition="($Think.get.bycd neq '')">href="{:U('')}&{:FP($parameter, 'bycd=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'bycd=')}"</if>>
+                    创建时间
+                    </a>
+                    <if condition="$Think.get.bycd neq ''">
+                        <a href="{:U('')}&{:FP($parameter, 'bycd=')}" style="color: darkmagenta"  class="active">[{:create_time_desc($_GET['bycd'])}]</a>
+                    </if>
+                    <div  id="create_time" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                        <a <if condition="$Think.get.bycd eq 'today'">class="active" href="{:U('')}&{:FP($parameter, 'bycd=')}"<else/> href="{:U('')}&{:FP($parameter, 'bycd=today')}"</if>>
+                        今日
+                        </a>
+                        <a <if condition="$Think.get.bycd eq 'month'">class="active"  href="{:U('')}&{:FP($parameter, 'bycd=')}"<else/> href="{:U('')}&{:FP($parameter, 'bycd=month')}"</if>>
+                        本月
+                        </a>
+                        <a <if condition="$Think.get.bycd eq 'fmonth'">class="active"  href="{:U('')}&{:FP($parameter, 'bycd=')}"<else/> href="{:U('')}&{:FP($parameter, 'bycd=fmonth')}"</if>>
+                        上月
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    &nbsp; <a onmouseover="mopen('order_date')" onmouseout="mclosetime()" <if condition="($Think.get.byod neq '')">href="{:U('')}&{:FP($parameter, 'byod=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'byod=')}"</if>>
+                    意向时间
+                    </a>
+                    <if condition="$Think.get.byod neq ''">
+                        <a href="{:U('')}&{:FP($parameter, 'byod=')}" style="color: darkmagenta"  class="active">[{:create_time_desc($_GET['byod'])}]</a>
+                    </if>
+                    <div  id="order_date" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                        <a <if condition="$Think.get.byod eq 'today'">class="active" href="{:U('')}&{:FP($parameter, 'byod=')}"<else/> href="{:U('')}&{:FP($parameter, 'byod=today')}"</if>>
+                        今日
+                        </a>
+                        <a <if condition="$Think.get.byod eq 'month'">class="active"  href="{:U('')}&{:FP($parameter, 'byod=')}"<else/> href="{:U('')}&{:FP($parameter, 'byod=month')}"</if>>
+                        本月
+                        </a>
+                        <a <if condition="$Think.get.byod eq 'fmonth'">class="active"  href="{:U('')}&{:FP($parameter, 'byod=')}"<else/> href="{:U('')}&{:FP($parameter, 'byod=fmonth')}"</if>>
+                        上月
+                        </a>
+                    </div>
+                </li>
+
+                <li><i class="icon-leaf"></i></li>
+                <li>
+                    <a <if condition="($Think.get.byw neq '')">href="{:U('')}&{:FP($parameter, 'byw=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'byw=on')}"</if>>
+                    需处理
+                    </a>
+                </li>
+                <li>
+                    <a <if condition="($Think.get.byk neq '')">href="{:U('')}&{:FP($parameter, 'byk=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'byk=on')}"</if>>
+                    客服待处理
+                    </a>
+                </li>
+            </ul>
+            <div style="float: right">客服部：{:defaultinfo('commiss_telephone')}</div>
+
+        </div>
+
+    </div>
+
+    <div class="row-fluid" style="padding-top: 15px">
+		<div class="span12">
+            <div class="pull-left">
+            <form class="form-inline" id="searchForm" action="index.php" method="get">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <div class="btn-group" style="padding-right: 5px">
+                        <button id="default_button"  class="btn btn-default" style="display: none"></button>
+                        <button id="delete"  class="btn btn-danger  btn-mini"><i class="icon-remove"></i>{:L('DELETE')}</button>
+                        <button class="btn  btn-mini  btn-danger dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);">项目交接</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="pull-left">
+                    <if condition="($Think.get.commiss_group_id neq null) and ($Think.get.group_type eq '1')">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-mini btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">组管理<span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a id="add_group" href="javascript:void(0);">添加到组</a></li>
+                                <li><a id="remove_group" href="javascript:void(0);">从本组移除</a></li>
+                            </ul>
+                        </div>
+                    <else/>
+                        <button  id="add_group" type="button"  class="btn btn-mini" style="margin-right: 5px;"><img src="__PUBLIC__/img/customer_source_icon.png"/>添加到组</button >
+                    </if>
+                </li>
+                <if condition="session('user_id') eq '1'">
+                    <li class="pull-left">
+                        {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                        <script>
+                            $(function() {
+                                $("#bylea").change(def_short_search_select);
+                            });
+                        </script>
+                    </li>
+                </if>
+                <li class="pull-left">
+                    {:branch_select_html("bybr", $branch,true, true, null,$league['league_id'])}&nbsp;&nbsp;
+                    <script>
+                        $(function() {
+                            $("#bybr").change(def_short_search_select);
+                        });
+                    </script>
+                </li>
+				<li class="pull-left">
+                    <ul class="nav pull-left">
+                        <li class="pull-left" >
+                            <include file="Public:def_index_fields_filter_select" />
+
+                        </li>
+                        <include file="Public:def_index_search_form" />
+                    </ul>
+				</li>
+			</ul>
+            </form>
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <a href="{:U('Commiss/add')}" class="btn btn-mini btn-primary">
+                        <i class="icon-plus"></i>&nbsp; 添加
+                    </a>
+                    <button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu  pull-right">
+                        <li>
+                            <a href="javascript:void(0);" id="advanced_dosearch" class="link">
+                                {:L('ADVANCED_SEARCH')}
+                            </a>
+                        </li>
+                        <if condition="vali_permission('commiss', 'export')">
+                        <li>
+                            <a href="javascript:void(0);" id="excelExport" class="link">
+                                </i>导出到Excel
+                            </a>
+                        </li>
+                        </if>
+                        <if condition="vali_permission('commiss', 'import')">
+                        <li>
+                            <a href="javascript:void(0);" id="excelImport" class="link">
+                                </i>导入Excel
+                            </a>
+                        </li>
+                        </if>
+                    </ul>
+                </div>
+			</div>
+		</div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+			<form id="form1" class="form-inline" action="" method="post">
+                <input type="hidden" name="m" value="commiss"/>
+                <input type="hidden" name="a" value="index" id="commiss_list_action"/>
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+					<thead>
+						<tr id="childNodes_num">
+							<th><input type="checkbox" id="check_all"/></th>
+                            <include file="Commiss:model_list_header" />
+							<th style="width:90px;text-align: center" >操作</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td id="td_colspan">{$page}</td>
+						</tr>
+					</tfoot>
+					<tbody>
+						<volist name="list" id="vo">
+							<tr   <if condition="$vo.markread eq true">class="error"</if> >
+								<td>
+									<input name="commiss_id[]" class="check_list" type="checkbox" value="{$vo.commiss_id}"/>
+                                    <if condition="$vo['lianluo']">
+                                        <div style="color: red;float:right" class="animated flash infinite">
+                                            <a href="{:U('commiss/view', 'id='.$vo['commiss_id'])}"  target="_blank" style="color: red">联</a>
+                                        </div>
+                                    </if>
+                                    <if condition="$vo['promtp_count'] gt 0">
+                                        <div style="color: red;float:right" class="animated flash infinite">
+                                            <a href="{:U('commiss/view', 'id='.$vo['commiss_id'].'&assort=prompt')}" target="_blank" style="color: red">({$vo['promtp_count']})</a>
+                                        </div>
+                                    </if>
+								</td>
+                                <volist name="field_array" id="v">
+                                    <include file="Public:def_index_list" />
+                                </volist>
+								<td   style="text-align: center">
+                                    <a href="{:U('commiss/view', 'id='.$vo['commiss_id'])}"  target="_blank" style="padding-right:5px" title="查看详情">
+                                        <i class="icon-th-large"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" class="add_log" ref="{$vo['commiss_id']}" title="添加日志">
+                                        <i class="icon-book"></i>
+                                    </a>
+                                </td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+<include file="Public:groupstance" />
+
+<include file="Public:export_dialog" />
+<include file="Public:adv_search" />
+<script>
+    $("#advanced_dosearch").click(function(){
+        advsearch('{:U("commiss/search")}');
+    });
+</script>
+<include file="Public:transfer" />
+
+<script type="text/javascript">
+
+function changeContent(){
+	a = $("#select1  option:selected").val();
+	window.location.href="{:U('commiss/index', 'by=')}"+a;
+}
+$(function(){
+
+    $("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked', $(this).prop("checked"));
+	});
+
+	$('#delete').click(function(){
+		if(confirm('确实要删除吗?')){
+            $("#commiss_list_action").val('delete');
+            $("#form1").submit();
+		}
+        return false;
+    });
+
+    $('.commiss_owner_role_id_send_message').click(function(){
+        var ref = $(this).attr("ref");
+        art.dialog.confirm("确实要发送通知消息吗?", function(){
+            $.ajax({
+                url: '{:U("commiss/send_notify_message","role_id=")}' + ref,
+                success: function (data) {
+                    art.dialog.tips("操作完成");
+                },
+                cache: false
+            });
+        });
+        return false;
+    });
+});
+</script>
+<script>
+    $(".add_log").click(function(){
+        var id = $(this).attr("ref");
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日志",
+            lock:true,
+            ok: function (data) {
+                $("#add-log").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("log/add","r=RCommissLog&module=commiss&type=1&id=")}' + id,
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+</script>
+<include file="Public:footer" />

@@ -1,0 +1,132 @@
+<include file="Public:header" />
+
+	<link rel="stylesheet" href="__PUBLIC__/treeview/jquery.treeview.css" type="text/css">
+	<script type="text/javascript" src="__PUBLIC__/treeview/jquery.treeview.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/treeview/jquery.treeview.edit.js"></script>
+	
+	<script type="text/javascript">
+		$(function() {
+			$("#browser").treeview();
+			$("#add").click(function() {
+				var branches = $("<li><span class='folder'>New Sublist</span><ul>" +
+					"<li><span class='file'>Item1</span></li>" +
+					"<li><span class='file'>Item2</span></li></ul></li>").appendTo("#browser");
+				$("#browser").treeview({
+					add: branches
+				});
+				branches = $("<li class='closed'><span class='folder'>New Sublist</span><ul><li><span class='file'>Item1</span></li><li><span class='file'>Item2</span></li></ul></li>").prependTo("#folder21");
+				$("#browser").treeview({
+					add: branches
+				});
+			});
+		})
+	</script>
+	
+	<style type="text/css">
+.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+	</style>
+	<div class="container">
+		<div class="page-header">
+			<h4>{:L('STRUCTURE')} -
+				<small>
+				<a href="{:U('user/department')}" <if condition="ACTION_NAME eq 'department' or ACTION_NAME eq 'role'">class="active"</if>>{:L('STRUCTURE')}</a>
+                </small>
+				{:branch_select_html("bybr", $_GET['bybr'], true)}&nbsp;&nbsp;
+				<script>
+					$(function() {
+						$("#bybr").change(function(){
+							var val = $(this).val();
+							window.location.replace("{:U('user/role', 'status='.$_GET['status'].'&bybr=')}" + val);
+						});
+					});
+				</script>
+			</h4>
+		</div>
+		<include file="Public:alert" />
+		
+		<div class="row">
+			<form action="{:U('user/department_delete')}" method="post" onsubmit="return confirm('{:L('CONFIRM_DELETE')}')">
+			<div class="span12">
+				<div class="bulk-actions align-left">
+					<a href="{:U('user/department')}" <if condition="ACTION_NAME eq 'department'">class="active"</if>>
+                    {:L('DEPARTMENT_TREE')}</a> |
+					<a href="{:U('user/role')}" <if condition="ACTION_NAME eq 'role'">class="active"</if>>
+                    {:L(SUPERIOR_SUBORDINATE_TREE)}</a>
+                    [<a href="{:U('user/role', 'status=1&bybr='.$_GET['bybr'])}" <if condition="$_GET['status'] eq '1'">class="active"</if>>
+					在职</a>]
+                    [<a href="{:U('user/role', 'status=0,2&bybr='.$_GET['bybr'])}" <if condition="$_GET['status'] eq '0,2'">class="active"</if>>
+					不在职</a>]
+
+					<div class="pull-right">
+						<if condition="session('?admin')">
+							<a id="add_department" class="btn btn-primary">
+                                <i class="icon-plus"></i>&nbsp; {:L('ADD_DEPARTMENT')}</a>&nbsp;
+							<a id="add_role" class="btn btn-primary">
+                                <i class="icon-plus"></i>&nbsp; {:L('ADD_POSITION')}</a>
+						</if>
+					</div>
+				</div>
+			</div>
+			<div class="span12">
+				{$tree_code}
+			</div> 
+		</div>
+		</form>
+	</div>
+
+<include file="User:def_department" />
+<script type="text/javascript">
+
+	
+	$(function(){
+		$(".treeview .file").hover(function(){
+			rel = $(this).attr('rel');
+			$('#control_file' + rel).show();
+		},function(){
+			rel = $(this).attr('rel');
+			$('#control_file' + rel).hide();
+		});
+		$(".treeview .folder").hover(function(){
+			rel = $(this).attr('rel');
+			$('#control_folder' + rel).show();
+		},function(){
+			rel = $(this).attr('rel');
+			$('#control_folder' + rel).hide();
+		});
+		$("#check_all").click(function(){
+			$("input[class='check_list']").prop('checked', $(this).prop("checked"));
+		});
+
+		$(".permission").click(function(){
+            id = $(this).attr('rel');
+            art.dialog.open('{:U("permission/user_authorize","position_id=")}'+id, {
+                id: 'N3690',
+                title: "授权",
+                lock:true,
+                fixed:true,
+                width: 1030,
+				height:400,
+                ok: function () {
+                    var iframe = $(this.iframe.contentWindow.document);
+					var perlist = [];
+					iframe.find('input:checkbox:checked').each(function(key,val){
+						perlist.push($(val).val())
+					});
+					if(perlist && perlist.length > 0){
+						var perlist_str = perlist.join(',') ;
+					}else{
+						var perlist_str = '' ;
+					}
+					$.get('{:U("permission/user_authorize")}',{perlist:perlist_str, auth:1,position_id:id}, function(data){
+                        art.dialog.tips(data.data);
+
+                    }, 'json');
+                },
+                cancel: true
+            });
+
+		});
+
+	});
+</script>
+<include file="Public:footer" />	

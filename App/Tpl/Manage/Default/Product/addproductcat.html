@@ -1,0 +1,74 @@
+<include file="Public:header" />
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4>{:L('ADD_PRODUCT_CATEGORIES')}</h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+        </div>
+        <div class="span12">
+            <form id="form1" action="{:U('product/addproductcat')}" method="post" enctype="multipart/form-data">
+                <input type='hidden' name="r" <present name="r">value="{$r}"</present>/>
+                <input type='hidden' name="module" <present name="r">value="{$module}"</present>/>
+                <input type='hidden' name="id" <present name="r">value="{$model_id}"</present>/>
+                <input type='hidden' name="product_id" value="{$product_id}"/>
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <tbody>
+                    <tr>
+                        <td class="tdleft" width="15%">已有类别</td>
+
+                        <td colspan="3">
+                            <volist name="exist_skill" id="sname">
+                                {$sname.category_name} &nbsp;
+                            </volist>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <script>
+                    function goback() {
+                        window.location.assign("{:U('product/skillview', 'id='.$product_id.'&assort=skill')}");
+                    }
+                </script>
+
+
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <td style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE_AND_NEW')}"/> &nbsp;
+                            <input class="btn" type="button" onclick="javascript:goback();" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE_AND_NEW')}"/> &nbsp;
+                            <input class="btn" type="button" onclick="javascript:goback();" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <include file="Public:editfieldsgroup" />
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="hide" id="dialog-validate" title="{:L('TEST_RESULTS')}">
+    {:L('HAVE_THE_FOLLOWING_PRODUCTS_ARE_SIMILAR_TO_THE_PRODUCT_NAME')}
+    <div id="search_content"></div>
+</div>
+
+<include file="catechange" />
+<include file="Public:newfieldvalid" />
+<include file="Public:footer" />

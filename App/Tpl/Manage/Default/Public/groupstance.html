@@ -1,0 +1,83 @@
+
+<script>
+
+    $("#add_group").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "选择组",
+            lock:true,
+            fixed:true,
+            window: 'top',
+
+            ok: function () {
+                var select_module = [];
+                var selgroup = $('input:radio[name={$module_name}_group_id]:checked').val();
+                $("input[class='check_list']").each(function() {
+                    if (true == $(this).prop("checked")) {
+                        select_module.push($(this).val());
+                    }
+                });
+
+                if (select_module.length == 0) {
+                    alert("请选择项目");
+                } else {
+                    $.ajax({
+                        type: 'get',
+                        url: "{:U($module_name.'/addgroupstance')}",
+                        data:{
+                            module_group_id:selgroup,
+                            module_id:select_module
+                        },
+                        success: function (data) {
+                            if (data) {
+                                art.dialog.tips('设置成功！已经保存在服务器');
+
+                            }
+                        },
+                        dataType:'json'
+                    });
+                }
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U($module_name."/allgroupdialog")}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+
+    $("#remove_group").click(function(){
+        art.dialog.confirm('确实要从这个组移出吗?', function () {
+            var select_module = [];
+            $("input[class='check_list']").each(function() {
+                if (true == $(this).prop("checked")) {
+                    select_module.push($(this).val());
+                }
+            });
+            $.ajax({
+                type: 'post',
+                url: "{:U($module_name.'/removegroupstance')}",
+                data:{
+                    module_group_id:"{$Think.get.module_group_id}",
+                    module_id:select_module
+                },
+                beforeSend:function(XMLHttpRequest){
+                    art.dialog.tips('数据正在提交..');
+                },
+                success: function (data) {
+                    if (data) {
+                        window.location.reload();
+                    }
+                },
+                complete:function(XMLHttpRequest, textStatus){
+                    art.dialog.tips('成功！已经保存在服务器');
+                },
+                dataType:'json'
+            });
+        });
+    });
+
+</script>

@@ -1,0 +1,125 @@
+<include file="Public:header" />
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">{:L('PRODUCT_DETAILS')}</a></h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Product:navtab" />
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                        <p style="font-size: 14px;">
+
+                            <a href="{:U('product/eventedit','product_id='.$product['product_id'].'&assort='.$assort)}">{:L('COMPILE')}</a> |
+                        </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Product:basicinfo" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">{:L('DENGJI_TIME')}</td>
+                        <td>
+                            <if condition="$product['create_time'] neq 0">
+                                {$product.create_time|date='Y-m-d H:i:s',###}
+                            </if>
+                        </td>
+                        <td class="tdleft">
+                            {:L('ADD_THE_INFORMATION_ON_PRODUCTS')}
+                        </td>
+                        <td>
+                            <a class="role_info" href="javascript:void(0)" rel="{$product.owner.role_id}">
+                                {$product.owner.user_name}
+                            </a>
+                        </td>
+                    </tr>
+
+                    <include file="Public:defviewtable" />
+
+                    </tbody>
+                </table>
+                <ul class="nav nav-tabs" id="tabs">
+                    <li><a href="#tabs-1"    data-toggle="tab">日历</a></li>
+                    <li><a href="#tabs-2"    data-toggle="tab">表格</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tabs-1" class="tab-pane">
+                        <include file="Product:eventtable" />
+                    </div>
+                    <div id="tabs-2" class="tab-pane">
+                        <include file="Product:eventlist" />
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th>调度日志</th>
+                </tr>
+            </table>
+            <div id="log-tabs">
+                <script>
+                    function logger_data_cb(d) {
+                        d._string = "type=1";
+                    }
+                </script>
+                <include file="Product:dispatch_view_logtable" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hide" id="dialog-event" title="{:L('ADD_THE_SCHEDULE')}">loading...</div>
+<div class="hide" id="dialog-default-state-edit" title="默认状态编辑">loading...</div>
+    <script>
+        $(function() {
+            $('#tabs a:first').tab('show');
+        });
+    </script>
+<script type="text/javascript">
+
+    //初始化图片查看插件
+    $("#dialog-event").dialog({
+        autoOpen: false,
+        width: 800,
+        maxHeight: 400,
+        modal: false,
+        position: ["center",100]
+    });
+
+    $("#dialog-default-state-edit").dialog({
+        autoOpen: false,
+        width: 800,
+        maxHeight: 400,
+        position: ["center",100]
+    });
+
+    $(".change_default_state").click(function(){
+        $('#dialog-default-state-edit').dialog('open');
+        $('#dialog-default-state-edit').load('{:U("product/changedefstate","id=".$product["product_id"])}');
+    });
+
+    $(".more").click(function(){
+        var log_id = $(this).attr('rel');
+        $('#llog_'+log_id).attr('class','');
+        $('#slog_'+log_id).attr('class','hide');
+    });
+
+    <if condition="in_array($product['station_state'], array('在编','请长假','请短假'))">
+    <else/>
+    $('#workstate_id').attr("disabled", "disabled");
+    </if>
+</script>
+
+
+<include file="Public:footer" />

@@ -1,0 +1,55 @@
+<ul class="nav nav-tabs">
+    <li <if condition="$_GET['assort'] eq 'basic' || $_GET['assort'] eq ''">class="active"</if> >
+    <a href="{:U('product/view', 'id='.$product_id)}<eq name='Think.get.visitor' value='trash'>&visitor=trash</eq>">基本信息</a>
+    </li>
+
+    <if condition="vali_permission('product','cultivateview')">
+        <li <if condition="$_GET['assort'] eq 'cultivate'">class="active"</if>>
+        <a href="{:U('product/cultivateview', 'id='.$product_id.'&assort=cultivate')}<eq name='Think.get.visitor' value='trash'>&visitor=cultivate</eq>">培训订单</a>
+        </li>
+    </if>
+
+    <li <if condition="$_GET['assort'] eq 'skill'">class="active"</if>>
+    <a href="{:U('product/skillview', 'id='.$product_id.'&assort=skill')}<eq name='Think.get.visitor' value='trash'>&visitor=trash</eq>">鉴定信息</a>
+    </li>
+
+    <li <if condition="$_GET['assort'] eq 'event'">class="active"</if> >
+    <a href="{:U('product/eventview', 'id='.$product_id.'&assort=event')}<eq name='Think.get.visitor' value='trash'>&visitor=trash</eq>">调度信息</a>
+    </li>
+
+    <if condition="vali_permission('product','marketview')">
+        <li <if condition="$_GET['assort'] eq 'market'">class="active"</if>>
+        <a href="{:U('product/marketview', 'id='.$product_id.'&assort=market')}<eq name='Think.get.visitor' value='trash'>&visitor=market</eq>">客户服务</a>
+        </li>
+    </if>
+    <if condition="vali_permission('product','evaluatemarket_view')">
+        <li <if condition="$_GET['assort'] eq 'evaluate'">class="active"</if>>
+        <a href="{:U('product/evaluatemarket_view', 'id='.$product_id.'&assort=evaluate')}<eq name='Think.get.visitor' value='trash'>&visitor=evaluate</eq>">评价</a>
+        </li>
+    </if>
+    <if condition="vali_permission('product','accountview')">
+        <li <if condition="$_GET['assort'] eq 'account'">class="active"</if> >
+        <a href="{:U('product/accountview', 'id='.$product_id.'&assort=account')}<eq name='Think.get.visitor' value='trash'>&visitor=trash</eq>">账户信息</a>
+        </li>
+    </if>
+
+    <if condition="vali_permission('product','tradeview')">
+        <li <if condition="$_GET['assort'] eq 'trade'">class="active"</if> >
+        <a href="{:U('product/tradeview', 'id='.$product_id.'&assort=trade')}<eq name='Think.get.visitor' value='trash'>&visitor=trash</eq>">缴费信息</a>
+        </li>
+    </if>
+
+    <if condition="vali_permission('product','berthview')">
+        <li <if condition="$_GET['assort'] eq 'berth'">class="active"</if>>
+        <a href="{:U('product/berthview', 'id='.$product_id.'&assort=berth')}<eq name='Think.get.visitor' value='trash'>&visitor=berth</eq>">住宿日志</a>
+        </li>
+    </if>
+
+    <if condition="vali_permission('product','leadsview')">
+    <li <if condition="$_GET['assort'] eq 'leads'">class="active"</if> >
+    <a href="{:U('product/leadsview', 'id='.$product_id.'&assort=leads')}<eq name='Think.get.visitor' value='trash'>&visitor=trash</eq>">面试信息</a>
+    </li>
+    </if>
+
+
+</ul>

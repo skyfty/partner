@@ -1,0 +1,41 @@
+<include file="Public:header" />
+<style>
+    table tbody tr{cursor:move;}
+</style>
+<script type="text/javascript" src="__PUBLIC__/js/jscolor/jscolor.js"></script>
+<div class="container">
+    <div class="page-header">
+        <h4>帐号信息设置</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="tab-content">
+        <form action="" method="post" id="form">
+            <input type="hidden" name="berth_id" value="{$berth_id}"/>
+            <input type="hidden" name="refer_url" value="{$refer_url}"/>
+
+            <table class="table">
+                <tfoot>
+                <tr>
+                    <td style="text-align:center;" colspan="4">
+                        <input name="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;
+                        <input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('RETURN')}"/></td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <tr>
+                    <td class="tdleft" width="15%">帐号名</td>
+                    <td><input type="text" name="username" value="{$username}" minlength="4" required/> </td>
+                    <td class="tdleft" width="15%">密码</td>
+                    <input type="hidden" name="src_password" value="{$password}"/>
+                    <td><input type="text" name="password" value="{$password}"  minlength="6" required/></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#form").validate({errorElement: "em"});
+</script>
+<include file="Public:footer" />

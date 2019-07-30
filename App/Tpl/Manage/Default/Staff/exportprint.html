@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>[{$staff['idcode']}]{$staff['name']}</title>
+	<style type="text/css">
+		<!--
+		* {
+			margin:0px;
+			padding:0px;
+		}
+		body {
+			font-size:12px;
+			background:#fff;
+			color:#333;
+			line-height:150%;
+			font-family:'微软雅黑', "宋体", Arial, Helvetica, sans-serif;
+		}
+		html button::-moz-focus-inner {
+			border-color:transparent!important;
+		}
+		input, button, textarea, select, optgroup, option {
+			font-family:inherit;
+			font-size:100%;
+			font-style:inherit;
+			font-weight:inherit;
+		}
+		ul, li, dl, dt, dd, ol {
+			display:block;
+			list-style:none;
+		}
+		h1 {
+			font-size:20px;
+			text-align:center;
+			color:#029be2;
+			font-weight:bold;
+			padding:10px 0;
+		}
+		h2 {
+			font-size:11px;
+			font-weight:bold;
+			padding:3px 0;
+		}
+		.tableout {
+			width:1000px;
+			margin:0 auto;
+		}
+		.table {
+			border: 1px solid #ebf1f1;
+			font-size:14px;
+			border-collapse:collapse;
+		}
+		.table {
+			margin-bottom: 12px;
+			width: 100%;
+		}
+		.table img {
+			margin-right:5px;
+		}
+		table {
+			background-color:transparent;
+			border-collapse:collapse;
+			border-spacing:0;
+			max-width: 100%;
+		}
+		.table td.tdleft {
+			background: #f5f5f5 none repeat scroll 0 0;
+			text-align: right;
+			vertical-align: middle;
+			color:#000;
+		}
+		.imagesdiv {
+			padding:6px;
+		}
+		.imagesdiv img {
+			height:130px;
+			width:auto;
+			margin-right:20px;
+			margin-top:8px;
+			margin-bottom:8px;
+		}
+		.table td.tdright {
+			background: #f5f5f5 none repeat scroll 0 0;
+			text-align: left;
+			vertical-align: middle;
+		}
+		.table th, .table td {
+			line-height: 10px;
+			padding:8px 8px;
+			text-align: left;
+			border-collapse:collapse;
+			vertical-align: middle;
+			border: 1px solid #ddd;
+		}
+		.box-secondary {
+			float: left;
+		}
+		.jianlin {
+			height:45px;
+			overflow:hidden;
+			line-height:45px;
+			font-size:30px;
+			color:#333;
+			text-align:center;
+			font-weight:bold;
+			margin-bottom:8px;
+		}
+		.jianlin img {
+			margin-right:8px;
+			vertical-align: bottom;
+		}
+		-->
+	</style>
+</head>
+
+<body>
+<div class="jianlin"><img src="http://www.ourbaby.cc/Public/images/protant.png" alt="">员工简历</div>
+<h1>[{$staff['idcode']}]{$staff['name']}</h1>
+<div class="tableout">
+	<table class="table">
+		<tbody>
+		<tr>
+			<td width="16%" align="center" valign="middle"><if condition="!empty($staff['images']['main'])"> <img src="{$staff.images.main.path}" width="190"> </if></td>
+			<td width="84%"><table class="table" style="margin:0;">
+				<tbody>
+				<tr>
+					<td class="tdleft" width="16%">姓名:</td>
+					<td width="16%">{$staff['name']}</td>
+					<td class="tdleft" width="16%">工号:</td>
+					<td width="16%">{$staff['idcode']}</td>
+					<td class="tdleft" width="16%">性别:</td>
+					<td width="16%">{$staff['sex']}</td>
+				</tr>
+				<tr>
+					<td class="tdleft" width="16%">出生日期:</td>
+					<td width="16%"> {$staff.birthday|toDate=###,'Y-m-d'} </td>
+					<td class="tdleft" width="16%">籍贯:</td>
+					<td colspan="" width="16%"> {$staff.census} </td>
+					<td class="tdleft" width="16%">民族:</td>
+					<td colspan="" width="16%"> {$staff.nation} </td>
+				</tr>
+				<tr>
+					<td class="tdleft" width="16%">所属门店:</td>
+					<td width="16%">
+						{$staff['branch_id']|branch_html}
+					</td>
+					<td class="tdleft" width="16%">部门:</td>
+					<td width="16%">{$staff['department_id']|department_html}</td>
+					<td class="tdleft" width="16%">岗位:</td>
+					<td width="16%">{$staff['position_id']|position_html}</td>
+				</tr>
+				<tr>
+					<td colspan="6" class="tdright">身份证：{$staff.cardid}</td>
+				</tr>
+				<tr>
+					<td colspan="6"><span class="box-secondary"><img src="{$cardid_pic_output_fields['piclist'][0]['path']}" alt="" width="auto" height="123" class="thumbnail cardpicthumb" /></span> <span class="box-secondary"><img src="{$cardid_pic_output_fields['piclist'][1]['path']}" alt="" width="auto" height="123" class="thumbnail cardpicthumb" /></span></td>
+				</tr>
+				</tbody>
+			</table></td>
+		</tr>
+		</tbody>
+	</table>
+	<table class="table">
+		<tbody>
+		<volist name="basic_output_fields" id="gvo">
+			<tr>
+				<th colspan="4"> {$gvo.name} </th>
+			</tr>
+			<php>
+
+				$j=0;
+			</php>
+
+			<volist name="gvo['fields']" id="vo">
+				<if condition="$vo['operating'] != '4' and $vo['in_print']">
+					<php>$j++;</php>
+					<if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['one_row'] == '1'">
+						<if condition="$i%2 == 0">
+
+							<td colspan="2">&nbsp;</td>
+							</tr>
+						</if>
+						<tr>
+							<td class="tdleft" width="15%">{$vo.name}</td>
+							<td colspan="5" style="line-height:18px;"> {$vo.html} </td>
+						</tr>
+						<if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+							<php>$i++;</php>
+						</if>
+						<else/>
+						<if condition="$i%2 != 0">
+							<tr>
+						</if>
+
+						<td class="tdleft" width="15%">{$vo.name}</td>
+						<td width="33%"> {$vo.html} </td>
+						<if condition="$i%2 == 0">
+							</tr>
+						</if>
+
+						<if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+
+							<td colspan="3">&nbsp;</td>
+							</tr>
+						</if>
+					</if>
+				</if>
+			</volist>
+		</volist>
+
+		<volist name="pic_output_fields" id="vo">
+			<tr>
+				<td class="tdleft" width="17%">{$vo.name}</td>
+				<td colspan="3" class="imagesdiv"  style="line-height:24px;"> {$vo.html} </td>
+			</tr>
+		</volist>
+		</tbody>
+
+	</table>
+</div>
+</body>
+</html>

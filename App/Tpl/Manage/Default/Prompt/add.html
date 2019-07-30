@@ -1,0 +1,21 @@
+<include file="Public:header" />
+<div class="container">
+	<div class="page-header">
+		<h4>添加提醒</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<form action="" method="post"  enctype="multipart/form-data">
+			    <input type="hidden" name="creator_role_id" value="{$Think.session.user_id}"/>
+                <input type="hidden" name="model" value="{$model}"/>
+                <input type="hidden" name="model_id" value="{$model_id}"/>
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <include file="Public:editfieldstable" />
+            </form>
+		</div>
+	</div>
+</div>
+
+<include file="Public:newfieldvalid" />
+<include file="Public:footer" />

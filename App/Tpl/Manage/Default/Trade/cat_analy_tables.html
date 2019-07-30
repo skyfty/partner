@@ -1,0 +1,86 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th colspan="2" style="color: #333333">类别统计</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td rowspan="{$cat_report_list_cnt}" width="60%">
+            <div id="cat_canvas_cycle" style="min-width: 500px; height: 500px;margin: 0 auto">{:L('TEMPORARILY_NO_DATA')}</div>
+        </td>
+    </tr>
+    <tr>
+        <th>类别</th>
+        <th>数量</th>
+        <th>金额</th>
+    </tr>
+    <foreach name="cat_report_list" item="vo">
+        <tr>
+            <td>
+                {$key}
+            </td>
+            <td>{$vo['count']}</td>
+            <td>{$vo['money']}</td>
+        </tr>
+    </foreach>
+    </tbody>
+</table>
+
+
+<script src="__PUBLIC__/highcharts/highcharts.js"></script>
+<script src="__PUBLIC__/highcharts/modules/exporting.js"></script>
+<script src="__PUBLIC__/highcharts/modules/funnel.js"></script>
+<script>
+    $(function () {
+
+        var countData = [
+            <foreach name="cat_report_analy['count']" item="vo">
+            {
+                name: "{$key}",
+                y: {$vo}
+            },
+            </foreach>
+
+        ];
+        var moneyData = [
+            <foreach name="cat_report_analy['money']" item="vo">
+            {
+                name: "{$key}",
+                y: {$vo}
+            },
+            </foreach>
+        ];
+
+        $('#cat_canvas_cycle').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: '培训类别状态统计'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    shadow: false,
+                    center: ['50%', '50%']
+                }
+            },
+            tooltip: {
+                valueSuffix: '%'
+            },
+            series: [{
+                name: '数量',
+                data: countData,
+                size: '60%'
+            }, {
+                name: '金额',
+                data: moneyData,
+                size: '80%',
+                innerSize: '60%'
+            }]
+        });
+    });
+
+</script>

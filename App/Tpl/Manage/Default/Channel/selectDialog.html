@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_channel_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("channel/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_channel(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("channel/listDialog")}', {
+            id: 'select_channel_dialog',
+            title: "选择渠道",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var channel_id = $(this.iframe.contentWindow.document).find('input:radio[name="channel"]:checked').val();
+                var data = {
+                    'id': channel_id
+                };
+                request_channel_info(data, cb?cb:on_channel_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

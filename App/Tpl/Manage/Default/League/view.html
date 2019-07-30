@@ -1,0 +1,40 @@
+<include file="Public:header" />
+
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="{:U('league/view', 'id='.$league['league_id'])}">加盟商详情</a>
+                    </li>
+                </ul>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <if condition="vali_permission('league','edit')">
+                                <a href="{:U('league/edit','id='.$league['league_id'])}">编辑</a> |
+                                </if>
+                                <if condition="vali_permission('league','delete')">
+                                <a href="{:U('league/delete','id='.$league['league_id'])}" class="del_confirm">{:L('DELETE')}</a>
+                                </if>
+                            </p>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                <include file="Public:defviewtable" />
+                </tbody>
+            </table>
+            <!--  -->
+		</div>
+	</div>
+</div>
+<script>
+
+</script>
+<include file="Public:footer" />

@@ -1,0 +1,57 @@
+<include file="Public:header" />
+
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Channel:navtab" />
+
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <eq name="channel['is_permission']" value="true">
+                                    <a href="{:U('channel/edit','id='.$channel['channel_id'])}">编辑</a> |
+                                    <a href="{:U('channel/delete','id='.$channel['channel_id'])}" class="del_confirm">{:L('DELETE')}</a> |
+                                </eq>
+                            </p>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                <include file="Public:defviewtable" />
+                </tbody>
+            </table>
+            <table  class="table" id="trade-data-tables" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>
+                        部门
+                    </th>
+                    <th>
+                        岗位
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="permission_list" id="vo">
+                    <tr>
+                        <th>
+                            {$vo['department_name']}
+                        </th>
+                        <th>
+                            {$vo['position_name']}
+                        </th>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+		</div>
+	</div>
+</div>
+
+
+<include file="Public:footer" />

@@ -1,0 +1,74 @@
+
+<table class="display prompt-data-tables" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>
+                主题
+            </th>
+            <th>
+                状态
+            </th>
+            <th>
+                提醒时间
+            </th>
+            <th>
+                创建时间
+            </th>
+            <th>
+                创建人
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    <volist name="prompt_list" id="vo">
+        <tr <if condition="$vo['prompt_state']">style="background-color:#EAD0D0"</if>>
+            <td>
+                {$vo.subject}
+            </td>
+            <td>
+                {$vo.state}
+            </td>
+            <td data-order="{$vo.prompt_time}" style="text-align: center">
+                {$vo.prompt_time|date="Y-m-d H:i:s",###}
+            </td>
+            <td data-order="{$vo.create_time}" style="text-align: center">
+                {$vo.create_time|date="Y-m-d H:i:s",###}
+            </td>
+            <td>
+                <a class="role_info" rel="{$vo['creator_role_id']}" href="javascript:void(0)">
+                    {$vo.creator.user_name}
+                </a>
+            </td>
+            <td style="text-align: center">
+                <a href="{:U('prompt/view','id='.$vo['prompt_id'])}&refer_view_url={$Think.Server.REQUEST_URI|urlencode}">
+                    {:L('VIEW')}
+                </a>
+            </td>
+        </tr>
+    </volist>
+    </tbody>
+</table>
+
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.prompt-data-tables').dataTable( {
+            "aoColumnDefs": [
+                {
+                    "bSortable": false,
+                    "aTargets": [ 5 ]
+                }
+            ],
+            "order": [[ 1, "desc" ]],
+            'language': def_dataTable_lang_opt
+        } );
+    });
+</script>

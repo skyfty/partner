@@ -1,0 +1,18 @@
+<include file="Product:logger_default" />
+
+<script id="brancht_tmpl" type="text/x-jquery-tmpl">
+<div style="float:left;padding-right:7px;padding-left:7px;">
+{:branch_select("brancht")}
+</div>
+
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        $("#assort_tmpl_div").after($("#brancht_tmpl").tmpl());
+        $("#brancht").change(function(){
+            on_time_change();
+        });
+    });
+</script>
+

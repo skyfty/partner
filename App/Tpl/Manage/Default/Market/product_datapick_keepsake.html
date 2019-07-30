@@ -1,0 +1,47 @@
+    <script type="text/javascript">
+    $(function(){
+        $("#recess_day").attr("readonly","readonly");
+        $("#time_adjust").attr("readonly","readonly");
+        $("#service_price").attr("readonly","readonly");
+        $("#settle_duration").attr("readonly","readonly");
+        $("#settle_duration").val("1");
+
+        $("#service_price").change(on_recess_day_change);
+        $("#money_adjust").change(calculate_settle_money);
+        $("#agency_scale").change(calculate_agency_money);
+        $("#settle_duration").change(calculate_settle_money);
+        $("#agency").change(on_agency_change);
+    });
+
+    function calculate_service_duration() {
+        var hours = calculate_service_day();
+        hours = parseFloat(hours);
+        var ssdays = hours % 24;
+        if (ssdays < 4 ) ssdays = 0;
+        else if ( ssdays < 16) ssdays = 0.5;
+        else ssdays = 1;
+        var days = parseInt(hours / 24) + ssdays;
+
+        var service_duration = Math.max(days, 0);
+        $("#service_duration").val(service_duration);
+
+        calculate_settle_money();
+    }
+
+    function calculate_settle_money() {
+
+        var money_adjust = $("#money_adjust").val();
+        if (!money_adjust) money_adjust = 0;
+        money_adjust = parseFloat(money_adjust);
+
+        var price = Math.round(parseFloat(money_adjust));
+        $("#price").val(price);
+
+        var settle_price = Math.round(parseFloat( money_adjust));
+        $("#settle_price").val(settle_price);
+
+        calculate_agency_money();
+    }
+
+</script>
+<include file="product_datapick"/>

@@ -1,0 +1,76 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>修改奖励金额</h4>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <include file="Public:alert" />
+            <form action="{:U('')}" method="post"  enctype="multipart/form-data" id="form1">
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <input type="hidden" name="market_product_id" value="{$market_product_reward['market_product_id']}" />
+                <input type="hidden" name="id" value="{$market_product_reward['market_product_id']}" />
+                <input type="hidden" name="rweard_type" value="{$rweard_type}" />
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="保存"> &nbsp;
+                            <input class="btn" type="reset" onclick="on_click_return();" value="返回">
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align: center" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="保存"> &nbsp;
+                            <input class="btn" type="reset" onclick="on_click_return();" value="返回">
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr><th colspan="4">基本信息</th></tr>
+                    <tr>
+                        <td class="tdleft" width="15%">
+                        促单人:
+                        </td>
+                        <td width="35%">
+                            <input type="text" value='{:channel_model_role_show_html($market_product_reward["channel_role_model"], $market_product_reward["channel_role_id"])}' disabled="disabled">
+                        </td>
+                        <td class="tdleft" width="15%">
+                            金额:
+                        </td>
+                        <td width="35%">
+                            <input type="text" id="price" name="price" value="{$price}"> &nbsp;  <span id="priceTip" style="color:red;"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function() {
+        $.formValidator.initConfig({
+            formID: "form1",
+            debug: false,
+            submitOnce: true,
+            onError: function (msg, obj, errorlist) {
+                art.dialog.alert(msg);
+            }
+        });
+
+        $("#price").formValidator({ // 验证：模块名称
+            onShow: "（必填）",
+            onCorrect: "（正确）"
+        }).regexValidator({
+            regExp: regexEnum.price,
+            onError: "金额格式不正确，请检查"
+        });
+    });
+</script>
+<include file="Public:footer" />

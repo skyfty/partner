@@ -1,0 +1,94 @@
+<include file="Public:header" />
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">产品订单详情</a></h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="{:U('trade/view', 'id='.$trade['trade_id'])}">基本信息</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <a href="{:U('trade/edit','id='.$trade['trade_id'])}">编辑</a> |
+                                <a href="{:U('trade/delete','id='.$trade['trade_id'])}" class="del_confirm">{:L('DELETE')}</a> |
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <include file="Public:defviewtable" />
+                    <if condition="$trade.product neq null">
+                        <tr>
+                            <td colspan="4">相关雇员</td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft" width="15%">雇员名称</td>
+                            <td>
+                                <a href="{:U('product/view', 'id='.$trade['product']['product_id'])}" target="_blank">
+                                    {$trade.product.product_name}
+                                </a>
+                            </td>
+                            <td class="tdleft" width="15%">工号</td>
+                            <td>{$trade.product.idcode}</td>
+                        <tr>
+                            <td class="tdleft" width="15%">渠道</td>
+                            <td>
+                                {$trade.origin}
+                            </td>
+                            <td class="tdleft" width="15%">介绍人</td>
+                            <td>{$trade.introducer}</td>
+                        </tr>
+                        </tr>
+                    </if>
+                    <if condition="$trade.customer neq null">
+                        <tr>
+                            <td colspan="4">相关客户</td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft" width="15%">客户名称</td>
+                            <td>
+                                <a href="{:U('customer/view', 'id='.$trade['customer']['customer_id'])}" target="_blank">
+                                    {$trade.customer.customer_name}
+                                </a>
+
+                            </td>
+                            <td class="tdleft" width="15%">编号</td>
+                            <td>{$trade.customer.idcode}</td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft" width="15%">渠道</td>
+                            <td>
+                                {$trade.origin}
+                            </td>
+                            <td class="tdleft" width="15%">介绍人</td>
+                            <td>{$trade.introducer}</td>
+                        </tr>
+                    </if>
+                    </tbody>
+                </table>
+
+                <table class="table table-hover">
+                    <tr>
+                        <th>日志</th>
+                    </tr>
+                </table>
+                <div id="log-tabs">
+                    <include file="Trade:logtable" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Public:footer" />

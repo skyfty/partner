@@ -1,0 +1,101 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Channel:navtab" />
+
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td colspan="4">
+                        <p style="font-size: 14px;">
+                            <a id="position_permission" href="javascript:void(0);">授权</a> |
+                            <a href="{$refer_url}">{:L('RETURN')}</a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+            <table  class="table" id="trade-data-tables" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>
+                        部门
+                    </th>
+                    <th>
+                        岗位
+                    </th>
+                    <th style="width:30px;">{:L('OPERATING')}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="permission_list" id="vo">
+                    <tr>
+                        <th>
+                            {$vo['department_name']}
+                        </th>
+                        <th>
+                            {$vo['position_name']}
+                        </th>
+                        <td style="text-align:center">
+                            <a href="{:U('channel/delete_channel_position_permission','id='.$channel['channel_id'].'&perid='.$vo['permission_id'])}" class="delete_channel_position_permission">
+                                删
+                            </a>
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+            <style>
+                th, td { white-space: nowrap; }
+                div.dataTables_wrapper {
+                    width: 1155px;
+                    margin: 0 auto;
+                }
+            </style>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#trade-data-tables').dataTable( {
+                        "order": [[ 0, "desc" ]],
+                        "scrollX": true,
+                        'language': def_dataTable_lang_opt
+                    } );
+                });
+            </script>
+            <!--  -->
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.delete_channel_position_permission').click(function(){
+        var url = $(this).attr("href");
+        art.dialog.confirm("确实要移除授权吗", function(){
+            window.location.replace(url);
+        });
+        return false;
+    });
+
+    $('#position_permission').click(function(){
+        art.dialog.open('{:U("user/position_select_dialog")}', {
+            id: 'position_permission_dialog',
+            title: "选择部门",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 380,
+            height: 140,
+            ok: function () {
+                var department_id = $(this.iframe.contentWindow.document).find("#department_id").val();
+                var position_id = $(this.iframe.contentWindow.document).find("#position_id").val();
+                window.location.replace("{:U('Channel/channel_position_permission', 'id='.$channel['channel_id'])}&did=" + department_id + "&pid=" + position_id);
+                return true;
+            },
+            cancel: true
+        });
+    });
+</script>
+<include file="Public:footer" />

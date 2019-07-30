@@ -1,0 +1,515 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<style>
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+</style>
+<script id="product-short-search" type="text/x-jquery-tmpl">
+<li>
+<a>
+<span class="short-search-label">
+${name} - ${idcode}{{if census!=''}} - ${census}{{/if}} {{if submit_state==0}} - <span style='color:red'>未提交</span>{{/if}}
+</span>
+</a>
+</li>
+</script>
+
+<script id="workstate_tmpl" type="text/x-jquery-tmpl">
+
+<input id="wsbt" readonly="readonly" type="text" style="width:90px;background-color: white;cursor:default;" placeholder="开始时间" class="input-medium" name="wsbt" onfocus="WdatePicker()">
+-
+<input id="wset" readonly="readonly" type="text" style="width:90px;background-color: white;cursor:default;" placeholder="结束时间" class="input-medium" name="wset" onfocus="WdatePicker()">
+<input type="text" id="nobd" name="nobd"  placeholder="非空闲天数" style="width:70px">&nbsp;
+</script>
+
+<div class="container">
+<div class="page-header" style="border:none; ">
+    <include file="Product:navcat" />
+</div>
+<include file="Public:alert" />
+<div class="row-fluid view">
+    <div class="span12">
+        <ul id="sddm" style="margin:0px 0px 0px 0px">
+            <li>
+                <i class="icon-list"></i>
+                <a href="{:U('')}&{:FP($parameter, 'by=&lia=')}" <if condition="$Think.get.lia eq null">class="active"</if>>
+                {:L('ALL')}
+                </a>
+                <a href="{:U('')}&{:FP($parameter, 'lia=self')}" <if condition="$Think.get.lia eq 'self'">class="active"</if>>
+                我负责的
+                </a>
+                <a href="{:U('')}&{:FP($parameter, 'lia=belongs')}" <if condition="$Think.get.lia eq 'belongs'">class="active"</if>>
+                我管辖的
+                </a>
+            </li>
+
+            <li>
+                <i class="icon-time"></i>
+            </li>
+            <li>
+                <a onmouseover="mopen('create_time')" onmouseout="mclosetime()" <if condition="($Think.get.byd neq '')">href="{:U('')}&{:FP($parameter, 'byd=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'byd=')}"</if>>
+                创建时间
+                </a>
+                <if condition="$Think.get.byd neq ''">
+                    <a href="{:U('')}&{:FP($parameter, 'byd=')}" style="color: darkmagenta"  class="active">[{:create_time_desc($_GET['byd'])}]</a>
+                </if>
+                <div  id="create_time" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <a <if condition="$Think.get.byd eq 'today'">class="active" href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=today')}"</if>>
+                    {:create_time_desc('today')}
+                    </a>
+                    <a <if condition="$Think.get.byd eq 'week'">class="active"  href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=week')}"</if>>
+                    {:create_time_desc('week')}
+                    </a>
+                    <a <if condition="$Think.get.byd eq 'month'">class="active"  href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=month')}"</if>>
+                    {:create_time_desc('month')}
+                    </a>
+                </div>
+            </li>
+
+            <li><i class="icon-check"></i></li>
+            <li>
+                &nbsp; <a onmouseover="mopen('verify_state_cv')" onmouseout="mclosetime()" <if condition="(in_array($_GET['byv'],array('cv','cvb','cvp')))">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}"<else/> href="{:U('')}&{:FP($parameter, 'byv=cv')}"</if> >
+                待审核
+                </a>
+                <if condition="(in_array($_GET['byv'],array('cvb','cvp')))">
+                    <a href="{:U('')}&{:FP($parameter, 'byv=')}" style="color: darkmagenta"  class="active">[{$Think.get.byv|verify_state_desc=###,array('cv','cvb','cvp')}]</a>
+                </if>
+                <div  id="verify_state_cv" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <a  <if condition="$Think.get.byv eq 'cvb'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=cvb')}"</if> >基本信息</a>
+                    <a  <if condition="$Think.get.byv eq 'cvp'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=cvp')}"</if>>专业信息</a>
+                </div>
+            </li>
+
+            <li>
+                &nbsp; <a onmouseover="mopen('verify_state_yv')" onmouseout="mclosetime()" <if condition="(in_array($_GET['byv'],array('yv','yvb','yvp')))">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}"<else/> href="{:U('')}&{:FP($parameter, 'byv=yv')}"</if> >
+                通过审核
+                </a>
+                <if condition="(in_array($_GET['byv'],array('yvb','yvp')))">
+                    <a href="{:U('')}&{:FP($parameter, 'byv=')}" style="color: darkmagenta"  class="active">[{$Think.get.byv|verify_state_desc=###,array('yv','yvb','yvp')}]</a>
+                </if>
+                <div  id="verify_state_yv" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <a  <if condition="$Think.get.byv eq 'yvb'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=yvb')}"</if> >基本信息</a>
+                    <a  <if condition="$Think.get.byv eq 'yvp'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=yvp')}"</if>>专业信息</a>
+                </div>
+            </li>
+
+            <li>
+                &nbsp; <a onmouseover="mopen('verify_state_nv')" onmouseout="mclosetime()" <if condition="(in_array($_GET['byv'],array('nv','nvb','nvp')))">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}"<else/> href="{:U('')}&{:FP($parameter, 'byv=nv')}"</if> >
+                未通过审核
+                </a>
+                <if condition="(in_array($_GET['byv'],array('nvb','nvp')))">
+                    <a href="{:U('')}&{:FP($parameter, 'byv=')}" style="color: darkmagenta"  class="active">[{$Think.get.byv|verify_state_desc=###,array('nv','nvb','nvp')}]</a>
+                </if>
+                <div  id="verify_state_nv" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <a  <if condition="$Think.get.byv eq 'nvb'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=nvb')}"</if> >基本信息</a>
+                    <a  <if condition="$Think.get.byv eq 'nvp'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=nvp')}"</if>>专业信息</a>
+                </div>
+            </li>
+
+            <li>
+                &nbsp; <a onmouseover="mopen('verify_state_bi')" onmouseout="mclosetime()" <if condition="(in_array($_GET['byv'],array('sbi','bi','si')))">class="active"  href="{:U('')}&{:FP($parameter, 'byv=')}"<else/> href="{:U('')}&{:FP($parameter, 'byv=sbi')}"</if> >
+                未提交
+                </a>
+                <if condition="(in_array($_GET['byv'],array('bi','si')))">
+                    <a href="{:U('')}&{:FP($parameter, 'byv=')}" style="color: darkmagenta"  class="active">[{$Think.get.byv|verify_state_desc=###,array('sbi','bi','si')}]</a>
+                </if>
+                <div  id="verify_state_bi" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <a  <if condition="$Think.get.byv eq 'bi'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=bi')}"</if> >基本信息</a>
+                    <a  <if condition="$Think.get.byv eq 'si'">class="active" href="{:U('')}&{:FP($parameter, 'byv=')}"<else/>href="{:U('')}&{:FP($parameter, 'byv=si')}"</if>>专业信息</a>
+                </div>
+            </li>
+
+            <li><i class="icon-leaf"></i></li>
+            <li>
+                &nbsp; <a onmouseover="mopen('station_state')" onmouseout="mclosetime()" <if condition="($Think.get.station_state neq '')">class="active"</if> href="{:U('')}&{:FP($parameter, 'station_state=')}" >
+                岗位状态
+                </a>
+                <if condition="$Think.get.station_state neq ''">
+                    <a href="{:U('')}&{:FP($parameter, 'station_state=')}" style="color: darkmagenta"  class="active">[{$Think.get.station_state}]</a>
+                </if>
+                <div  id="station_state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <volist name=":model_select_field_list(68)" id="fvo">
+                        <a <if condition="($_GET['station_state'] eq $fvo)"> class="active" href="{:U('')}&{:FP($parameter, 'station_state=')}"<else/> href="{:U('')}&{:FP($parameter, 'station_state='.$fvo)}"</if>>
+                        {$fvo}
+                        </a>
+                    </volist>
+                </div>
+            </li>
+
+            <li>
+                &nbsp; <a onmouseover="mopen('workstate_id')" onmouseout="mclosetime()" <if condition="($Think.get.workstate_id neq '')">class="active"</if> href="{:U('')}&{:FP($parameter, 'workstate_id=')}" >
+                工作状态
+                </a>
+                <if condition="$Think.get.workstate_id neq ''">
+                    <a href="{:U('')}&{:FP($parameter, 'workstate_id=')}" style="color: darkmagenta"  class="active">[{$Think.get.workstate_id}]</a>
+                </if>
+                <div  id="workstate_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <volist name=":product_workstate_list()" id="fvo">
+                        <a <if condition="($_GET['workstate_id'] eq $fvo)"> class="active" href="{:U('')}&{:FP($parameter, 'workstate_id=')}"<else/> href="{:U('')}&{:FP($parameter, 'workstate_id='.$fvo)}"</if>>
+                        {$fvo}
+                        </a>
+                    </volist>
+                </div>
+            </li>
+
+            <li>
+                &nbsp; <a onmouseover="mopen('cultivate_status')" onmouseout="mclosetime()" <if condition="($Think.get.cultivate_status neq '')"> class="active"</if> href="{:U('')}&{:FP($parameter, 'cultivate_status=')}">
+                培训状态
+                </a>
+                <if condition="$Think.get.cultivate_status neq ''">
+                    <a href="{:U('')}&{:FP($parameter, 'cultivate_status=')}" style="color: darkmagenta"  class="active">[{$Think.get.cultivate_status}]</a>
+                </if>
+                <div  id="cultivate_status" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                    <volist name=":model_select_field_list(1004)" id="fvo">
+                        <a <if condition="($_GET['cultivate_status'] eq $fvo)"> class="active" href="{:U('')}&{:FP($parameter, 'cultivate_status=')}"<else/> href="{:U('')}&{:FP($parameter, 'cultivate_status='.$fvo)}"</if>>
+                        {$fvo}
+                        </a>
+                    </volist>
+                </div>
+            </li>
+
+            <li><i class="icon-trash"></i></li>
+            <li><a href="{:U('')}&{:FP($parameter, 'by=trash')}" <if condition="$Think.get.by eq 'trash'">class="active"</if>>垃圾箱</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row-fluid" style="padding-top: 15px">
+    <div class="span12">
+        <div class="pull-left">
+            <form class="form-inline" id="searchForm" action="" method="get">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <div class="btn-group" style="padding-right: 5px">
+                        <button id="default_button"  class="btn btn-default" style="display: none"></button>
+                        <button id="delete"  class="btn btn-danger  btn-mini"><i class="icon-remove"></i>{:L('DELETE')}</button>
+                        <button class="btn  btn-mini  btn-danger dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);" id="reset_submit">重置提交</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <if condition="$Think.get.by eq 'trash'">
+                    <li class="pull-left">
+                        <button  id="recover" type="button"  class="btn  btn-mini" style="margin-right: 5px;">
+                            <i class="icon-retweet"></i>恢复
+                        </button >
+                    </li>
+                <else/>
+                    <li class="pull-left">
+                        <if condition="($Think.get.module_group_id neq null) and ($Think.get.group_type eq '1')">
+                            <div class="btn-group">
+                                <button type="button" class="btn  btn-mini btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">组管理&nbsp;<span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a id="add_group" href="javascript:void(0);">添加到组</a></li>
+                                    <li><a id="remove_group" href="javascript:void(0);">从本组移除</a></li>
+                                </ul>
+                            </div>
+                            <else/>
+                            <button  id="add_group" type="button"  class="btn  btn-mini" style="margin-right: 5px;">
+                                <img src="__PUBLIC__/img/customer_source_icon.png"/>添加到组
+                            </button >
+                        </if>
+                    </li>
+                </if>
+                <if condition="session('user_id') eq '1'">
+                <li class="pull-left">
+                    {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                    <script>
+                        $(function() {
+                            $("#bylea").change(def_short_search_select);
+                        });
+                    </script>
+                </li>
+                </if>
+
+                <li class="pull-left">
+                    {:branch_select_html("bybr", $branch,true,true,6, $league['league_id'])}&nbsp;&nbsp;
+                    <script>
+                        $(function() {
+                            $("#bybr").change(def_short_search_select);
+                        });
+                    </script>
+                </li>
+                <li class="pull-left">
+                        <ul class="nav pull-left">
+                            <li class="pull-left">
+                                <include file="Public:def_index_fields_filter_select" />
+
+                            </li>
+                            <script>
+                                function short_search_format( ul, item ) {
+                                    return $("#product-short-search").tmpl(item).appendTo( ul )
+                                }
+                            </script>
+                            <include file="Public:def_index_search_form" />
+                        </ul>
+                    <script language="JavaScript">
+                        $("#static_condition").html($("#workstate_tmpl").tmpl());
+                        $("#wsbt").prop('value', '{$Think.get.wsbt}');
+                        $("#wset").prop('value', '{$Think.get.wset}');
+                        $("#nobd").prop('value', '{$Think.get.nobd}');
+                    </script>
+                </li>
+            </ul>
+            </form>
+        </div>
+        <div class="pull-right">
+            <div class="btn-group">
+                <a class="btn btn-primary btn-mini" href="{:U('product/add')}">
+                    <i class="icon-plus"></i>&nbsp; 添加
+                </a>
+                <button class="btn btn-mini  btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:void(0);" id="advanced_dosearch" class="link">
+                            {:L('ADVANCED_SEARCH')}
+                        </a>
+                    </li>
+                    <if condition="vali_permission('product', 'export')">
+                    <li>
+                        <a href="javascript:void(0);" id="excelExport" class="link">
+                            </i>导出到Excel
+                        </a>
+                    </li>
+                    </if>
+                    <li class="divider"></li>
+                    <li>
+                        <a id="all_send"  href="javascript:void(0)">{:L('ALL_SEND')}</a>
+                    </li>
+                    <li>
+                        <a id="page_send" href="javascript:void(0)">{:L('PAGE_SEND')}</a>
+                    </li>
+                    <li>
+                        <a id="check_send" href="javascript:void(0)">{:L('CHECK_SEND')}</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <div class="row-fluid">
+
+    <div class="span12">
+        <form id="product_list_form" action="" method="Post">
+            <input type="hidden" name="m" value="product"/>
+            <input type="hidden" name="a" value="index" id="product_list_action"/>
+            <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+                <thead>
+                <tr id="childNodes_num">
+                    <th style="width:13px;">
+                        <input class="check_all" id="check_all" type="checkbox" />
+                    </th>
+                    <include file="Product:model_list_header" />
+                    <th style="width:65px;text-align: center"  >{:L('OPERATION')}</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td id="td_colspan">
+                        {$page}
+                    </td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <volist name="list" id="vo">
+                    <if condition="$vo['healthy_expire'] eq '是'">
+                        <tr  class="warning">
+                    <else/>
+                        <tr>
+                    </if>
+                    <td>
+                        <input name="product_id[]" class="check_list" type="checkbox" value="{$vo.product_id}" <neq name="vo['is_owner']" value="true"> disabled="disabled" is_owner='0'<else/>is_owner='1'</neq> />
+                    </td>
+                    <volist name="field_array" id="v">
+                        <include file="Public:def_index_list" />
+                    </volist>
+                    <td style="text-align: center; width:65px;">
+                        <a  href="{:U('product/view', 'id='.$vo['product_id'])}<eq name='Think.get.by' value='trash'>&visitor=trash</eq>" style="padding-right:5px"  data-toggle="tooltip" title="查看详细">
+                            <i class="icon-th-large"></i>
+                        </a>
+
+
+                        <if condition="vali_permission('product','adjuect_branch_queue/zb')">
+                        <if condition="$vo['canqueue'] eq true">
+                            <a rel="{$vo['product_id']}" href="javascript:void(0);" data-toggle="tooltip" style="padding-right:5px"  class="entry_queue" title="加入总部排岗">
+                                <i class="icon-share"></i>
+                            </a>
+                        <elseif condition="$vo['workstate_id'] eq '排岗'"/>
+                            <a href="{:U('product/adjuect_branch_queue', 'workstate_id=空闲&queue_branch_id=-1&product_id='.$vo['product_id'])}" data-toggle="tooltip" style="padding-right:5px"  class="exit_queue" title="退出总部排岗">
+                                <i class="icon-retweet"></i>
+                            </a>
+                        <else/>
+                            <a style="color: #D0D0D0;cursor: no-drop;padding-right:5px" href="javascript:void(0);" title="排岗">
+                                <i class="icon-share"></i>
+                            </a>
+                        </if>
+                        </if>
+                    </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+</div>
+<include file="Public:groupstance" />
+<include file="Public:export_dialog" />
+
+<include file="Public:adv_search" />
+<script>
+    $("#advanced_dosearch").click(function(){
+        advsearch('{:U("Product/search")}');
+    });
+</script>
+
+<script type="text/javascript">
+
+    function on_category_id_change() {
+        $("#category_id").val($("#search  option:selected").val());
+    }
+
+
+    function show_categoory_field_condition(data, searchContent, conditionContent, search) {
+        var options = '';
+        $.each(data.data, function(k, v){
+            options += '<option value="'+v.category_id+'">'+v.name+'</option>';
+        });
+
+        $("#"+searchContent).html('<select id="'+search+'" style="width:auto" onchange="on_category_id_change();">' + options + '</select><span id="categroy_leven_span"></span>&nbsp;');
+        $("#"+conditionContent).html('');
+        $("#categroy_leven_span").html("{$Think.get.catelevel|plevelcheckbox}");
+    }
+
+    function changeContent(){
+        var a = $("#select1  option:selected").val();
+        window.location.href="{:U('product/index', 'by=')}"+a;
+    }
+    $(function(){
+
+        <if condition="$Think.get.field eq 'skill'">
+            <if condition="$Think.get.category_id eq ''">
+            $("#search option[value='2']").prop("selected", true);
+            <else/>
+            $("#search option[value='{$Think.get.category_id}']").prop("selected", true);
+            </if>
+
+            on_category_id_change();
+        </if>
+
+        $("#check_all").click(function(){
+            $("input[class='check_list'][is_owner='1']").prop('checked', $(this).prop("checked"));
+        });
+
+        $("#reset_submit").click(function(){
+            var id_array = new Array();
+            $("input[class='check_list']:checked").each(function(){
+                id_array.push($(this).val());
+            });
+
+            if (id_array.length == 0) {
+                alert("没有选择任何雇员");
+            } else {
+                if (confirm("确实要重致为未提交状态吗?")) {
+                    var product_ids = id_array.join(",");
+                    window.location.assign("{:U('Product/reset_submit_state', 'model=product&ids=')}"+product_ids);
+                }
+            }
+        });
+
+        $('#delete').click(function(){
+            <if condition="$Think.get.by eq 'trash'">
+            if(confirm('确实要删除这个雇员吗.此操作会将相关订单、账户、雇员资料全部删除')){
+                $("#product_list_action").val('completely_delete');
+            <else/>
+            if(confirm('确实要将这个雇员移动到垃圾箱吗.此操作会删除会员账户和微信帐号')){
+                $("#product_list_action").val('delete');
+            </if>
+                $("#product_list_form").submit();
+                return false;
+            }
+        });
+
+        $('#recover').click(function(){
+            if(confirm('确实要恢复删除的这个雇员吗！')){
+                $("#product_list_action").val('recover');
+                $("#product_list_form").submit();
+                return false;
+            }
+        });
+    });
+
+</script>
+
+<include file="Product:adjuect_queue" />
+
+<object id="rcard" type="application/x-rcard"  width="0" height="0">
+    <param name="onload" value="pluginLoaded" />
+</object>
+<script>
+    $(function(){
+
+        function person_search(data, cardinfo) {
+            if (data) {
+                if (data.length == 1) {
+                    product_url = "{:U('product/view','id=')}" + data[0].product_id;
+                } else {
+                    product_url = "{:U('product/index','field=cardid&condition=is&act=search&search=')}" + cardinfo.cardid;
+                }
+                window.location.href=product_url;
+            } else {
+                var param = "&rcard";
+                window.location.href="{:U('product/add')}" + param;
+            }
+        }
+
+        function person(p) {
+            if (p) {
+                var cardinfo = {
+                    name: p.name,
+                    address: p.address,
+                    cardid: p.cardid,
+                    police: p.police,
+                    pic: p.pic,
+                    birthday: p.birthday,
+                    nation: p.nation,
+                    sex: p.sex,
+                    validstart: p.validstart,
+                    validend: p.validend,
+                    nationcode: p.nationcode,
+                    msg: p.msg
+                };
+                $.ajax({
+                    type: 'get',
+                    url: "{:U('product/changeContent', 'field=cardid&search=')}" + cardinfo.cardid,
+                    async: false,
+                    success: function (data) {
+                        if (data && data.data) {
+                            person_search(data.data.list, cardinfo);
+                        }
+                    },
+                    dataType:'json'
+                });
+            }
+        }
+
+        var rcard = document.getElementById('rcard');
+        if (rcard.valid) {
+            if (rcard.attachEvent) {
+                rcard.attachEvent("onperson", person);
+            } else {
+                rcard.addEventListener("person", person, false);
+            }
+            rcard.open();
+        }
+    });
+</script>
+
+<include file="Public:footer" />

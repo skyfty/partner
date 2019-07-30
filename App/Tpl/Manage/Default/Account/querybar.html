@@ -1,0 +1,58 @@
+<form class="form-inline" id="searchForm"  action="" method="get">
+    <ul class="nav pull-left">
+        <li class="pull-left">
+            <select style="width:auto" name="field" id="field" onchange="changeCondition()">
+                <option class="all" value="all">{:L('ANY FIELD')}</option>
+                <option class="{$t}" value="clause_additive">{:L('{$t}')}</option>
+                <option class="word" value="idcode">{:L('PRODUCT_IDCODE')}</option>
+                <option class="number" value="money">{:L('MONEY')}</option>
+                <option class="word" value="description">{:L('DESCRIPTION')}</option>
+                <option class="role" value="creator_role_id">{:L('CREATOR_ROLE')}</option>
+                <volist name="field_list" id="v">
+                    <if condition="$v['field'] neq 'clause_type_id'">
+                        <option class="{$v['form_type']}" value="{$v[field]}" rel="account">{$v[name]}</option>
+                    </if>
+                </volist>
+            </select>&nbsp;&nbsp;
+        </li>
+        <li id="conditionContent" class="pull-left">
+            <select id="condition" style="width:auto" name="condition" onchange="changeSearch()">
+                <option value="contains">{:L('CONTAINS')}</option>
+                <option value="not_contain">{:L('NOT_CONTAIN')}</option>
+                <option value="is">{:L('IS')}</option>
+                <option value="isnot">{:L('ISNOT')}</option>
+                <option value="start_with">{:L('START_WITH')}</option>
+                <option value="end_with">{:L('END_WITH')}</option>
+                <option value="is_empty">{:L('IS_EMPTY')}</option>
+                <option value="is_not_empty">{:L('IS_NOT_EMPTY')}</option>
+            </select>&nbsp;&nbsp;
+        </li>
+        <li id="searchContent" class="pull-left">
+            <input id="search" type="text" class="input-medium search-query" name="search"/>&nbsp;
+        </li>
+        <li class="pull-left">
+            {:L('FROM')}<input style="width:130px" type="text" id="start_time" name="start_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" class="Wdate" value="{$Think.get.start_time}"/>
+            {:L('TO')}<input style="width:130px"  type="text" id="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+        </li>
+        <li class="pull-left">
+            <input type="hidden" name="m" value="account"/>
+            <input type="hidden" name="t" value="{$t}"/>
+            <input type="hidden" name="dire" value="{$dire}"/>
+            <input type="hidden" name="act" id="act" value="search"/>
+
+            <if condition="$Think.get.by neq null">
+                <input type="hidden" name="by" value="{$Think.get.by}"/>
+            </if>
+            <if condition="$Think.get.type neq null">
+                <input type="hidden" name="type" value="{$Think.get.type}"/>
+            </if>
+            <button type="button" class="btn " id="dosearch"> <img src="__PUBLIC__/img/search.png"/></button>
+            <button type="button" id="clean_search" class="btn">全部</button>&nbsp;
+            <script>
+                $("#clean_search").click(function(){
+                    window.location.assign("{:U('')}&{:FP($parameter, 'field=&start_time=&end_time=')}");
+                });
+            </script>
+        </li>
+    </ul>
+</form>

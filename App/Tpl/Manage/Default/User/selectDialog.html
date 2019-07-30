@@ -1,0 +1,10 @@
+<include file="Staff:selectDialog"/>
+<script>
+    function user_select_dialog(cb, param)  {
+        select_staff(param, function(b){
+            if (cb) {
+                cb(b.name, b.role_id);
+            }
+        });
+    }
+</script>

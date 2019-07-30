@@ -1,0 +1,22 @@
+
+<script>
+    function request_category_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("serve/getcategoryselect")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+    function on_serve_category_change(id) {
+        request_category_info({id:id}, function(d){
+            $("#sv_cate").html(d);
+        });
+        $("#category").val(id);
+    }
+</script>

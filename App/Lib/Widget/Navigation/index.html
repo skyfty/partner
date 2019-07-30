@@ -1,0 +1,325 @@
+<style type="text/css">
+    .navbar .nav>li>a {
+        padding: 10px 6px 10px
+
+    }
+</style>
+
+<div class="nav-collapse collapse">
+
+	<ul class="nav top-nav" >
+		<volist name="top" id="vo">
+            <if  condition="($vo['module'] eq 'staff') or ($vo['module'] eq 'branch')">
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('staff', 'branch', 'user'))">active</if>' >
+                    <a class="dropdown-toggle" href="{:U('staff/index')}" style="color: #ffffff;float:left;padding-right:2px">公司管理 </a>
+                    <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <if condition="session('?admin') or vali_permission('staff', 'index')">
+                        <li><a href="{:U('staff/index')}" class="dropdown-menu-item">员工管理</a></li>
+                        </if>
+
+                        <if condition="session('?admin') or vali_permission('branch', 'index')">
+                        <li><a href="{:U('branch/index')}" class="dropdown-menu-item">门店管理</a></li>
+                        </if>
+
+                        <if condition="session('?admin')">
+                        <li class="divider"></li>
+                        <li><a href="{:U('user/role')}" class="dropdown-menu-item">权限分配</a></li>
+                         </if>
+                    </ul>
+                </li>
+            <elseif condition="$vo['module'] eq 'account'"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('account'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('account/index')}" style="color: #ffffff;float:left;padding-right:2px">账户管理 </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('account/market', 't=market')}" class="dropdown-menu-item">客户服务收入确认</a></li>
+                    <li><a href="{:U('account/cultivate', 't=cultivate')}" class="dropdown-menu-item">培训收入确认</a></li>
+                    <li><a href="{:U('account/inernal', 't=inernal')}" class="dropdown-menu-item">公司账户</a></li>
+                    <li><a href="{:U('account/customer', 't=customer')}" class="dropdown-menu-item">客户账户</a></li>
+                    <li><a href="{:U('account/product', 't=product')}" class="dropdown-menu-item">雇员账户</a></li>
+                    <li><a href="{:U('account/staff', 't=staff')}" class="dropdown-menu-item">员工账户</a></li>
+                    <li><a href="{:U('account/flow', 't=flow')}" class="dropdown-menu-item">公司流水</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('account/analytics')}" class="dropdown-menu-item">统计</a></li>
+                    <li><a href="{:U('account/logger')}" class="dropdown-menu-item">日志</a></li>
+                </ul>
+                </li>
+            <elseif condition="in_array($vo['module'],array('serve','trade'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('serve','trade'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('trade/index')}" style="color: #ffffff;float:left;padding-right:2px">产品管理 </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('trade/index')}" class="dropdown-menu-item">产品订单</a></li>
+                    <li><a href="{:U('serve/index')}" class="dropdown-menu-item">产品列表</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('trade/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                    <li><a href="{:U('trade/cost')}" class="dropdown-menu-item">成本</a></li>
+                </ul>
+                </li>
+            <elseif condition="in_array($vo['module'],array('dorm','berth'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('dorm','berth'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('berth/index')}" style="color: #ffffff;float:left;padding-right:2px">床位管理 </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <if condition="session('?admin') or vali_permission('berth', 'index')">
+                    <li><a href="{:U('berth/index')}" class="dropdown-menu-item">床位管理</a></li>
+                    </if>
+                    <if condition="session('?admin') or vali_permission('dorm', 'index')">
+                    <li><a href="{:U('dorm/index')}" class="dropdown-menu-item">宿舍管理</a></li>
+                    <li><a href="{:U('berth/mind')}" class="dropdown-menu-item">宿舍导图</a></li>
+                    </if>
+                    <li class="divider"></li>
+                    <li><a href="{:U('berth/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                </ul>
+                </li>
+            <elseif condition="in_array($vo['module'],array('currier','cultivate'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('currier','cultivate'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('cultivate/index')}" style="color: #ffffff;float:left;padding-right:2px">培训管理 </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('cultivate/index')}" class="dropdown-menu-item">培训订单</a></li>
+                    <li><a href="{:U('currier/index')}" class="dropdown-menu-item">培训列表</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('cultivate/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                </ul>
+                </li>
+            <elseif condition="in_array($vo['module'],array('dispatch'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('dispatch'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('dispatch/index')}" style="color: #ffffff;float:left;padding-right:2px">调度管理 </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('dispatch/index')}" class="dropdown-menu-item">入职总表</a></li>
+                    <li><a href="{:U('dispatch/index','act=branch')}" class="dropdown-menu-item">门店调度</a></li>
+                    <li><a href="{:U('dispatch/index','act=hospital')}" class="dropdown-menu-item">医院调度列表</a></li>
+
+                </ul>
+                </li>
+            <elseif condition="in_array($vo['module'],array('commiss'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('commiss'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('commiss/index')}" style="color: #ffffff;float:left;padding-right:2px">
+                    客服管理
+                    <div  style=" border-radius:25px;position:absolute;width:30px; height:20px;display: none; background-color:#FF0000; z-index:1000;top:30px;color:#FFFFFF;text-align:center" id="main_nav_{$vo['id']}"></div>
+                    <div  style=" border-radius:25px;position:absolute;width:30px; height:20px;display: none; background-color:#FF0000; z-index:1000;top:30px;left:40px;color:#FFFFFF;text-align:center" id="main_nav_genjin_{$vo['id']}"></div>
+
+                </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('commiss/index')}" class="dropdown-menu-item">客服管理</a></li>
+                    <li><a href="{:U('commiss/logger')}" class="dropdown-menu-item">日志</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('commiss/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                </ul>
+                </li>
+            <elseif condition="in_array($vo['module'],array('market'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('market'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('market/index')}" style="color: #ffffff;float:left;padding-right:2px">
+                    客户服务
+                </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('market/index', 'assort=xs')}" class="dropdown-menu-item">销售视图</a></li>
+                    <li><a href="{:U('market/index', 'assort=cb')}" class="dropdown-menu-item">成本视图</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('market/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                    <li><a href="{:U('market/logger')}" class="dropdown-menu-item">日志</a></li>
+                </ul>
+                </li>
+
+            <elseif condition="in_array($vo['module'],array('product'))"/>
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('product'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('product/index')}" style="color: #ffffff;float:left;padding-right:2px">
+                    雇员管理
+                </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('product/index')}" class="dropdown-menu-item">雇员列表</a></li>
+                    <li><a href="{:U('product/index', 'queue_category_id=6&assort=zb&act=dispatch')}" class="dropdown-menu-item">调度</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('product/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                    <li><a href="{:U('product/logger')}" class="dropdown-menu-item">日志</a></li>
+                </ul>
+                </li>
+
+            <elseif condition="in_array($vo['module'],array('league'))"/>
+                <if condition="session('?admin') and (session('league_id') eq 0)">
+                <li class='dropdown <if condition="in_array(strtolower(MODULE_NAME),array('league'))">active</if>' >
+                <a class="dropdown-toggle" href="{:U('league/index')}" style="color: #ffffff;float:left;padding-right:2px">
+                    加盟商管理
+                </a>
+                <a  class="dropdown-toggle" data-toggle="dropdown" style="float:right;padding-right:8px;padding-left:2px;cursor: pointer" ><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{:U('league/index')}" class="dropdown-menu-item">加盟商列表</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{:U('league/index', 'act=group')}" class="dropdown-menu-item">分组</a></li>
+                    <li><a href="{:U('league/logger')}" class="dropdown-menu-item">日志</a></li>
+                </ul>
+                </li>
+                </if>
+            <elseif condition="$vo.title neq ''"/>
+                <li
+                    <if condition="strtolower(MODULE_NAME) eq strtolower($vo['module'])">
+                        class="active"
+                    <else/>
+                        <if condition="(strtolower(MODULE_NAME) eq 'trade') && ($vo['module'] == 'serve')">
+                            class="active"
+                        </if>
+                    </if>>
+                    <a  href="{$vo.url}" style="color: #ffffff">
+                        {$vo.title}
+                        <if condition="($vo['title'] == '雇员管理') || ($vo['title'] == '客户管理') || ($vo['title'] == '客服管理')">
+                            <div  style=" border-radius:25px;position:absolute;width:30px; height:20px;display: none; background-color:#FF0000; z-index:1000;top:30px;color:#FFFFFF;text-align:center" id="main_nav_{$vo['id']}"></div>
+                        </if>
+                    </a>
+                </li>
+			</if>
+		</volist>				
+
+	</ul>
+	<ul class="nav pull-right">
+		<li style=" width: auto;margin-right: 5px;">
+            <a  style="padding: 10px 0px;width: auto;color:#fff" href="{:U('Staff/myinfo')}">
+                <i class="icon-user"></i><if  condition="session('league_name')">[{$Think.session.league_name}]</if> {$Think.session.name}
+            </a>
+        </li>
+		<li>
+            <a href="{:U('message/index')}" title="{:L('NEW_MESSAGE')}">
+                <span id="message_tips" style="color:#fff;">
+                    <i class="icon-envelope"></i>
+                    <span id="message_num">0</span>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="{:U('task/index', 'by=me')}" title="{:L('MY_TASK')}">
+                <span id="task_tips" style="color:#fff;">
+                    <i class="icon-tasks"></i> <span id="task_num">0</span>
+                </span>
+            </a>
+        </li>
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding: 10px;color: #ffffff">{:L('SYSTEM')}<b class="caret"></b></a>
+			<ul class="dropdown-menu">							
+				<volist name="user" id="vo">
+					<if condition="$vo.title neq ''">
+					<li><a href="{$vo.url}"  class="dropdown-menu-item">{$vo.title}</a></li>
+					</if>
+				</volist>
+                <if  condition="session('?admin')">
+                    <li><a href="{:U('channel/index')}">渠道管理</a></li>
+                    <li><a href="{:U('index/stafflog')}">操作日志</a></li>
+                </if>
+
+                <li class="divider"></li>
+				<li><a href="{:U('user/logout')}"  class="dropdown-menu-item">{:L('EXIT')}</a></li>
+			</ul>
+		</li>
+	</ul>
+	<div class="nav_menu_tool_tips" close-status="open">
+		<div class="tips_icon_close"><a href="javascript:void(0);" id="close_tips">X</a></div>
+		<div class="tips_panel">
+			<div class="tips_item" id="message_item">
+				<span class="tips_count">0</span> 封新站内信<span class="tips_link"><a href="{:U('message/index')}">查看站内信</a></span>
+			</div>
+            <div class="tips_item" id="task_item">
+                <span class="tips_count">0</span> 个新任务提醒<span class="tips_link"><a href="{:U('task/index')}">查看任务</a></span>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div id="message" class="hide"><p id="tips"></p></div>
+<div class="hide" id="dialog-message-send" title="{:L('WRITE_LETTER')}">loading...</div>
+<script type="text/javascript">
+
+$("#dialog-message-send").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 800,
+	maxHeight: 600,
+	position: ["center",100]
+});
+
+var a = 1;
+function fn(){
+	if(a == 1){
+		$('#message_tips').css({color:'#fff'});
+		a = 0;
+	}else{
+		$('#message_tips').css({color:'#D2D2D2'});
+		a = 1;
+	}
+}
+var myInterval;
+
+function message_tips(){
+	$.get("{:U('message/tips')}", function(data){
+
+		if((data.data['message'] != $('#message_tips #message_num').html()) && (data.data['message'] != 0)){
+			$('#message_item').css({display:'block'});	//显示站内信卡片
+            $('#message_tips').css({color:'#fff'});
+            myInterval = setInterval(fn,1000);
+			$("#message #tips").html("<audio id='ttsoundplayer'  autoplay='autoplay'><source src='Public/sound/Global.wav' type='audio/wav'></audio>");
+		} else {
+			$("#message #tips").html('');
+			if(data.data['message'] == 0){
+                $('#message_tips').css({color:'#D2D2D2'});
+
+                $('#message_item').css({display:'none'});	//隐藏站内信卡片
+				clearInterval(myInterval);
+			}
+		}
+
+        //导航提醒设置颜色
+        if(data.data['task'] != '0'){
+            $('#task_tips').css({color:'#fff'});
+
+        }else{
+            $('#task_tips').css({color:'#D2D2D2'});
+        }
+        if(data.data['task_count'] != '0'){
+            $('#task_item').css({display:'block'});	//显示任务卡片
+        }else{
+            $('#task_item').css({display:'none'});	//隐藏任务卡片
+        }
+        $('#task_tips #task_num').html(data.data['task_count']);
+
+        var closeStatus = $('.nav_menu_tool_tips').attr('close-status');	//卡片提示状态
+        if(data.status == 1 && (data.data.message != 0 || data.data.task_count != 0 ) && closeStatus == 'open'){
+            $('.nav_menu_tool_tips').css({display:'block'});
+        }else{
+            $('.nav_menu_tool_tips').css({display:'none'});
+        }
+
+        //导航提醒实时写入数值
+		$('#message_tips #message_num').html(data.data['message']);
+
+		//卡片提醒实时写入数值
+		$('#message_item .tips_count').html(data.data['message']);
+
+		//根据站内信、任务、日程、合同是否存在数据来判断是否显示卡片提示
+		var closeStatus = $('.nav_menu_tool_tips').attr('close-status');	//卡片提示状态
+		if(data.status == 1 && data.data.message != 0 && closeStatus == 'open'){
+			$('.nav_menu_tool_tips').css({display:'block'});
+		}else{
+			$('.nav_menu_tool_tips').css({display:'none'});
+		}
+	},'json');
+}
+
+
+$(function(){
+	message_tips();
+	
+	$("#header_send_message").click(function(){
+		$('#dialog-message-send').dialog('open');
+		$('#dialog-message-send').load('{:U("message/send")}');
+	});
+	
+	/** 点击卡片提醒关闭按钮，永久关闭任务、日程、合同，暂时关闭站内信 */
+	$('#close_tips').click(function(){
+		$('.nav_menu_tool_tips').attr('close-status','closed');
+		$('.nav_menu_tool_tips').css({display:'none'});
+	});
+});
+</script>

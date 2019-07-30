@@ -1,0 +1,66 @@
+<if condition="$vo['form_type'] == 'datetime'">
+<a onmouseover="mopen('table_header_datetime_{$vo['field']}')" field="{$vo['field']}" onmouseout="mclosetime()" date_col_filter="{:U('Berth/list_col_filter_select','type=date&field_id='.$vo['field_id'].'&field='.$vo['field'])}" date_col_filter_call="filter_berth_date_field"  href="javascript:void(0);">
+    <i class="icon-filter"></i>
+</a>
+    <if condition="($_GET[$vo['field']]['value'] neq '')">
+    <br/>
+    <span style="font-weight:normal">{:format_table_head_date_col($vo['field'], $parameter)}</span>
+    </if>
+</if>
+
+<if condition="$vo['form_type'] == 'box'">
+<a onmouseover="mopen('list_head_{$vo['field']}')" onmouseout="mclosetime()"  href="javascript:void(0);" id="list_head_{$vo['field']}_filter">
+    <i class="icon-filter"></i>
+</a>
+<if condition="($_GET[$vo['field']]['value'] neq '')">
+    <br/><span style="font-weight:normal">{$_GET[$vo['field']]}</span>
+</if>
+<div id="list_head_{$vo['field']}" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+    <a <if condition="($_GET[$vo['field']] eq '')"> href="{:U('')}&{:FP($parameter, $vo['field'].'=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, $vo['field'].'=')}"</if>>
+    全部
+    </a>
+    <volist name=":model_select_field_list($vo['field_id'])" id="fvo">
+        <a <if condition="($_GET[$vo['field']] eq $fvo)"> href="{:U('')}&{:FP($parameter, $vo['field'].'=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, $vo['field'].'='.$fvo)}"</if>>
+        {$fvo}
+        </a>
+    </volist>
+</div>
+</if>
+
+<if condition="$vo['form_type'] == 'tr_cate'">
+    <a onmouseover="mopen('table_header_tr_cate_{$vo['field']}')" field="{$vo['field']}" onmouseout="mclosetime()" text_col_filter="{:U('Berth/list_col_filter_select','type=text&field_id='.$vo['field_id'].'&field='.$vo['field'])}" text_col_filter_call="filter_berth_text_field"  href="javascript:void(0);">
+        <i class="icon-filter"></i>
+    </a>
+    <if condition="($_GET[$vo['field']]['value'] neq '')">
+    <br/>
+    <span style="font-weight:normal">{:format_table_head_text_col($vo['field'], $parameter)}</span>
+    </if>
+</if>
+
+<if condition="$vo['field'] == 'branch_id'">
+
+<elseif condition="in_array($vo['form_type'], array('text', 'telephone', 'mobile'))"/>
+    <a onmouseover="mopen('table_header_text_{$vo['field']}')" field="{$vo['field']}" onmouseout="mclosetime()" text_col_filter="{:U('Berth/list_col_filter_select','type=text&field_id='.$vo['field_id'].'&field='.$vo['field'])}" text_col_filter_call="filter_berth_text_field"  href="javascript:void(0);">
+        <i class="icon-filter"></i>
+    </a>
+    <if condition="($_GET[$vo['field']]['value'] neq '')">
+    <br/>
+    <span style="font-weight:normal">{:format_table_head_text_col($vo['field'], $parameter)}</span>
+    </if>
+<elseif condition="($vo['form_type'] == 'channel_role_id_box') or ($vo['form_type'] == 'channel_role_model_box')"/>
+    <a onmouseover="mopen('table_header_text_{$vo['field']}')" field="{$vo['field']}" onmouseout="mclosetime()" text_col_filter="{:U('Berth/list_col_filter_select','type=text&field_id='.$vo['field_id'].'&field='.$vo['field'])}" text_col_filter_call="filter_berth_text_field"  href="javascript:void(0);">
+        <i class="icon-filter"></i>
+    </a>
+    <if condition="($_GET[$vo['field']]['value'] neq '')">
+    <br/>
+    <span style="font-weight:normal">{:format_table_head_text_col($vo['field'], $parameter)}</span>
+    </if>
+<elseif condition="$vo['form_type'] == 'number' or $vo['form_type'] == 'floatnumber'"/>
+    <a onmouseover="mopen('table_header_number_{$vo['field']}')" field="{$vo['field']}" onmouseout="mclosetime()" number_col_filter="{:U('Berth/list_col_filter_select','type=number&field_id='.$vo['field_id'].'&field='.$vo['field'])}" number_col_filter_call="filter_berth_text_field"  href="javascript:void(0);">
+        <i class="icon-filter"></i>
+    </a>
+    <if condition="($_GET[$vo['field']]['value'] neq '')">
+    <br/>
+    <span style="font-weight:normal">{:format_table_head_text_col($vo['field'], $parameter)}</span>
+    </if>
+</if>

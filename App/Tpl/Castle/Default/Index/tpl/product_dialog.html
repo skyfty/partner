@@ -1,0 +1,34 @@
+<div  ng-controller="productDialogController">
+    <div class="modal-header">
+        <h3 class="modal-title">雇员列表</h3>
+    </div>
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <div class="modal-body">
+        <table ui-static-datatable="$parent.items" ui-static-datatable-fields="fields"  ng-data-url="/product/index" ng-type="radio" class="table table-striped b-t b-light" style="white-space: nowrap;">
+            <thead>
+            <tr>
+                <th ng-field="product_id" searchable="false" orderable="false">选择</th>
+                <th ng-field="idcode">编号</th>
+                <th ng-field="name">名称</th>
+                <th ng-field="census">籍贯</th>
+                <th ng-field="workstate_id">工作状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</div>
+<script>
+
+    app.controller('productDialogController', function($scope, $state) {
+        $scope.fields = {$field_array|json_encode};
+        $scope.datatablesearch = function(d){
+            d.query = $scope.$parent.params;
+        };
+    });
+</script>

@@ -1,0 +1,166 @@
+<include file="Public:header" />
+
+<div class="container">
+	<div class="page-header">
+		<h4>{:L('EDIT_TASK')}</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<form action="{:U('task/edit')}" method="post" id="form1">
+				<input type="hidden" name="task_id" value="{$task.task_id}"/>
+                <input type="hidden" name="jujuedesc"  id="jujuedesc" value=""/>
+
+                <table class="table table-hover">
+					<thead>
+						<tr>
+							<td>&nbsp;</td>
+							<td>
+                                <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                                <input name="return" onclick="javascript:history.go(-1)" class="btn" type="button" value="{:L('RETURN')}"/>
+                            </td>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr> 
+							<td>&nbsp;</td>
+							<td>
+                                <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                                <input onclick="javascript:history.go(-1)" class="btn" type="button" value="{:L('RETURN')}"/>
+                            </td>
+						</tr>
+					</tfoot> 
+					<tbody>
+						<tr><th colspan="4">{:L('BASIC_INFO')}</th></tr>
+						<tr>
+							<td class="tdleft" width="15%">*{:L('THEME')}</td>
+							<td width="35%"><input type="text" id="subject"  name="subject" value="{$task.subject}" /></td>
+                            <td class="tdleft" >状态</td>
+                            <td>
+                                <select name="status" id="status">
+                                    <option <if condition="$task.status eq '接受'">selected</if> value="接受">接受</option>
+                                    <option <if condition="$task.status eq '完成'">selected</if> value="完成">完成</option>
+                                    <option <if condition="$task.status eq '拒绝'">selected</if> value="拒绝">拒绝</option>
+                                </select>
+                            </td>
+    					</tr>
+						<tr>
+							<td class="tdleft">负责人</td>
+							<td>
+								<input type="hidden" name="owner_role_id" id="owner_role_id" value="{$task.owner_role_id}"/>
+								<input  type="text" id="owner_name" name="owner_name" value=" <?php
+										foreach($task['owner_name'] as $k => $v ){
+											if($v) echo $v['user_name'].",";
+										}
+									?> "  />{:L('CLICK_TO_SELECT')}
+							</td>
+                            <td class="tdleft">{:L('SELECT_RELATED')}</td>
+                            <td>
+                                <select name="module" class="span2" onchange="changeContent()" id="select1">
+                                    <option value=""></option>
+                                    <option <if condition="$task['module']['module_name'] eq 'Customer'">selected="selected"</if> value="customer">{:L('CUSTOMER')}</option>
+                                    <option <if condition="$task['module']['module_name'] eq 'Business'">selected="selected"</if> value="business">{:L('BUSINESS')}</option>
+                                    <option <if condition="$task['module']['module_name'] eq 'Product'">selected="selected"</if> value="product">{:L('PRODUCT')}</option>
+                                </select>
+                                <input type="hidden" id="module_id" name="module_id" value="{$task.module.module_id}" id="select_content"/>
+                                <input type="text" name="module_name" id="module_name" value="{$task.module.name}"/>
+                            </td>
+						</tr>
+                        <tr>
+                            <td class="tdleft">开始时间</td>
+                            <td>
+                                <input type="text" id="start_time" onfocus="on_start_time_focus();" name="start_time" value="<if condition="$task.start_time neq '0'">{$task.start_time|date="Y-m-d H:i",###}</if>" class="Wdate"/>
+                            </td>
+                            <td class="tdleft">结束时间</td>
+                            <td>
+                                <input type="text" id="end_time" onfocus="on_end_time_focus();" name="end_time" value="<if condition="$task.end_time neq '0'">{$task.end_time|date="Y-m-d H:i",###}</if>" class="Wdate"/>
+                            </td>
+                        </tr>
+
+						<tr>
+							<td class="tdleft" >{:L('PRECEDENCE')}</td>
+							<td colspan="3">
+                                <select name="priority">
+                                    <option <if condition="$task['priority'] eq '紧急任务'">selected</if> value="紧急任务">紧急任务</option>
+                                    <option <if condition="$task['priority'] eq '一般性任务'">selected</if> value="一般性任务">一般性任务</option>
+                                </select>
+                            </td>
+						</tr>
+						<tr>
+							<td class="tdleft" >{:L('DESCRIPTION')}</td>
+							<td  colspan="3">
+								<textarea rows="15" id="description" class="span10" name="description">{$task.description}</textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="dialog-edit-jujue-desc" class="modal fade" role="dialog"  aria-hidden="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+                备注
+            </h4>
+        </div>
+
+        <div class="modal-body">
+            <table class="table table-hover" style="border: none">
+                <tr>
+                    <td>{:L('DESCRIPTION')}:</td>
+                    <td>
+                        <textarea class="span4" name="desc" id="desc" style="width: 450px; height: 200px"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                关闭
+            </button>
+            <button type="submit" class="btn btn-primary" onclick="save_jujue_desc();">
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function save_jujue_desc() {
+        var desc = $("#desc").val();
+        if (desc == "") {
+            alert("必须注明拒绝原因");return;
+        }
+        $("#jujuedesc").val(desc);
+        $('#dialog-edit-jujue-desc').modal('hide')
+    }
+
+    $("#status").change(function(){
+        if ($(this).val() == "拒绝") {
+            $('#dialog-edit-jujue-desc').modal('show')
+
+        }
+    });
+
+    $("#form1").submit(function(){
+        if ($("#status").val() == "拒绝") {
+            if ($("#desc").val() == "") {
+                alert("必须注明拒绝原因");
+                $('#dialog-edit-jujue-desc').modal('show')
+                return false;
+            }
+        } else {
+            $("#jujuedesc").val("")
+        }
+        return true;
+    });
+</script>
+
+<div class="hide" id="dialog-message7" title="选择任务相关人">loading...</div>
+<include file="Task:datapick" />
+<include file="Public:footer" />

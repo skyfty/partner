@@ -1,0 +1,82 @@
+<include file="Customer:selectDialog" />
+<script type="text/javascript">
+    function on_customer_info(b) {
+        $('#module_id').val(b.customer_id);
+        $('#module_name').val(b.name);
+    }
+</script>
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    function on_product_info(b) {
+        $('#module_id').val(b.product_id);
+        $('#module_name').val(b.name);
+    }
+</script>
+
+<include file="Market:selectDialog" />
+<script type="text/javascript">
+    function on_market_info(b) {
+        $('#module_id').val(b.market_id);
+        $('#module_name').val(b.idcode);
+    }
+</script>
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info(b) {
+        $("#owner_role_id").val("," + b.role_id + ",");
+        $("#owner_name").val(b.name);
+    }
+    $('#owner_name').click(function(){
+            select_staff();
+        }
+    );
+</script>
+
+<script type="text/javascript">
+
+    function on_start_time_focus() {
+        $("#end_time").val("");
+        WdatePicker({});
+    }
+
+    function on_end_time_focus() {
+        var mindate = $("#start_time").val();
+        WdatePicker({
+            minDate:mindate
+        });
+    }
+
+    function changeContent(){
+        $('#module_id').val("");
+        $('#module_name').val("");
+        $('#module_name').click();
+    }
+    $(function(){
+        $("input[name='submit']").click(function(){
+            var subject = $("#subject").val();
+            if(!subject){
+                alert('{:L('SUBJECT_CAN_NOT_EMPTY')}');
+                return false;
+            }
+            if($("#start_time").val() == "" || $("#end_time").val() == ""){
+                alert('任务时间错误');
+                return false;
+            }
+        });
+        $('#module_name').click(
+            function(){
+                var a = $("#select1  option:selected").val();
+                if(a == "market"){
+                    select_market();
+                }else if(a == "customer"){
+                    select_customer();
+                }else if(a == "product"){
+                    select_product();
+                }
+            }
+        );
+
+    });
+</script>

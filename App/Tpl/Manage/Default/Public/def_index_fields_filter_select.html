@@ -1,0 +1,10 @@
+<select style="width:150px" id="field" onchange="changeCondition()" name="field">
+    <option class="text" value="all">{:L('ANY_FIELD')}</option>
+    <volist name="field_list" id="v">
+        <if condition="$v['form_type'] eq 'datetime'">
+            <option is_showtime="{$v['is_showtime']}" class="{$v['form_type']}" value="{$v[field]}" rel="{$module_name}">{$v[name]}</option>
+            <else/>
+            <option class="{$v['form_type']}" value="{$v[field]}" rel="{$module_name}">{$v[name]}</option>
+        </if>
+    </volist>
+</select>&nbsp;&nbsp;

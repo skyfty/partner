@@ -1,0 +1,327 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">新培训订单信息</a>
+            <span style="font-size: medium;color: #0088cc;"> - {$cultivate['idcode']} - {$cultivate['currier_id']|currier_show_html} - {$cultivate['model_show_html']}</span>
+        </h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead >
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <if condition="$cultivate_settle">
+                                    <a href="{:U('cultivate/settlement', 'id='.$cultivate['cultivate_id'])}" class="settlement_btn barrier-submit">结算</a> |
+                                </if>
+                                <if condition="$cultivate['settle_state'] eq '917'">
+                                    <a href="javascript:void(0);" onclick="return cancel_confirm();">退回</a> |
+                                </if>
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+
+                </table>
+
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <th colspan="6"> 结算信息 </th>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">培训状态:</td>
+                        <td>{$cultivate['status_id']|format_cultivate_status}</td>
+                        <td class="tdleft" width="15%">考试状态:</td>
+                        <td>{$cultivate['examine_state']|format_cultivate_status}</td>
+                        <td class="tdleft" width="15%">结算状态:</td>
+                        <td>{$cultivate['settle_state']|format_cultivate_status}</td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">订单金额:</td>
+                        <td>{$cultivate['sum_settle_price']}</td>
+                        <td class="tdleft" width="15%">已付金额:</td>
+                        <td>{$cultivate['deficit_price']}</td>
+                        <td class="tdleft" width="15%">待确认金额:</td>
+                        <td>{$cultivate['wait_confirm_price']}</td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">首单:</td>
+                        <td>{$cultivate['initial']}</td>
+                        <td class="tdleft" width="15%">未付金额:</td>
+                        <td>{$cultivate['surplus_price']}</td>
+                        <td class="tdleft" width="16%">已冻结金额:</td>
+                        <td>
+                            {$cultivate['model_earnest']}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">利润:</td>
+                        <td>{$cultivate['gain']}</td>
+                        <td class="tdleft" width="15%">预估成本:</td>
+                        <td colspan="3">{$cultivate['estimate_cost']}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                        <volist name="currier_account_list" id="vo">
+                            <p <eq name="vo.quarry" value="1">style="background-color:#e2e2e2"</eq>>
+                            [{$vo['create_time']|toDate}]  {:model_info_show_html($vo['account_type'], $vo['clause_additive'], 'account')}  {$vo['income_or_expenses']|acction_type_desc} {$vo['name']}， 金额为 {$vo['money']}
+                            </p>
+                        </volist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="5"> 渠道费 </th>
+                        <th style="text-align: right">
+                            <if condition="($cultivate['settle_state'] eq '918') or ($cultivate['status_id'] == '0')">
+                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">增加</a>
+                            <else/>
+                                <a href="{:U('cultivate/channel_add', 'cultivate_id='.$cultivate['cultivate_id'])}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">增加</a>
+                            </if>
+
+
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <table class="table cost-datatables  compact" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th style="width: 200px">渠道</th>
+                                    <th style="width: 200px">渠道人</th>
+                                    <th style="width: 200px">渠道费</th>
+                                    <th style="width: 200px">比例</th>
+                                    <th>状态</th>
+                                    <th style="width: 100px">操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="channel_list" id="vo">
+                                    <tr>
+                                        <td>
+                                            {$vo['channel_name']}
+                                        </td>
+                                        <td>
+                                            {$vo['channel_role_name']}
+                                        </td>
+                                        <td>
+                                            {$vo['channel_price']|number_format=###,2}
+                                        </td>
+                                        <td>
+                                            {$vo['channel_role_radio']}
+                                        </td>
+                                        <td>
+
+                                        <if condition="$vo['channel_price'] gt 0">
+                                        <if condition="$vo['channel_price_settle_time'] gt 0">
+                                            已支付
+                                        <else/>
+                                            未支付
+                                        </if>
+                                        </if>
+                                        </td>
+                                        <td>
+                                            <if condition="($cultivate['settle_state'] eq '918')  or $cultivate['status_id'] == '0'">
+                                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">编辑</a> |
+                                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">删除</a>
+                                            <else/>
+                                                <a href="{:U('cultivate/channel_edit')}&id={$vo['cultivate_channel_id']}&cultivate_id={$cultivate.cultivate_id}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">编辑</a> |
+                                                <a  href="{:U('cultivate/channel_delete')}&id={$vo['cultivate_channel_id']}&cultivate_id={$cultivate.cultivate_id}" class="del_confirm">删除</a>
+                                            </if>
+                                        </td>
+                                    </tr>
+                                </volist>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th colspan="6">合计: {$cultivate['sum_channel_price']}</th>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="6" >
+                                        <volist name="channel_account_list" id="vo">
+                                            <p <eq name="vo.quarry" value="1">style="background-color:#e2e2e2"</eq>>
+                                                [{$vo['create_time']|toDate}]  {:model_info_show_html($vo['account_type'], $vo['clause_additive'], 'account')}  {$vo['income_or_expenses']|acction_type_desc} {$vo['name']}， 金额为 {$vo['money']}
+                                            </p>
+                                        </volist>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <th colspan="5">
+                            促单费
+                        </th>
+                        <th style="text-align: right">
+                            <if condition="($cultivate['settle_state'] eq '918')  or ($cultivate['status_id'] == '0')">
+                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">增加</a>
+                            <else/>
+                                <a href="{:U('cultivate/urge_add', 'id='.$cultivate['cultivate_id'])}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">增加</a>
+                            </if>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <table class="table cost-datatables  compact" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th style="width: 200px">类别</th>
+                                    <th style="width: 200px">促单人</th>
+                                    <th style="width: 200px">促单费</th>
+                                    <th style="width: 200px">比例</th>
+                                    <th>状态</th>
+                                    <th style="width: 100px">操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="urge_list" id="vo">
+                                    <tr>
+                                        <td>
+                                            {$vo['urge_role_class']}
+                                        </td>
+                                        <td>
+                                            {$vo['urge_role_id']|staff_role_show_html}
+                                        </td>
+                                        <td>
+                                            {$vo['urge_price']|number_format=###,2}
+                                        </td>
+                                        <td>
+                                            {$vo['urge_owner_radio']}
+                                        </td>
+                                        <td>
+                                            <if condition="$vo['urge_price'] gt 0">
+                                            <if condition="$vo['urge_price_settle_time'] gt 0">
+                                                已支付
+                                            <else/>
+                                                未支付
+                                            </if>
+                                            </if>
+                                        </td>
+                                        <td>
+                                            <if condition="($cultivate['settle_state'] eq '918') or ($cultivate['status_id'] == '0') or ($lock_agency_scale eq true)">
+                                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">编辑</a> |
+                                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">删除</a>
+                                            <else/>
+                                                <a href="{:U('cultivate/urge_edit')}&id={$vo['cultivate_urge_id']}&cultivate_id={$cultivate.cultivate_id}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">编辑</a> |
+                                                <a  href="{:U('cultivate/urge_delete')}&id={$vo['cultivate_urge_id']}&cultivate_id={$cultivate.cultivate_id}" class="del_confirm">删除</a>
+                                            </if>
+                                        </td>
+                                    </tr>
+                                </volist>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th colspan="6">合计: {$cultivate['sum_urge_price']}</th>
+
+                                </tr>
+                                <tr>
+                                    <th colspan="6" style="color: red">净利润:  {$cultivate['profit']}</th>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="6" >
+                                        <volist name="urge_account_list" id="vo">
+                                            <p <eq name="vo.quarry" value="1">style="background-color:#e2e2e2"</eq>>
+                                                [{$vo['create_time']|toDate}]  {:model_info_show_html($vo['account_type'], $vo['clause_additive'], 'account')}  {$vo['income_or_expenses']|acction_type_desc} {$vo['name']}， 金额为 {$vo['money']}
+                                            </p>
+                                        </volist>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function cancel_confirm() {
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "退回确认",
+            lock:true,
+            fixed:true,
+            ok: function () {
+                if ($('#content').val() == "") {
+                    alert("必须写明退回原因");
+                    return false;
+                }
+                show_lock_tips("正在退回结算...");
+                $('#cancel_submit_form').submit();
+            },
+            cancel: true
+        });
+        $.ajax({
+            url: "{:U('Cultivate/cancel_submit', 'id='.$cultivate['cultivate_id'])}",
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+        return false;
+    }
+
+    $(".settlement_btn").click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm('确实要结算订单吗', function(){
+            show_lock_tips("正在提交结算...");
+            window.location.replace(href);
+        });
+        return false;
+    });
+
+</script>
+
+
+<script>
+
+    $(document).ready(function() {
+        var table = $('.cost-datatables').DataTable( {
+            'searching':false,
+            'paging':false,
+            'language': def_dataTable_lang_opt,
+        } );
+
+        $('.cost-datatables tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                row.child($("#channel-info-tmpl").tmpl(row.data())).show();
+                tr.addClass('shown');
+            }
+        } );
+        $(".dataTables_info").hide();
+    } );
+
+</script>
+
+<include file="Public:footer" />	

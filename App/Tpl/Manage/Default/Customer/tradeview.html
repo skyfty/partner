@@ -1,0 +1,79 @@
+<include file="Public:header" />
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">{:L('THE_CUSTOMER_DETAILS')}</a></h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Customer:navtab" />
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Customer:basicinfo" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--  -->
+
+                <table  class="display" id="trade-data-tables" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <volist name="field_array" id="vo">
+                            <th>
+                                {$vo.name}
+                            </th>
+                        </volist>
+                        <th style="width:30px;">{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="customer.trade" id="vo">
+                        <tr>
+                            <include file="Trade:model_list_row" />
+                            <td style="text-align:center">
+                                <a href="{:U('trade/view','id='.$vo['trade_id'])}" target="_blank"  title="查看详细">
+                                    <i class="icon-th-large"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <style>
+                    th, td { white-space: nowrap; }
+                    div.dataTables_wrapper {
+                        width: 1155px;
+                        margin: 0 auto;
+                    }
+                </style>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#trade-data-tables').dataTable( {
+                            "order": [[ 0, "desc" ]],
+                            "scrollX": true,
+                            'language': def_dataTable_lang_opt
+                        } );
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<include file="Public:footer" />

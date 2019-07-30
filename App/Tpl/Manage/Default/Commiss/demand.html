@@ -1,0 +1,134 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Commiss:navcat" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <table class="display" cellspacing="0" width="100%" id="logger-datatable">
+                <thead>
+                <tr  class="tr-td"   style="font-size: 14px">
+                    <th style="width: 150px">时间</th>
+                    <th width="140px">操作者 <div style="float:right;padding-right:7px;padding-left:2px;" id="staff_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_staff_id();"><i class="icon-filter"></i></a></th>
+                    <th width="140px">客服 <div style="float:right;padding-right:7px;padding-left:2px;" id="commiss_id_remove_span"></div><a href="javascript:void(0);" onclick="on_click_commiss_id();"><i class="icon-filter"></i></a></th>
+                    <th width="100px">标题</th>
+                    <th>内容</th>
+                    <th width="80px">操作</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    var sel_create_role_id = null;
+    var datatable_options = {
+        ajax: {
+            "data": function(d) {
+                d.start_time = $('#start_time').val();
+                d.end_time = $('#end_time').val();
+                d.assort = "kfbv";
+                d.logpubshow = "1";
+                d.create_role_id = sel_create_role_id;
+            },
+            "url": "{:U('Commiss/logtable')}"
+        },
+        "columnDefs": [
+            {
+                "targets": [1,2,3,4],
+                "bSortable": false,
+            }
+        ],
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 0, "desc" ]],
+        'language': def_dataTable_lang_opt,
+    }
+</script>
+
+<script id="date-search" type="text/x-jquery-tmpl">
+<div id="account-datatable-date-filter" style="padding-left:20px" class="dataTables_filter">
+
+<div style="float:left;padding-top:4px">起止日期：</div>
+<input type="text" placeholder="开始时间" style="width:145px"   id="start_time" name="start_time" onClick="on_start_time_focus();" class="Wdate" value="{$Think.get.start_time}"/>
+<input style="float:right;" placeholder="结束时间"  style="width:145px" type="text" id="end_time" onClick="on_end_time_focus();" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+</div>
+</script>
+
+<script type="text/javascript">
+
+    function on_assort_change() {
+        var assort = $("#assort").val();
+        window.location.replace("{:U('commiss/logger')}&" + "assort=" + assort);
+    }
+    var logger_table = $('#logger-datatable').dataTable(datatable_options);
+    $("#logger-datatable_length").after($("#date-search").tmpl());
+
+    $("#logger-datatable_filter").html($("#account-options").tmpl());
+    $("#logscope").chosen({
+        max_selected_options: 5,
+        disable_search:true,
+    });
+
+    function on_end_time_focus() {
+        var mindate = $("#start_time").val();
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm:ss',
+            minDate: mindate,
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_start_time_focus() {
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm:ss',
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_time_change() {
+        logger_table.fnClearTable(true);
+    }
+</script>
+
+<script id="remove_span_tmpl" type="text/x-jquery-tmpl">
+<a ref="${id}" refm="${model}"  href="javascript:void(0);" onclick="on_click_remove_id(this);">${name}<i class="icon-remove"></i></a>
+</script>
+
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info_by_logger(b) {
+        sel_create_role_id = b.role_id;
+        var data = {
+            "name": b.name,
+            "id": b.role_id,
+            "model":"create_role_id"
+        };
+        $("#staff_id_remove_span").html($("#remove_span_tmpl").tmpl(data));
+        on_time_change();
+    }
+
+    function on_click_staff_id() {
+        select_staff(null, on_staff_info_by_logger);
+    }
+
+    function on_click_remove_id(sef) {
+        var refm = $(sef).attr("refm");
+        if (refm == "create_role_id") {
+            sel_create_role_id = "";
+            $("#staff_id_remove_span").html("");
+        } else {
+            sel_commiss_id = "";
+            $("#commiss_id_remove_span").html("");
+        }
+
+        on_time_change();
+    }
+</script>
+
+<include file="Public:footer" />

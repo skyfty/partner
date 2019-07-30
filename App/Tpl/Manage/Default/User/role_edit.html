@@ -1,0 +1,48 @@
+<form id="role_edit" class="form-horizontal" action="{:U('user/role_edit')}" method="Post">
+	<input type="hidden" name="position_id"  id="position_id"  name="position_id" value="{$position.position_id}"/>
+	<table class="table">
+		<tr>
+			<td class="tdleft" width="30%">
+				{:L('POSITION_NAME')}
+			</td>
+			<td>
+				<input type="text" class="text-input large-input" name="name" id="name" value="{$position.name}"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdleft" width="30%">
+				{:L('WHICH_DEPARTMENT_BELONGS_TO')}
+			</td>
+			<td>
+				<select name="department_id" id="department_id">
+					<volist name="departmentList" id="temp">
+						<option <if condition="$position['department_id'] eq $temp['department_id']">selected </if> value="{$temp.department_id}">{$temp.name}</option>
+					</volist>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdleft" width="30%">
+				{:L('SUPERIORS_POSITION')}
+			</td>
+			<td>
+				<select name="parent_id" id="parent_id">
+					<option></option>
+					<volist name="positionList" id="temp">
+						<option <if condition="$position['parent_id'] eq $temp['position_id']">selected</if> value="{$temp.position_id}">{$temp.name}</option>
+					</volist>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdleft" width="30%">
+				{:L('POSITION_DESCRIPTION')}
+			</td>
+			<td>
+				<textarea name="description" id="description">{$position.description}</textarea>
+
+			</td>
+		</tr>
+	</table>
+
+</form>

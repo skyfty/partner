@@ -1,0 +1,66 @@
+<table  class="table"  style="border: 0px;margin-bottom:0px">
+    <tbody>
+    <tr>
+        <td style="width: 250px">
+            <if condition="!empty($product['images']['main'])">
+                <div class="box-secondary">
+                    <a href="{$product.images.main.path}" data-lightbox="roadtrip">
+                        <img src="{$product.images.main.path}" class="thumbnail cardpicthumb">
+                    </a>
+                </div>
+            </if>
+            <if condition="!empty($product['images']['cardpic'])">
+                <a href="{$product.images.cardpic.path}" data-lightbox="roadtrip">
+                    <img src="{$product.images.cardpic.path}" class="thumbnail cardpicthumb">
+                </a>
+            </if>
+        </td>
+        <td>
+            <table class="table">
+                <tr>
+                    <td class="tdleft" width="16%">雇员名称:</td>
+                    <td width="16%">{$product['name']}</td>
+                    <td class="tdleft" width="16%">工号:</td>
+                    <td width="16%">
+                        {$product['idcode']}
+                    </td>
+                    <td class="tdleft" width="16%">性别:</td>
+                    <td width="16%">{$product['sex']}</td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="16%">手机号码:</td>
+                    <td width="16%">
+                        {$product['telephone']}
+                    </td>
+                    <td class="tdleft" width="16%">出生日期:</td>
+                    <td width="16%">
+                        {$product.birthday|toDate=###,'Y-m-d'}
+                    </td>
+                    <td class="tdleft" width="16%">籍贯:</td>
+                    <td width="16%">
+                        {$product.census}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="16%">岗位状态:</td>
+                    <td width="16%">{$product.station_state}</td>
+                    <td class="tdleft" width="16%">工作状态:</td>
+                    <td width="16%">{$product.workstate_name}</td>
+                    <td class="tdleft" width="16%">培训状态:</td>
+                    <td width="16%">{$product.cultivate_status}</td>
+                </tr>
+                <volist name="product.skill" id="svo">
+                    <tr>
+                        <td class="tdleft" width="16%">技能</td>
+                        <td width="16%">{$svo['category_name']}</td>
+                        <td class="tdleft" width="16%">级别</td>
+                        <td width="16%">{$svo['level']}</td>
+                        <td class="tdleft" width="16%">价格</td>
+                        <td width="16%">{$svo['salary']}</td>
+                    </tr>
+                </volist>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>

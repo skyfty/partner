@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+    <li <if condition="$_GET['tab'] eq 'charts' || $_GET['tab'] eq ''">class="active"</if> >
+    <a href="{:U('')}&{:FP($parameter, 'tab=charts')}">图表</a>
+    </li>
+    <li <if condition="$_GET['tab'] eq 'tables'">class="active"</if> >
+    <a href="{:U('')}&{:FP($parameter, 'tab=tables')}">数据表</a>
+    </li>
+</ul>

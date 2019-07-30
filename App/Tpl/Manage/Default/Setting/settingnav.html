@@ -1,0 +1,12 @@
+<ul class="nav nav-tabs">
+    <li <if condition="ACTION_NAME == 'defaultinfo'">class="active"</if>><a href="{:U('setting/defaultInfo')}">{:L('BASIC_SYSTEM_SETTING')}</a></li>
+    <li <if condition="($_GET['model'] eq 'skill')">class="active"</if>><a href="{:U('product/category', 'model=skill')}">技能类别</a></li>
+    <li <if condition="($_GET['model'] eq 'model')">class="active"</if>><a href="{:U('serve/category', 'model=model&assort=category')}">产品类别</a></li>
+    <li <if condition="($_GET['model'] eq 'currier')">class="active"</if>><a href="{:U('currier/category', 'model=currier&assort=category')}">培训分类</a></li>
+
+    <if condition="session('?admin') and (session('league_id') eq 0)">
+        <li <if condition="(ACTION_NAME eq 'fields') OR (ACTION_NAME eq 'product_fields')">class="active"</if>><a href="{:U('setting/fields')}">{:L('CUSTOMIZING_FIELDS_SETTING')}</a></li>
+        <li <if condition="(ACTION_NAME eq 'accounttype')">class="active"</if>><a href="{:U('account/accounttype', 'model=account')}">账目类型</a></li>
+        <li <if condition="ACTION_NAME eq 'setting'">class="active"</if>><a href="{:U('navigation/setting')}">{:L('SYSTEM_NAVIGATION_SETTING')}</a></li>
+    </if>
+</ul>

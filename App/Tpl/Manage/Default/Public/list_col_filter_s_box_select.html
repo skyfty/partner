@@ -1,0 +1,19 @@
+<table class="table" style="margin-bottom:0px">
+    <tr>
+        <td>
+            {:proudct_category_select("proudct_category_select")}<br/>
+            {:plevelcheckbox()}
+            <button type="button"   class="btn btn-mini btn-default skill_filder_dialog_form_condition_ok_btn" style="float: right">确定</button>
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+    $(function() {
+        $('.skill_filder_dialog_form_condition_ok_btn').click(function (event) {
+            $("[field='{$field}']").qtip('api').hide(event);
+        });
+    });
+
+</script>

@@ -1,0 +1,156 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">客户服务详情</a><span style="font-size: medium;color: #0088cc;"> - {$market['idcode']} - {$market['category_name']} - {$market['customer_id']|customer_show_html=###, false}</span></h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead >
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;" class="view_top_nav">
+                                <if condition="is_market_settle($market) or $market['status_id'] == '0'">
+                                    <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">增加</a>
+                                    <else/>
+                                    <a href="{:U('market/channel_add', 'id='.$market['market_id'])}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">增加</a>
+                                </if>
+
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table id="datatables" class="display datatables" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>渠道</th>
+                        <th>渠道人</th>
+                        <th>渠道费</th>
+                        <th style="width: 60px">操作</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>合计:</th>
+                        <th></th>
+                        <th></th>
+                        <th style="text-align: left">{$market['sum_channel_price']}</th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="channel-info-tmpl" type="text/x-jquery-tmpl">
+<table class="table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+    <tbody>
+        <tr>
+            <td class="tdleft" width="15%">渠道</td>
+            <td>${channel_name}</td>
+            <td class="tdleft" width="15%">渠道人</td>
+            <td>{{html channel_role_name}}</td>
+            <td class="tdleft" width="15%">渠道费</td>
+            <td>${channel_price}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">备注</td>
+            <td colspan="5">${channel_description}</td>
+        </tr>
+    </tbody>
+</table>
+</script>
+
+<script id="channel-operator-tmpl" type="text/x-jquery-tmpl">
+
+<if condition="$market['settle_state'] egt '917'">
+    <a style="color: #D0D0D0;cursor: no-drop;">编辑</a>
+    <a style="color: #D0D0D0;cursor: no-drop;">删除</a>
+<else/>
+    <a href="{:U('market/channel_edit')}&id=${market_channel_id}&market_id=${market_id}">编辑</a>
+    {{if isdefault == '1'}}
+        <a style="color: #D0D0D0;cursor: no-drop;">删除</a>
+    {{else}}
+        <a href="{:U('market/channel_delete')}&id=${market_channel_id}&market_id=${market_id}"  onclick="return del_confirm();">删除</a>
+    {{/if}}
+</if>
+
+</script>
+
+
+<script>
+
+    $(document).ready(function() {
+        var table = $('#datatables').DataTable( {
+            ajax: {
+                "data": function(d) {
+                },
+                "url": "{:U('market/channel_list', 'id='.$market['market_id'])}"
+            },
+            "columns": [
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+                { "data": "channel_name" },
+                { "data": "channel_role_name" },
+                { "data": "channel_price" },
+                {
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+            ],
+            "columnDefs": [
+                {
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).html($("#channel-operator-tmpl").tmpl(rowData));
+                    },
+                    "targets": 4
+                },
+                {
+                    "bSortable": false,
+                    "targets": 0,
+
+                }
+            ],
+            "bStateSave":true,
+            'searching':false,
+            "processing": true,
+            "order": [[1, 'asc']],
+            'language': def_dataTable_lang_opt,
+        } );
+
+        $('#datatables tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                row.child($("#channel-info-tmpl").tmpl(row.data())).show();
+                tr.addClass('shown');
+            }
+        } );
+    } );
+
+</script>
+
+<include file="Public:footer" />	

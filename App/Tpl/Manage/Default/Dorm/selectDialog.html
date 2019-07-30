@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_dorm_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("dorm/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_dorm(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("dorm/listDialog")}', {
+            id: 'select_dorm_dialog',
+            title: "选择宿舍",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var dorm_id = $(this.iframe.contentWindow.document).find('input:radio[name="dorm"]:checked').val();
+                var data = {
+                    'id': dorm_id
+                };
+                request_dorm_info(data, cb?cb:on_dorm_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

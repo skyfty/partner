@@ -1,0 +1,68 @@
+<include file="Public:header" />
+<div class="container" style="width: 1300px">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4>{:L('PRODUCTION_EDITOR')}</h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+        </div>
+        <div class="span10" style="width: 1300px">
+            <form id="form1" action="{:U('product/eventedit', 'id='.$product['product_id'].'&assort='.$assort)}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="product_id" value="{$product.product_id}"/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <tfoot>
+                    <tr>
+                        <td style="text-align:center;" colspan="4"><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('RETURN')}"/></td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <include file="Public:editfieldsgroup" />
+                    </tbody>
+                </table>
+                <input name="a" type="hidden" value="eventedit">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="hide" id="dialog-validate" title="{:L('PRODUCT_TEST_RESULTS')}">
+    {:L('SELECT_ALL_OF_CUSTOMERS')}
+    <div id="search_content"></div>
+</div>
+
+<script type="text/javascript">
+
+<if condition="in_array($product['station_state'],array('其他录用','签约','试用',  '无底薪签约'))">
+<else/>
+$('#workstate_id').attr("disabled", "disabled");
+$('#workstate_id option[value=""]').prop("selected", true);
+</if>
+
+<if condition="($settle_state_count gt 0)">
+    <if condition="in_array($product['station_state'],array('其他录用','签约','试用',  '无底薪签约'))">
+        $('#station_state option[value="自愿离职"]').remove();
+        $('#station_state option[value="开除"]').remove();
+        $('#station_state option[value="其他未录用"]').remove();
+    <else/>
+        $('#station_state').attr("disabled", "disabled");
+    </if>
+</if>
+
+$('#station_state').change(function(){
+    var ss = $(this).val();
+    if(ss == "其他录用" || ss == "签约" ||ss == "试用" ||ss == "无底薪签约"){
+        $('#workstate_id').removeAttr("disabled");
+        if ($('#workstate_id').val() == "") {
+            $('#workstate_id option[value="5"]').prop("selected", true);
+        }
+    } else {
+        $('#workstate_id').attr("disabled", "disabled");
+        $('#workstate_id option[value=""]').prop("selected", true);
+    }
+});
+</script>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

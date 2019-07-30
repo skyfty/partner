@@ -1,0 +1,40 @@
+<ul class="nav pull-left">
+    <li class="pull-left">
+        <form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="" method="get">
+            <input type="hidden"  name="ietype" id="ietype" value="{$Think.get.ietype}"/>
+            <ul class="nav pull-left">
+                <include file="Public:def_analy_search_from" />
+                <li class="pull-left">
+                    类型&nbsp;
+                    <select  name="atype" id="atype" style="width: 100px">
+                        <volist name="account_type" id="vo">
+                            <option value="{$key}">{$key}</option>
+                        </volist>
+                    </select>
+                    <script>
+                        $("#atype option[value='{$Think.get.atype}']").prop("selected", true);
+                        $("#atype").change(function(){
+                            $("#ietype").val("");
+                            $("#searchForm").submit();
+                        });
+                    </script>
+                </li>
+                <li class="pull-left">
+                    &nbsp;收支&nbsp;
+                    <select id="ietype_select" style="width: 100px">
+                        <volist name="ie_type" id="vo">
+                            <option value="{$key}">{$key}</option>
+                        </volist>
+                    </select>
+                    <script>
+                        $("#ietype_select option[value='{$Think.get.ietype}']").prop("selected", true);
+                        $("#ietype_select").change(function(){
+                            $("#ietype").val($(this).val());
+                            $("#searchForm").submit();
+                        });
+                    </script>
+                </li>
+            </ul>
+        </form>
+    </li>
+</ul>

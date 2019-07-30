@@ -1,0 +1,57 @@
+<include file="Public:header" />
+<div class="container">
+		<div class="page-header">
+			<h4>编辑新培训订单</h4>
+		</div>
+		<div class="row">
+            <div class="span12">
+				<include file="Public:alert" />
+				<form action="{:U('cultivate/edit', 'id='.$cultivate['cultivate_id'])}" method="post" id="form1"  enctype="multipart/form-data">
+                <input type="hidden" name="cultivate_id" value="{$cultivate['cultivate_id']}">
+					<input type="hidden" name="assort" value="{$assort}">
+					<input type="hidden" name="model" id="model" value="{$cultivate['model']}"/>
+					<table class="table table-hover" width="95%" border="0" cellspacing="1" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <td style="text-align:center;" colspan="4" >
+                                <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tfoot>
+							<tr>
+								<td style="text-align:center;" colspan="4" >
+                                    <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                    <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                                </td>
+							</tr>
+						</tfoot>
+						<tbody>
+
+                            <include file="Public:editfieldsgroup" />
+                        </tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function on_cultivate_ready(b){};
+	$(function(){
+		<if condition="($assort == 'state') and is_cultivate_settle($cultivate)">
+			$("#start_time").attr("disabled", "disabled");
+			$("#end_time").attr("disabled", "disabled");
+			$("#examine_state").attr("disabled", "disabled");
+			$("#examine_time").attr("disabled", "disabled");
+		</if>
+        $("#currier_name").attr("readonly", "readonly");
+        $("#cultivate_model_name").attr("readonly", "readonly");
+
+    });
+</script>
+<include file="Public:editfieldvalid" />
+<include file="Cultivate:datapick" />
+<include file="Public:def_channel_datapick"/>
+<include file="Public:footer" />

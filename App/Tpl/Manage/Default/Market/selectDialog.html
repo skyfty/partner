@@ -1,0 +1,37 @@
+<script type="text/javascript">
+    function request_market_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("market/getmarket")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_market(param, cb) {
+        art.dialog.data("param", param ? param : {});
+        art.dialog.open('{:U("market/listDialog")}', {
+            id: 'select_market_dialog',
+            title: "选择客户服务订单",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var market_id = $(this.iframe.contentWindow.document).find('input:radio[name="market_id"]:checked').val();
+                var data = {
+                    'id': market_id
+                };
+                request_market_info(data, cb?cb:on_market_info);
+                return true;
+            },
+            cancel:true
+        });
+    }
+</script>

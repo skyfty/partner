@@ -1,0 +1,146 @@
+<table class="display event-data-tables" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th style="width: 100px">
+            开始时间
+        </th>
+        <th style="width: 100px">
+            结束时间
+        </th>
+        <th style="width: 100px">
+            状态
+        </th>
+        <th>
+            备注
+        </th>
+        <th style="width: 100px; text-align: center">
+            操作
+        </th>
+    </tr>
+    </thead>
+    <tbody id="event_body">
+
+    </tbody>
+</table>
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+</style>
+
+<script type="text/javascript">
+
+    var url = '{:U("Product/listevent", "product_id=".$product_id)}';
+    url += "&start_date=" + (new Date(1900,0,12)).format("yyyy-MM-dd");
+    url += "&end_date=" + (new Date(3000,0,12)).format("yyyy-MM-dd");
+    var event_data_tables = $('.event-data-tables').dataTable( {
+        "aoColumnDefs": [
+            {
+                "bSortable": false,
+                "aTargets": [ 4 ]
+            }
+        ],
+        "columns": [
+            { "data": "start" },
+            { "data": "end" },
+            { "data": "workstate_id" },
+            { "data": "description" },
+            { "data": "operator" }
+        ],
+        "idSrc": "event_id",
+        "processing": true,
+        "ajax": url,
+        "order": [[ 2, "desc" ]],
+        'language': def_dataTable_lang_opt
+    } );
+    $("#DataTables_Table_0_filter").html('<button  onclick="cancel_leave();" type="button" class="btn  btn-mini" style="margin-right: 15px;">改变请假状态</button><button  onclick="add_event();" type="button" class="btn  btn-mini" style="margin-right: 5px;">添加日程</button>');
+
+    function cancel_leave() {
+        if ('{$product["leave_state"]}' == "请假中") {
+            alert("当前处于请假中状态");return;
+        }
+        art.dialog.confirm("确认改变请假状态吗？", function(){
+            var cc = '{$product["leave_state"]}'=="在职"?"请假过期":"在职";
+            $.ajax({
+                url: '{:U("product/change_leave_state","product_id=".$product["product_id"])}&leave_state=' + cc,
+                success: function (data) {
+                    alert(data);
+                    window.location.reload();
+
+                },
+                cache: false
+            });
+        });
+    }
+
+    function add_event() {
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日程",
+            lock:true,
+            ok: function () {
+                $("#form1").ajaxSubmit({
+                    success : function(){
+                        event_data_tables.api().ajax.reload();
+                    }
+                });
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("product/eventdialog","product_id=".$product["product_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    }
+
+    function onclick_eventreset(event_id) {
+        if (confirm("确实要改变状态吗?")) {
+            $.ajax({
+                url: '{:U("product/event_reset","event_id=")}' + event_id,
+                success: function (data) {
+                    event_data_tables.api().ajax.reload();
+                },
+                cache: false
+            });
+        }
+    }
+
+    function onclick_eventedit(event_id) {
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日程",
+            lock:true,
+            ok: function () {
+                $("#form1").ajaxSubmit({
+                    success : function(){
+                        event_data_tables.api().ajax.reload();
+                    }
+                });
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("product/eventdialog","product_id=".$product["product_id"])}&event_id=' +event_id ,
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    }
+
+    function onclick_eventdelete(event_id) {
+        if (confirm("确实要删除这个日程吗?")) {
+            $.ajax({
+                url: '{:U("product/event_delete","event_id=")}' + event_id,
+                success: function (data) {
+                    event_data_tables.api().ajax.reload();
+                },
+                cache: false
+            });
+        }
+    }
+</script>

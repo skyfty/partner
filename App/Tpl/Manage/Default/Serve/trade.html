@@ -1,0 +1,45 @@
+<include file="Public:header" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4><a name="tab">产品详情</a></h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li>
+                    <a href="{:U('serve/view', 'id='.$serve['serve_id'])}">基本信息</a>
+                    </li>
+                    <li class="active">
+                    <a href="{:U('serve/trade', 'id='.$serve['serve_id'])}">产品订单</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+                                    <a href="{:U('trade/add', 'serve_id='.$serve['serve_id'])}" target="_blank">添加</a> |
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <include file="Serve:tradetable" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />

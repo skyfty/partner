@@ -1,0 +1,28 @@
+<include file="Public:header" />
+
+<script type="text/javascript" src="__PUBLIC__/daterangepicker/moment.js"></script>
+<script type="text/javascript" src="__PUBLIC__/daterangepicker/daterangepicker.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/daterangepicker/daterangepicker-bs3.css" type="text/css" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>添加分组</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="span12">
+        <form class="form-horizontal" action="{:U('market/groupadd')}" method="post" name="form1" id="form1">
+            <input type="hidden" name="refer_url" value="{$refer_url}"/>分组名：
+            <input type="text" name="group_name" id="name" class="span7" value=""/>&nbsp;&nbsp;
+            <include file="Public:groupedittable" />
+        </form>
+    </div>
+</div>
+<script>
+    $("#return_btn").click(function(){
+        window.location.assign("{:U('market/index', 'act=group')}");
+    });
+    $(".group_radio").change(function(b){
+        window.location.assign("{:U('market/groupadd', 'group_type')}" + $(this).val());
+    });
+</script>
+<include file="Public:footer" />

@@ -1,0 +1,70 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">新培训订单信息</a>
+            <span style="font-size: medium;color: #0088cc;"> - {$cultivate['idcode']} - {$cultivate['currier_id']|currier_show_html} - {$cultivate['model_show_html']}</span>
+        </h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="Cultivate:tabnav" />
+    </div>
+    <div class="row">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+
+                                    <if condition="per_state_edit">
+                                    <a href="{:U('cultivate/edit', 'id='.$cultivate['cultivate_id'].'&assort='.$assort)}">编辑</a>&nbsp;|
+                                    </if>
+                                    <a href="javascript:void(0);" class="add_log" title="撤销结算提交">添加日志</a> |
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <include file="Public:defviewtable" />
+                    </tbody>
+                </table>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th>日志</th>
+                </tr>
+            </table>
+            <div id="log-tabs">
+                <script>
+                    function logger_data_cb(d) {
+                        d._string = "type=1";
+                    }
+                </script>
+                <include file="Cultivate:basic_view_logtable" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".add_log").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日志",
+            lock:true,
+            ok: function (data) {
+                $("#add-log").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("log/add","r=RCultivateLog&module=cultivate&type=1&assort=default&id=".$cultivate["cultivate_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+</script>
+<include file="Public:footer" />

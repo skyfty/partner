@@ -1,0 +1,82 @@
+<script type="text/javascript">
+    function on_click_accounttype_ok() {
+        var tipdialog = show_lock_tips('提交中...');
+        var form = $(this.iframe.contentWindow.document).find('#accounttype_form');
+        $(form).ajaxSubmit({
+            success: function() {
+                tipdialog.close();
+                art.dialog.alert("提交成功");
+                window.location.reload();
+            }
+        });
+        this.close();
+        return false;
+    }
+
+    function accounttype_add() {
+        art.dialog.open('{:U("account/accounttype_add", "assort=".$_GET["assort"])}', {
+            id: 'accounttype_add_dialog',
+            title: "添加账目类别",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width:700,
+            height:330,
+            ok: on_click_accounttype_ok,
+            cancel: true
+        });
+        return false;
+    }
+
+    function accounttype_edit(a) {
+        var url = $(a).attr("href");
+        art.dialog.open(url, {
+            id: 'accounttype_edit_dialog',
+            title: "修改账目类别",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width:700,
+            height:330,
+            ok: on_click_accounttype_ok,
+            cancel: true
+        });
+        return false;
+    }
+
+    $(function(){
+        $("#check_all").click(function(){
+            $("input[class='list']").prop('checked', $(this).prop("checked"));
+        });
+
+
+        $("table tbody").sortable({
+            connectWith: "table tbody",
+            stop: function( event, ui ) {
+                $.each($(".list"), function(i, item){
+                    $(item).attr('order_id', i);
+                });
+            }
+        });
+
+        $("#sort_btn").click(
+            function() {
+                var position = [];
+                $.each($(".list"), function(i, item){
+                    var order_id= $(item).attr('order_id');
+                    position.push({type_id:item.value,order_id: order_id});
+                });
+
+                $.get('{:U("account/accounttype_sort")}',{postion:position}, function(data){
+                    if (data.status == 1) {
+                        $('.alert.alert-success').remove();
+                        $(".page-header").after('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>' + data.info + '</div>');
+                    } else {
+                        $('.alert.alert-error').remove();
+                        $(".page-header").after('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>' + data.info + '</div>');
+                    }
+                }, 'json');
+            }
+        );
+    });
+</script>

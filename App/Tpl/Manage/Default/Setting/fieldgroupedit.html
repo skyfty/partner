@@ -1,0 +1,41 @@
+<script type="text/javascript" src="__PUBLIC__/js/formValidator-4.0.1.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidatorRegex.js" charset="UTF-8"></script>
+<form class="form-horizontal" action="{:U('setting/fieldgroupedit')}" method="post" name="form1" id="form1">
+    <input type="hidden" name="field_group_id" value="{$field_group_info.field_group_id}"/>
+    <table class="table">
+        <tr id="name_td">
+            <td width="40%" class="tdleft">分组名</td>
+            <td><input type="text" id="name" name="name" value="{$field_group_info.name}"/></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    $(function(){
+        jscolor.bind();
+        $.formValidator.initConfig({formID:"form1",debug:false,submitOnce:true,
+            onError:function(msg,obj,errorlist){
+                $("#errorlist").empty();
+                $.map(errorlist,function(msg){
+                    $("#errorlist").append("<li>" + msg + "</li>")
+                });
+                alert(msg);
+            },
+            submitAfterAjaxPrompt : '{:L('AJAX_VALIDATING_PLEASE_WAIT')}'
+        });
+        $("#name").formValidator({
+            tipID:"nameTip",
+            empty:false,
+            onShow:"{:L('FOR_EXAMPLE_THE_ARTICLE_TITLE')}",
+            onFocus:"{:L('PLEASE_ENTER_A_NAME')}",
+            onCorrect:"√"
+        }).inputValidator({
+            min:1,
+            empty:{
+                leftEmpty:false,
+                rightEmpty:false,
+                emptyError:"{:L('BOTH_SIDES_ARE_NOT_FREE')}"
+            },
+            onError:":{:L('LABEL_NAME_CANNOT_BE_EMPTY')}"
+        });
+    });
+</script>

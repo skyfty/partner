@@ -1,0 +1,20 @@
+<ul class="nav nav-list">
+    <li class="active">
+        <a href="{:U('market/index')}">类别查看</a>
+    </li>
+    <li>
+        <a href="{:U('')}&{:FP($parameter, 'category_id=')}" <if condition="($Think.get.category_id eq null)">class="active"</if>>
+        {:L('ALL')}
+        </a>
+    </li>
+    <volist name="categoryList" id="vo">
+        <li>
+            <a href="{:U('')}&{:FP($parameter, 'category_id='.$vo['category_id'])}" <if condition="$Think.get.category_id eq $vo['category_id']">class="active"</if>>
+            {$vo.name}
+            </a>
+        </li>
+    </volist>
+    <li class="active">
+        <a href="{:U('market/index')}&{:FP($parameter, 'act=group&assort=')}">服务分组</a>
+    </li>
+</ul>

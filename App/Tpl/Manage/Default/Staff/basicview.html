@@ -1,0 +1,154 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">员工详情</a></h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="Staff:navtab" />
+    </div>
+    <div class="row">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+                                    <a href="javascript:void(0);" class="add_log">添加日志</a> |
+                                    <if condition="$is_personnel">
+                                    <a href="{:U('staff/edit', 'id='.$staff['staff_id'].'&assort='.$assort)}">编辑</a>&nbsp;|
+                                    </if>
+
+                                    <if condition="vali_permission('staff','delete')">
+                                        <a href="{:U('staff/delete', 'staff_id='.$staff['staff_id'])}" class="del_confirm">{:L('DELETE')}</a>&nbsp;|
+                                    </if>
+
+                                    <a href="{:U('staff/cardinfo','id='.$staff['staff_id'])}" target="_blank">身份证信息</a> |
+                                    <a href="{:U('index/export_pdf','model=staff&id='.$staff['staff_id'])}" target="_blank">导出PDF</a>|
+                                    <if condition="$is_perrepassword == true">
+                                    <a href="javascript:void(0);" target="_blank" onclick="repassword();">修改密码</a>
+                                    </if>
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Staff:basicinfo" />
+                        </td>
+                    </tr>
+                    <include file="Public:defviewtable" />
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$(".view_openid").click(function(){
+    $.ajax({
+        type: 'get',
+        url: "{:U('staff/view_openid')}",
+        data:{
+            id:"{$staff['staff_id']}"
+        },
+        success: function (data) {
+            if (data && data.status == 1) {
+                $(".view_openid").html(data.info);
+            }
+        },
+        dataType:'json'
+    });
+});
+
+$(function(){
+    $(".verify").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "验证",
+            lock:true,
+            ok: function () {
+                var state = $("input[name='state']:checked").val();
+                if (state == 0 && $("#describe").val() == "") {
+                    alert("必须说明审核不通过原因");
+                    return false;
+                }
+                $("#myform").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url:'{:U("staff/verify","staff_id=".$staff["staff_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+
+
+    $("#wxbind").click(function(){
+        if ('{$staff["wxmobile"]}' == '') {
+            if(confirm('没有指定绑定的微信手机号， 是否使用默认手机号绑定？')){
+                return true;
+            }
+        } else {
+            if(confirm('确实要绑定微信吗？')){
+                return true;
+            }
+        }
+        return false;
+    });
+
+    $("#wxupdate").click(function(){
+        if(confirm('确实要绑定微信吗？')){
+            return true;
+        }
+        return false;
+    });
+});
+
+function repassword() {
+    var dialog = art.dialog({
+        id: 'N3690',
+        title: "修改密码",
+        lock:true,
+        ok: function (data) {
+            $("#repassword-form").submit();
+        },
+        cancel:true
+    });
+    $.ajax({
+        url: "{:U('staff/repassword','id='.$staff['staff_id'])}",
+        success: function (data) {
+            dialog.content(data);
+        },
+        cache: false
+    });
+}
+
+
+$(".add_log").click(function(){
+    var dialog = art.dialog({
+        id: 'N3690',
+        title: "增加日志",
+        lock:true,
+        ok: function (data) {
+            $("#add-log").submit();
+        },
+        cancel:true
+    });
+    $.ajax({
+        url: '{:U("log/add","r=RLogStaff&module=staff&id=".$staff["staff_id"]."&assort=$assort")}',
+        success: function (data) {
+            dialog.content(data);
+        },
+        cache: false
+    });
+});
+</script>
+<include file="Public:footer" />

@@ -1,0 +1,77 @@
+<include file="Public:header" />
+<div class="container">
+		<div class="page-header">
+			<h4>编辑客服</h4>
+		</div>
+		<div class="row">
+            <div class="span12">
+				<include file="Public:alert" />
+				<form action="{:U('commiss/edit', 'id='.$commiss['commiss_id'])}" method="post" id="form1"  enctype="multipart/form-data">
+                <input type="hidden" name="commiss_id" value="{$commiss['commiss_id']}">
+					<table class="table table-hover" width="95%" border="0" cellspacing="1" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <td style="text-align:center;" colspan="4" >
+                                <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tfoot>
+							<tr>
+								<td style="text-align:center;" colspan="4" >
+                                    <input class="btn btn-primary" name="submit" type="submit" value="{:L('save')}"/>  &nbsp;
+                                    <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                                </td>
+							</tr>
+						</tfoot>
+						<tbody>
+
+                            <include file="Public:editfieldsgroup" />
+                        </tbody>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="Public:editfieldvalid" />
+<include file="Commiss:datapack" />
+<script>
+	$(function(){
+		<if condition="$commiss['owner_role_id'] eq ''">
+		$("#owner_role_id").val("");
+		$("#owner_role_id_name").val("");
+		</if>
+
+		<if condition="$commiss['related_model_id'] neq ''">
+		$("#channel_role_model").attr("disabled", "disabled");
+		$('#channel_role_model').trigger('chosen:updated');
+		$("#telephone").attr("disabled", "disabled");
+
+        <if condition="$commiss['related_model_name'] eq 'product'">
+            $("#order_classify option[value='customer']").remove();
+        <else/>
+            $("#order_classify option[value='product']").remove();
+        </if>
+		$("#order_classify option[value='league']").remove();
+		$("#order_classify option[value='other']").remove();
+
+        $("#qq_number").attr("disabled", "disabled");
+		$("#wechat").attr("disabled", "disabled");
+		$("#channel_role_id_name").attr("disabled", "disabled");
+		<else/>
+        $("#communicate option[value='已完成']").prop("disabled", "disabled");
+        </if>
+	});
+	function on_order_date_focus(fmt, o) {
+		WdatePicker({
+			dateFmt: fmt,
+			maxDate:'%y-%M-%d'
+		});
+	}
+
+</script>
+<include file="Public:def_channel_datapick"/>
+<include file="Public:footer" />

@@ -1,0 +1,22 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>修改产品</h4>
+		</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form id="form1" action="{:U('')}" method="post" enctype="multipart/form-data">
+			    <input type="hidden" name="id" value="{$serve.serve_id}"/>
+                <input name="a" type="hidden" value="edit">
+                <include file="Public:editfieldstable" />
+			</form>
+		</div>
+	</div>
+</div>
+<include file="Serve:datapick" />
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

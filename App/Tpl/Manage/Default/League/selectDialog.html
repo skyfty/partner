@@ -1,0 +1,24 @@
+<script type="text/javascript">
+
+    function select_league() {
+        art.dialog.open("{:U('League/listDialog')}", {
+            id: 'select_branch_dialog',
+            title: "选择加盟商",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 800,
+            height: 510,
+            ok: function () {
+                var role_ids = $(this.iframe.contentWindow.document).find('#role_ids').val();
+                var role_names = $(this.iframe.contentWindow.document).find('#role_names').val();
+                if (typeof(on_league_roles) == "function") on_league_roles(role_ids, role_names);
+                return true;
+            },
+            cancel: function () {
+                return true;
+            }
+        });
+    }
+
+</script>

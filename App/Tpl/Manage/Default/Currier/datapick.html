@@ -1,0 +1,19 @@
+
+<script>
+    function on_train_category_change(id) {
+        $("#category_id").val(id);
+    }
+
+
+</script>
+
+
+<include file="Traincert:selectDialog" />
+<script type="text/javascript">
+    function on_traincert_info(b) {
+        $('#traincert_name').val(b.name);
+        $('#traincert_id').val(b.traincert_id);
+    }
+    $('#traincert_name').click(select_traincert);
+
+</script>

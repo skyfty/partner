@@ -1,0 +1,214 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<style>
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+</style>
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+        <include file="Berth:navcat" />
+	</div>
+	<include file="Public:alert" />
+    <div class="row-fluid view">
+        <div class="span12">
+            <ul id="sddm" style="margin:0px 0px 0px 0px">
+                <li>
+                    <i class="icon-list"></i>
+                    <a href="{:U('')}&{:FP($parameter, 'by=&lia=')}" <if condition="$Think.get.lia eq null">class="active"</if>>
+                    {:L('ALL')}
+                    </a>
+                    <a href="{:U('')}&{:FP($parameter, 'lia=self')}" <if condition="$Think.get.lia eq 'self'">class="active"</if>>
+                    我负责的
+                    </a>
+                    <a href="{:U('')}&{:FP($parameter, 'lia=belongs')}" <if condition="$Think.get.lia eq 'belongs'">class="active"</if>>
+                    我管辖的
+                    </a>
+                </li>
+
+                <li>
+                    <i class="icon-time"></i>
+                </li>
+                <li>
+                    <a onmouseover="mopen('create_time')" onmouseout="mclosetime()" <if condition="($Think.get.byd neq '')">href="{:U('')}&{:FP($parameter, 'byd=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'byd=')}"</if>>
+                    创建时间
+                    </a>
+                    <if condition="$Think.get.byd neq ''">
+                        <a href="{:U('')}&{:FP($parameter, 'byd=')}" style="color: darkmagenta"  class="active">[{:create_time_desc($_GET['byd'])}]</a>
+                    </if>
+                    <div  id="create_time" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                        <a <if condition="$Think.get.byd eq 'today'">class="active" href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=today')}"</if>>
+                        {:create_time_desc('today')}
+                        </a>
+                        <a <if condition="$Think.get.byd eq 'week'">class="active"  href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=week')}"</if>>
+                        {:create_time_desc('week')}
+                        </a>
+                        <a <if condition="$Think.get.byd eq 'month'">class="active"  href="{:U('')}&{:FP($parameter, 'byd=')}"<else/> href="{:U('')}&{:FP($parameter, 'byd=month')}"</if>>
+                        {:create_time_desc('month')}
+                        </a>
+                    </div>
+                </li>
+                <li><i class="icon-trash"></i></li>
+                <li><a href="{:U('')}&{:FP($parameter, 'by=trash')}" <if condition="$Think.get.by eq 'trash'">class="active"</if>>垃圾箱</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row-fluid" style="padding-top: 15px">
+		<div class="span12">
+            <div class="pull-left">
+            <form class="form-inline" id="searchForm" action="index.php" method="get">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <button  id="delete"  type="button" class="btn btn-mini  btn-danger" style="margin-right: 5px;"><i class="icon-remove"></i>{:L('DELETE')}</button >
+                </li>
+                <li class="pull-left">
+                    <if condition="($Think.get.dorm_group_id neq null) and ($Think.get.group_type eq '1')">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-mini btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">组管理<span class="caret"></span></button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a id="add_group" href="javascript:void(0);">添加到组</a></li>
+                                <li><a id="remove_group" href="javascript:void(0);">从本组移除</a></li>
+                            </ul>
+                        </div>
+                    <else/>
+                        <button  id="add_group" type="button"  class="btn btn-mini" style="margin-right: 5px;"><img src="__PUBLIC__/img/customer_source_icon.png"/>添加到组</button >
+                    </if>
+                </li>
+                <if condition="session('user_id') eq '1'">
+                    <li class="pull-left">
+                        {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                        <script>
+                            $(function() {
+                                $("#bylea").change(def_short_search_select);
+                            });
+                        </script>
+                    </li>
+                </if>
+                <li class="pull-left">
+                    {:branch_select_html("bybr", $branch,true,true,null, $league['league_id'])}&nbsp;&nbsp;
+                    <script>
+                        $(function() {
+                            $("#bybr").change(def_short_search_select);
+                        });
+                    </script>
+                </li>
+				<li class="pull-left">
+                    <ul class="nav pull-left">
+                        <li class="pull-left" >
+                            <include file="Public:def_index_fields_filter_select" />
+
+                        </li>
+                        <include file="Public:def_index_search_form" />
+                    </ul>
+				</li>
+			</ul>
+            </form>
+            </div>
+            <div class="pull-right">
+                <div class="btn-group">
+                    <a href="{:U('Dorm/add')}" class="btn btn-mini btn-primary">
+                        <i class="icon-plus"></i>&nbsp; 添加
+                    </a>
+                    <button class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu  pull-right">
+                        <li>
+                            <a href="javascript:void(0);" id="advanced_dosearch" class="link">
+                                {:L('ADVANCED_SEARCH')}
+                            </a>
+                        </li>
+                        <if condition="vali_permission('dorm', 'export')">
+                        <li>
+                            <a href="javascript:void(0);" id="excelExport" class="link">
+                                </i>导出到Excel
+                            </a>
+                        </li>
+                        </if>
+                    </ul>
+                </div>
+			</div>
+		</div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+			<form id="form1" class="form-inline" action="" method="post">
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+					<thead>
+						<tr id="childNodes_num">
+							<th><input type="checkbox" id="check_all"/></th>
+                            <include file="Dorm:model_list_header" />
+							<th style="width:90px;text-align: center" >操作</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td id="td_colspan">{$page}</td>
+						</tr>
+					</tfoot>
+					<tbody>
+						<volist name="list" id="vo">
+							<tr>
+								<td>
+									<input name="dorm_id[]" class="check_list" type="checkbox" value="{$vo.dorm_id}"/>
+								</td>
+                                <volist name="field_array" id="v">
+                                    <include file="Public:def_index_list" />
+                                </volist>
+								<td   style="text-align: center">
+                                    <a href="{:U('dorm/view', 'id='.$vo['dorm_id'])}" target="_blank"  title="查看详情">
+                                        <i class="icon-th-large"></i>
+                                    </a>
+								</td>
+							</tr>
+						</volist>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+<include file="Public:groupstance" />
+
+<include file="Public:export_dialog" />
+<include file="Public:adv_search" />
+<script>
+    $("#advanced_dosearch").click(function(){
+        advsearch('{:U("dorm/search")}');
+    });
+</script>
+
+<script type="text/javascript">
+
+function changeContent(){
+	a = $("#select1  option:selected").val();
+	window.location.href="{:U('dorm/index', 'by=')}"+a;
+}
+$(function(){
+
+    $("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked', $(this).prop("checked"));
+	});
+
+	$('#delete').click(function(){
+		if(confirm('{:L('Confirm_to_delete')}')){
+            $("#form1").attr('action', '{:U("dorm/delete")}');
+            $("#form1").submit();
+		}
+	});
+	$('#remove').click(function(){
+		if(confirm('{:L('CONFIRMED_IN_THE_CUSTOMER_POOL')}')){
+			$("#form1").attr('action', '{:U("dorm/remove")}');
+			$('#operating_type').attr('value', 'remove');
+			$("#form1").submit();
+		}
+	});
+
+
+});
+</script>
+
+<include file="Public:footer" />

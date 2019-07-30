@@ -1,0 +1,193 @@
+
+<!-- nabar right -->
+<ul class="nav navbar-nav navbar-left">
+    <li class="dropdown pos-stc" dropdown>
+
+        <a herf class="pull-left dropdown-toggle clear" dropdown-toggle>
+            <span class="thumb-sm avatar m-t-n-sm m-b-n-sm m-l-sm">
+            <img src="App/Tpl/Castle/Default/Index/img/a0.jpg" alt="..." class="img-circle">
+            <i class="on b-white bottom"></i>
+            </span>
+            <b class="caret"></b>
+        </a>
+        <div class="clear" style="padding-top:7px">
+            <div><a href>{{footInfo.name}}</a></div>
+            <small class="text-muted">{{footInfo.idcode}}</small>
+        </div>
+
+        <div class="dropdown-menu wrapper w-full bg-white">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="m-l-xs m-t-xs m-b-xs font-bold">Pages <span class="badge badge-sm bg-success">10</span></div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <ul class="list-unstyled l-h-2x">
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Profile</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Post</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Search</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Invoice</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-6">
+                            <ul class="list-unstyled l-h-2x">
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Price</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Lock screen</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Sign in</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Sign up</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 b-l b-light">
+                    <div class="m-l-xs m-t-xs m-b-xs font-bold">UI Kits <span class="label label-sm bg-primary">12</span></div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <ul class="list-unstyled l-h-2x">
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Buttons</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Icons <span class="badge badge-sm bg-warning">1000+</span></a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Grid</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Widgets</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-6">
+                            <ul class="list-unstyled l-h-2x">
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Bootstap</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Sortable</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Portlet</a>
+                                </li>
+                                <li>
+                                    <a href><i class="fa fa-fw fa-angle-right text-muted m-r-xs"></i>Timeline</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 b-l b-light">
+                    <div class="m-l-xs m-t-xs m-b-sm font-bold">Analysis</div>
+                    <div class="text-center">
+                        <div class="inline">
+                            <div ui-jq="easyPieChart" ui-options="{
+                          percent: 65,
+                          lineWidth: 50,
+                          trackColor: '{{app.color.light}}',
+                          barColor: '{{app.color.info}}',
+                          scaleColor: false,
+                          size: 100,
+                          rotate: 90,
+                          lineCap: 'butt',
+                          animate: 2000
+                        }">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li class="pos-stc">
+        <a href>
+            <span><i class="glyphicon glyphicon-phone "></i> {{footInfo.telephone}}</span>
+        </a>
+    </li>
+
+    <li>
+        <a href>
+            <img src="Public/img/candel.png" alt="..." style="width: 20px;">
+            <span> {{footInfo.birthday | date:'yyyy-MM-dd'}}</span>
+        </a>
+
+    </li>
+
+</ul>
+<!-- / navbar right -->
+
+<ul class="nav navbar-nav">
+
+    <li>
+        <a href  tooltip="基本信息状态: {{footInfo.basic_verify|verifyState:footInfo.basic_submit_time}}">
+            <span class="fa  fa-asterisk"></span>
+            <span>{{footInfo.basic_verify|verifyState:footInfo.basic_submit_time}}</span>
+        </a>
+
+    </li>
+    <li>
+        <a href  tooltip="专业信息状态: {{footInfo.skill_verify|verifyState:footInfo.skill_submit_time}}">
+            <span class="fa  fa-gavel"></span>
+            <span>{{footInfo.skill_verify|verifyState:footInfo.skill_submit_time}}</span>
+        </a>
+
+    </li>
+
+    <li>
+        <a href  tooltip="岗位状态: {{footInfo.station_state[0]}}">
+            <span class="fa  fa-suitcase"></span>
+            <span>{{footInfo.station_state[0]}}</span>
+        </a>
+
+    </li>
+
+    <li>
+        <a href tooltip="工作状态: {{footInfo.workstate_name[0]}}">
+            <span class="fa  fa-drupal"></span>
+            {{footInfo.workstate_name[0]}}
+        </a>
+
+    </li>
+
+    <li>
+        <a href tooltip="培训状态: {{footInfo.cultivate_status[0]}}">
+            <span class="fa fa-mortar-board"></span>
+            {{footInfo.cultivate_status[0]}}
+        </a>
+
+    </li>
+</ul>
+
+<!-- nabar right -->
+<ul class="nav navbar-nav navbar-right">
+    <li ng-repeat="(k,s) in footInfo.skill" style="border-left:1px solid #d4d0d3">
+        <div style="padding: 3px 15px 3px 15px">
+            <span class="m-b-xs block">{{s.name||"未设置"}}</span>
+            <small class="text-muted">
+                <span class="label label-info"><span class="fa fa-star-half-full "></span> {{s.level}}</span>
+            </small>
+            <small class="text-muted">
+                <span class="label label-primary">￥{{s.salary}}</span>
+            </small>
+        </div>
+    </li>
+</ul>
+<!-- / navbar right -->
+
+</div>
+<!-- / navbar collapse -->

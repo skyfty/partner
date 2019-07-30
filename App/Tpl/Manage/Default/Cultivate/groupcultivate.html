@@ -1,0 +1,145 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>添加分组</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="span11">
+        <form class="form-horizontal" action="{:U('cultivate/groupedit')}" method="post" name="form1" id="form1">
+            <input type="hidden" name="cultivate_group_id" value="{$cultivate_group_id}"/>
+
+            分组名：
+            <input type="text" name="group_name" id="name" class="span7" value="{$cultivate_group['name']}"/>&nbsp;&nbsp;
+            <input type="radio" class="group_radio" name="group_type" value="0">固定分组
+            <input type="radio" class="group_radio" name="group_type" value="1" checked=checked >预置分组
+            <input class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>
+            <button type="button" class="btn" id="return_btn">&nbsp;返回</button>&nbsp;
+
+            <table class="table"  style="margin-top:20px">
+                <thead>
+                <tr>
+                    <td colspan="4">
+                    <p style="font-size: 14px;">
+                        <a href="javascript:void(0)" id="addcultivate">增加</a> |
+                        <a href="javascript:void(0)" id="delete">移除</a>
+                    </p>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="6">
+                        <table class="table table-hover"  style="border: 0px;margin-bottom:0px">
+                        <thead>
+                        <tr>
+                            <th style="width:5%;">
+                                <input class="check_all" id="check_all" type="checkbox" /> &nbsp;
+                            </th>
+                            <th>新培训订单编号</th>
+                            <th>新培训名称</th>
+                            <th>服务状态</th>
+                            <th style="width:90px;">{:L('OPERATION')}</th>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                {$page}
+                            </td>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <volist name="list" id="vo">
+                            <tr>
+                                <td>
+                                    <input type="checkbox"  class="check_list" name="product_id[]" value="{$vo.product_id}" />
+                                </td>
+                                <td>{$vo.idcode}</td>
+                                <td>{$vo.name}</td>
+                                <td>{$vo.workstate_name}</td>
+                                <td>
+                                    <a href="{:U('cultivate/removegroupcultivate', 'cultivate_id='.$vo['cultivate_id'].'&cultivate_group_id='.$cultivate_group_id)}"  class="remove_confirm">移除</a>&nbsp;
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<div class="hide" id="dialog-select" title="选择联系人">loading...</div>
+
+<script>
+    $("#check_all").click(function(){
+        $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+    });
+    $('#delete').click(function(){
+        if (confirm("确实从该分组移除吗?")) {
+            $("#form1").attr('action', '{:U("cultivate/removegroupcultivate")}');
+            $("#form1").submit();
+        }
+    });
+    $('.remove_confirm').click(function(){
+        if(confirm("确实从该分组移除吗?")){
+            return true;
+        }else{
+            return false;
+        }
+    });
+    $("#dialog-select").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 800,
+        maxHeight:400,
+        position: ["center",100],
+        buttons: {
+            "Ok": function () {
+                var item = $('input:radio[name="cultivate"]:checked').val();
+                var name = $('input:radio[name="cultivate"]:checked').parent().next().html();
+                $(this).dialog("close");
+
+                $.ajax({
+                    'type':'get',
+                    'dataType':'json',
+                    'url':'{:U("cultivate/addgroupcultivate")}',
+                    'data':{
+                        'cultivate_group_id':{$cultivate_group_id},
+                        'cultivate_id':item
+                    },
+                    'success':function(data){
+                        if(data.status == 1){
+                            window.location.reload();
+                        }else{
+                            alert(data.info);
+                        }
+                    }
+                });
+            },
+            "Cancel": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+    $("#addcultivate").click(function(){
+        $('#dialog-select').dialog('open');
+        $('#dialog-select').load('{:U("cultivate/listDialog")}');
+    });
+    $("#return_btn").click(function(){
+        window.location.assign("{:U('cultivate/group')}");
+
+    });
+    $(".group_radio").change(function(b){
+        if ($(this).val() == 0) {
+            window.location.assign("{:U('cultivate/groupedit', 'group_type=0&cultivate_group_id='.$cultivate_group['cultivate_group_id'])}");
+        } else {
+            window.location.assign("{:U('cultivate/groupproduct', 'group_type=1&cultivate_group_id='.$cultivate_group['cultivate_group_id'])}");
+        }
+    });
+
+</script>
+
+<include file="Public:footer" />

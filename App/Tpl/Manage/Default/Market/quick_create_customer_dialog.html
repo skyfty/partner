@@ -1,0 +1,95 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <div></div>
+            <form class="form-horizontal" action="{:U('market/quick_create_customer')}" method="post" id="quick_create_customer_form">
+                <input type='hidden' name="id" value="{$Think.get.id}"/>
+                <input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td class="tdleft" width="15%">
+                            <label for="name">客户姓名:</label>
+                        </td>
+                        <td width="35%" id="customer_name_1_html">
+                            <input class="weui_input" type="text" id="name" name="name" value="" required minlength="2" >
+                            <span id="nameTip" style="color:red;" class="onShow onFocus onError"><span style="color:red;">*</span></span>
+                        </td>
+                        <td class="tdleft" width="15%">
+                            <label for="sex">性别:</label>
+                        </td>
+                        <td width="35%" id="customer_sex_0_html">
+                            {:field_html_show("customer", "sex")}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">
+                            身份证号:
+                        </td>
+                        <td width="35%" id="customer_cardid_1_html">
+                            <input class="weui_input" type="text" id="cardid" name="cardid" maxlength="" value=""> &nbsp;
+                            <span id="cardidTip" style="color:red;"></span>
+                        </td>
+                        <td class="tdleft" width="15%">
+                            <label for="telephone">手机号码:</label>
+                        </td>
+                        <td id="customer_telephone_1_html">
+                            <input class="weui_input" type="text" id="telephone" name="telephone" value="" required>
+                            <span id="telephoneTip" style="color:red;" class="onShow onFocus onError"><span style="color:red;">*</span></span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">
+                            <label for="nation">民族:</label>
+                        </td>
+                        <td width="35%" id="customer_nation_1_html">
+                            {:field_html_show("customer", "nation")}
+                        </td>
+                        <td class="tdleft" width="15%">
+                            <label for="census">籍贯:</label>
+                        </td>
+                        <td width="35%" id="customer_census_1_html">
+                            {:field_html_show("customer", "census")}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">
+                            <label for="channel_role_model">渠道:</label>
+                        </td>
+                        <td width="35%" id="customer_origin_1_html">
+                            {:field_html_show("customer", "channel_role_model")}
+                            <span id="originTip" style="color:red;" class="onShow onFocus onError"><span style="color:red;">*</span></span>
+
+                        </td>
+                        <td class="tdleft" width="15%">
+                            <label for="channel_role_id">渠道人:</label>
+                        </td>
+                        <td width="35%" id="customer_introducer_1_html">
+                            {:field_html_show("customer", "channel_role_id")}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">居住地址:</td>
+                        <td colspan="3" id="customer_live_address_1_html">
+                            {:format_address_edit_field("live_address")}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<include file="Public:def_channel_datapick" />
+
+<if condition="session('branch_id') eq '5'">
+    <script>$(function(){$("#channel_role_model option[value='18']").prop("selected", true);});</script>
+<elseif condition="session('branch_id') eq '8'"/>
+    <script>$(function(){ $("#channel_role_model option[value='61']").prop("selected", true);});</script>
+<elseif condition="session('branch_id') eq '9'"/>
+    <script>$(function(){ $("#channel_role_model option[value='62']").prop("selected", true);});</script>
+</if>
+</body>

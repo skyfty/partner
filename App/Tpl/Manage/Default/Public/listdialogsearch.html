@@ -1,0 +1,33 @@
+<script>
+    function on_{$Think.MODULE_NAME|strtolower}ChangeCondition(){
+        changeCondition(
+                '{$Think.MODULE_NAME|strtolower}_field',
+                '{$Think.MODULE_NAME|strtolower}_condition',
+                '{$Think.MODULE_NAME|strtolower}_conditionContent',
+                '{$Think.MODULE_NAME|strtolower}_searchContent',
+                '{$Think.MODULE_NAME|strtolower}_search'
+        );
+    }
+</script>
+<li id="{$Think.MODULE_NAME|strtolower}_conditionContent" class="pull-left">
+    <select id="{$Think.MODULE_NAME|strtolower}_condition" style="width:auto" onchange="changeSearch()">
+        <option value="contains">{:L('INCLUDE')}</option>
+        <option value="is">{:L('YES')}</option>
+        <option value="start_with">{:L('BEGINNING_CHARACTER')}</option>
+        <option value="end_with">{:L('TERMINATION_CHARACTER')}</option>
+        <option value="is_empty">{:L('MANDATORY')}</option>
+    </select>&nbsp;
+</li>
+<li id="{$Think.MODULE_NAME|strtolower}_searchContent" class="pull-left">
+    <input id="{$Think.MODULE_NAME|strtolower}_search" type="text" class="input-medium search-query" name="search"/>&nbsp;&nbsp;
+</li>
+<li class="pull-left">
+    <input type="hidden" name="m" value="{$Think.MODULE_NAME|strtolower}"/>
+    <if condition="$Think.get.by neq null">
+        <input type="hidden" name="by" value="{$Think.get.by}"/>
+    </if>
+    <button type="submit" onclick="{$Think.MODULE_NAME|strtolower}_changeCondition(0)" class="btn">{:L('SEARCH')}</button>
+</li>
+<script>
+    $("#{$Think.MODULE_NAME|strtolower}_search").focus();
+</script>

@@ -1,0 +1,40 @@
+
+
+<form id="department_edit" class="form-horizontal" action="{:U('User/department_edit')}" method="Post">
+    <input type="hidden" name="department_id" value="{$vo.department_id}"/>
+
+    <table class="table">
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('DEPARTMENT_NAME')}
+            </td>
+            <td>
+                <input class="text-input large-input" type="text" name="name" value="{$vo.name}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('SUPERIORS_DEPARTMENT')}            </td>
+            <td>
+                <select name="parent_id">
+                    <option value="0">{:L('THE_TOP_DEPARTMENT')}</option>
+                    <volist name="departmentList" id="temp">
+                        <option <if condition="$vo['parent_id'] eq $temp['department_id']">selected</if> value="{$temp.department_id}">{$temp.name}</option>
+                    </volist>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('DEPARTMENT_DESCRIPTION')}            </td>
+            <td>
+                <textarea name="description">{$vo.description}</textarea>
+
+            </td>
+        </tr>
+
+    </table>
+
+</form>
+
+

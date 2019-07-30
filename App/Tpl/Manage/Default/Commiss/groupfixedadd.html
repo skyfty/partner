@@ -1,0 +1,59 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>添加分组</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="span12">
+        <form class="form-horizontal" action="{:U('commiss/groupadd')}" method="post" name="form1" id="form1">
+            分组名：
+            <input type="text" name="group_name" id="name" class="span7" value=""/>&nbsp;&nbsp;
+            <input type="radio" class="group_radio" name="group_type" value="0">条件分组
+            <input type="radio" class="group_radio" name="group_type" value="1" checked=checked >固定分组
+            <input type="hidden" name="refer_url" value="{$refer_url}"/>
+            <input class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>
+            <button type="button" class="btn" id="return_btn">&nbsp;返回</button>&nbsp;
+
+            <table class="table" style="margin-top:20px;width:1130px">
+                <thead>
+                <tr>
+                    <td colspan="4">
+                        <p style="font-size: 14px;">
+                            <a href="javascript:void(0)" disabled style="color: #e6e6e6">增加</a> |
+                            <a href="javascript:void(0)" disabled style="color: #e6e6e6">移除</a>
+                        </p>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="6">
+                        <table class="table table-hover"  style="border: 0px;margin-bottom:0px;">
+                            <thead>
+                            <tr>
+                                <th style="width:5%;">
+                                    <input class="check_all" id="check_all" type="checkbox" /> &nbsp;</th>
+                                <th>客服编号</th>
+                                <th>客服名称</th>
+                                <th style="width:90px;">{:L('OPERATION')}</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+
+    $("#return_btn").click(function(){
+        window.location.assign("{:U('commiss/group')}");
+    });
+    $(".group_radio").change(function(b){
+        window.location.assign("{:U('commiss/groupadd', 'group_type')}" + $(this).val());
+    });
+</script>
+<include file="Public:footer" />

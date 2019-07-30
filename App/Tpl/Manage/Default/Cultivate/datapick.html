@@ -1,0 +1,70 @@
+
+<include file="Product:selectDialog" />
+<include file="Customer:selectDialog" />
+<script type="text/javascript">
+    function on_select_cultivate_model(b, model) {
+        if (model == "product") {
+            $('#cultivate_model_name').val(b.name);
+            $('#model_id').val(b.product_id);
+        }else if (model == "customer") {
+            $('#cultivate_model_name').val(b.name);
+            $('#model_id').val(b.customer_id);
+        }
+        $('#model_owner_role_id').val(b.owner_role_id);
+        $("#model_owner_role_id_name").val(b.owner_role_name);
+
+        on_cultivate_ready(b);
+    }
+
+</script>
+
+<include file="Currier:selectDialog" />
+
+
+<script type="text/javascript">
+    function on_start_time_focus() {
+        WdatePicker({
+            dateFmt: "yyyy-MM-dd",
+            onpicked : on_start_time_picked,
+            oncleared:on_start_time_picked
+        });
+    }
+
+    function on_start_time_picked() {
+        var start_time = $("#start_time").val();
+        if (start_time) {
+            $("#end_time").removeAttr("disabled");
+        } else {
+            $("#end_time").val("");
+            $("#end_time").attr("disabled","disabled");
+        }
+    }
+
+    function on_end_time_focus() {
+        var mindate = $("#start_time").val();
+        WdatePicker({
+            dateFmt: "yyyy-MM-dd",
+            minDate:mindate,
+        });
+    }
+
+    $(function(){
+        $("#model_owner_role_id_name").attr("disabled","disabled");
+        $("#model").change(function(){
+            var model = $(this).val();
+            if (model == "") {
+                $("#cultivate_model_name").attr("readonly","readonly");
+                $("#model_owner_role_id").attr("readonly","readonly");
+            }else {
+                $("#cultivate_model_name").removeAttr("readonly");
+                $("#model_owner_role_id").removeAttr("readonly");
+            }
+            $('#model_owner_role_id').val("");
+            $('#cultivate_model_name').val("");
+            $('#model_id').val("");
+        });
+
+
+    });
+
+</script>

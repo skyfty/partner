@@ -1,0 +1,27 @@
+<tfoot>
+<tr style="background: #029BE2;color: #fff;font-size: 12px;">
+    <td colspan="11">
+        <if condition="isset($balance)">
+            结余：{$balance|number_format=###,2}
+        </if>
+
+        <if condition="isset($zhichu_money)">
+            当前页{$zhichu_tip}金额总计：{$zhichu_money|number_format=###,2}（元）
+        </if>
+        <if condition="isset($zhichu_sum_money)">
+            {$zhichu_tip}金额总计：{$zhichu_sum_money|number_format=###,2}（元）
+        </if>
+        <if condition="isset($shouru_money)">
+            当前页{$shouru_tip}金额总计：{$shouru_money|number_format=###,2}（元）
+        </if>
+        <if condition="isset($shouru_sum_money)">
+            {$shouru_tip}金额总计：{$shouru_sum_money|number_format=###,2}（元）
+        </if>
+    </td>
+</tr>
+<tr>
+    <td colspan="11">
+        {$page}
+    </td>
+</tr>
+</tfoot>

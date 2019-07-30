@@ -1,0 +1,27 @@
+
+<table class="table table-hover" id="commiss_group_table">
+    <thead>
+    <tr>
+    <th style="width: 20px">&nbsp;</th>
+    <th>组名</th>
+    </thead>
+    <tbody id="data">
+    <volist name="list" id="vo">
+        <tr>
+            <td>
+                <input type="radio" name="commiss_group_id" value="{$vo.commiss_group_id}" />
+            </td>
+            <td>{$vo.name}</td>
+        </tr>
+    </volist>
+    </tbody>
+</table>
+
+
+<script>
+    $('#commiss_group_table').dataTable({
+        "scrollX": true,
+        "order": [[ 1, "desc" ]],
+        'language': def_dataTable_lang_opt
+    });
+</script>

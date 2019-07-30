@@ -1,0 +1,78 @@
+<include file="Public:picfiletmp" />
+
+<div class="hide" id="dialog-video" title="添加视频">loading...</div>
+<script>
+    $("#dialog-video").dialog({
+        autoOpen: false,
+        width: 800,
+        maxHeight: 400,
+        position: ["center",100]
+    });
+
+    //增加一个文件
+    $('.btn_add_video').click(function(){
+        var field_name = $(this).attr('field_name');
+        $('#dialog-video').dialog('open');
+        $('#dialog-video').load('{:U(MODULE_NAME."/addvideo","id=".$_GET["id"]."&field=")}' + field_name);
+    });
+
+    $('.btn_del_video').click(function(){
+        var videoid = $(this).attr('rel');
+        if(confirm('确定要删除吗?')){
+            $.ajax({
+                'type':'get',
+                'dataType':'json',
+                'url':'{:U(MODULE_NAME."/deletevideo")}',
+                'data':{id:videoid},
+                'success':function(data){
+                    if(data.status == 1){
+                        //删除图片DOM
+                        $('#video-list-'+videoid).remove();
+                    }else{
+                        alert(data.info);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+<div class="hide" id="dialog-file" title="添加文件">loading...</div>
+<script>
+    $("#dialog-file").dialog({
+        autoOpen: false,
+        width: 800,
+        maxHeight: 400,
+        position: ["center",100]
+    });
+
+    //增加一个文件
+    $('.btn_add_file').click(function(){
+        var field = $(this).attr('field_name');
+        $('#dialog-file').dialog('open');
+        $('#dialog-file').load('{:U(MODULE_NAME."/addfile","id=".$_GET["id"]."&assort=$assort"."&field=")}' + field);
+    });
+
+    //增加一个文件
+    $('.btn_del_file').click(function(){
+        var fileid = $(this).attr('rel');
+        if(confirm('确定要删除吗?')){
+            $.ajax({
+                'type':'get',
+                'dataType':'json',
+                'url':'{:U(MODULE_NAME."/deletefile")}',
+                'data':{
+                    id:fileid
+                },
+                'success':function(data){
+                    if(data.status == 1){
+                        $('#file-list-'+fileid).remove();
+                    }else{
+                        alert(data.info);
+                    }
+                }
+            });
+        }
+    });
+</script>

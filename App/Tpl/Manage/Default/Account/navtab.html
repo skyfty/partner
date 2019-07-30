@@ -1,0 +1,47 @@
+<ul class="nav nav-tabs">
+    <li <if condition="in_array($t,array('market', 'cultivate'))">class="active"</if>>
+    <a href="{:U('account/market','t=market')}">
+        <img src="__PUBLIC__/img/shoukuandan.png"/> &nbsp;
+        收入确认
+    </a>
+    </li>
+
+    <li <if condition="($t eq 'inernal')">class="active"</if>>
+    <a  href="{:U('account/inernal','t=inernal')}">
+        <img src="__PUBLIC__/img/yingshoukuan.png"/>&nbsp;
+        {:L('INTERNAL_ACCOUNT')}
+    </a>
+    </li>
+    <li <if condition="$t eq 'customer'">class="active"</if>>
+    <a href="{:U('account/customer','t=customer')}">
+        <img src="__PUBLIC__/img/customer_icon.png"/> &nbsp;
+        {:L('CUSTOMER_ACCOUNT')}
+    </a>
+    </li>
+    <li <if condition="$t eq 'product'">class="active"</if>>
+    <a href="{:U('account/product','t=product')}">
+        <img src="__PUBLIC__/img/shoukuandan.png"/> &nbsp;
+        {:L('PRODUCT_ACCOUNT')}
+    </a>
+    </li>
+    <li <if condition="$t eq 'staff'">class="active"</if>>
+    <a href="{:U('account/staff','t=staff')}">
+        <img src="__PUBLIC__/img/shoukuandan.png"/> &nbsp;
+        员工账户
+    </a>
+    </li>
+
+    <li <if condition="$t eq 'flow'">class="active"</if>>
+    <a href="{:U('account/flow','t=flow')}">
+        <img src="__PUBLIC__/img/tongji.png"/> &nbsp;
+        公司流水
+    </a>
+    </li>
+
+    <li <eq name="Think.ACTION_NAME" value="logger">class="active"</eq>>
+    <a href="{:U('account/logger')}">
+        <img src="__PUBLIC__/img/my_log.png"/> &nbsp;
+        日志
+    </a>
+    </li>
+</ul>

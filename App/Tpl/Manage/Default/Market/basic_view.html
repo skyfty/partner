@@ -1,0 +1,128 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+	<div class="page-header">
+        <h4><a name="tab">客户服务详情</a><span style="font-size: medium;color: #0088cc;"> - {$market['idcode']} - {$market['category_name']} - {$market['customer_id']|customer_show_html=###, false}</span></h4>
+	</div>
+	<include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+		<div class="tabbable span12">
+			<div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;" class="view_top_nav">
+                                    <if condition="is_market_settle($market) or $market['status_id'] == '0'">
+                                        <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">编辑</a>
+                                    <else/>
+                                        <a href="{:U('market/edit', 'id='.$market['market_id'])}">编辑</a>
+                                    </if>
+                                    <if condition="!session('?admin') and is_market_settle($market) or $market['status_id'] == '0'">
+                                        <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">{:L('DELETE')}</a>
+                                    <else/>
+                                        <a href="{:U('market/delete', 'id='.$market['market_id'])}" class="del_confirm">{:L('DELETE')}</a>
+                                    </if>
+                                    <a href="{:U('market/renewal', 'id='.$market['market_id'])}" class="renewal" title="续约">续约</a>
+                                    <if condition="$per_edit and $market_over and $market['status_id'] != '0'">
+                                        <if condition="$market['settle_state'] eq '917'">
+                                            <a href="{:U('market/revoke_submit_settlement', 'id='.$market['market_id'])}" class="settlement_confirm" title="撤销结算提交">撤销结算提交</a>
+                                        <elseif  condition="$market['settle_state'] eq '918'"/>
+                                            <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">撤销结算提交</a>
+                                        <else/>
+                                            <a href="{:U('market/submit_settlement', 'id='.$market['market_id'])}" class="settlement_confirm" title="结算提交">结算提交</a>
+                                        </if>
+                                    <else/>
+                                        <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">结算提交</a>
+                                    </if>
+                                    <if condition="is_market_settle($market) or $market['status_id'] == '0'">
+                                        <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">撤销</a>
+                                    <else/>
+                                        <a href="{:U('market/revoke', 'id='.$market['market_id'])}" class="revoke_confirm">撤销</a>
+                                    </if>
+                                    <a href="javascript:void(0);" class="add_log" title="撤销结算提交">添加日志</a>
+
+                                    <if condition="$market['category_id'] == '3'">
+                                    <a target="_blank" href="{:U('trade/add', 'serve_id=138&customer_id='.$market['customer_id'].'&ytime='.pregtime($new_start_date))}" >添加管理费</a>
+                                    <if condition="$insurance">
+                                    <a target="_blank" href="{:U('trade/view', 'id='.$insurance['trade_id'])}" >[{$insurance['orderid']}]</a>
+                                    </if> |
+                                    </if>
+
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <include file="Public:defviewtable"/>
+                    </tbody>
+                </table>
+
+			</div>
+            <table class="table table-hover">
+                <tr>
+                    <th>日志</th>
+                </tr>
+            </table>
+            <div id="log-tabs">
+                <script>
+                    function logger_data_cb(d) {
+                        d._string = "type=1";
+                    }
+                </script>
+                <include file="Market:logtable" />
+            </div>
+		</div>
+	</div>
+</div>
+<script>
+    $('.renewal').click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要续约这个订单吗?", function(){
+            window.location.replace(href);
+        });
+        return false;
+    });
+    $(".settlement_confirm").click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要结算提交吗?", function(){
+            show_lock_tips("正在结算提交...");
+            window.location.replace(href);
+        });
+        return false;
+    });
+    $(".revoke_confirm").click(function(){
+        var href = $(this).attr("href");
+        art.dialog.confirm("确实要撤销订单吗?", function(){
+            show_lock_tips("正在撤销订单...");
+            window.location.replace(href);
+        });
+        return false;
+    });
+</script>
+
+<script>
+    $(".add_log").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日志",
+            lock:true,
+            ok: function (data) {
+                $("#add-log").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("log/add","r=RMarketLog&module=market&type=1&id=".$market["market_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+</script>
+<include file="Public:footer" />	

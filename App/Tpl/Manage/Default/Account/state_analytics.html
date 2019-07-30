@@ -1,0 +1,91 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Account:navtab" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <include file="Public:analysearch" />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2 knowledgecate">
+            <include file="Account:analycat" />
+        </div>
+        <div class="span10">
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th colspan="2">账户统计</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td></td>
+                    <foreach name="account_type" item="at">
+                    <td>
+                        {$at}
+                    </td>
+                    </foreach>
+                </tr>
+
+                <foreach name="all_type" item="av" key="ak">
+                    <tr>
+                        <td>
+                            {$ak}
+                        </td>
+                        <foreach name="account_type" item="at">
+                        <td>
+                            {$basic_accounts[$ak][$at]}
+                        </td>
+                        </foreach>
+                    </tr>
+                </foreach>
+                </tbody>
+            </table>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th colspan="2">白条账目统计</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td></td>
+                    <foreach name="loans_account_type" item="at">
+                        <td>
+                            {$key}
+                        </td>
+                    </foreach>
+                </tr>
+
+                <foreach name="rel_type" item="av" key="ak">
+                    <tr>
+                        <td>
+                            {$ak}
+                        </td>
+                        <foreach name="loans_account_type" item="at" key="tk">
+                            <td>
+                                {$loans_accounts[$ak][$tk]}
+                            </td>
+                        </foreach>
+                    </tr>
+                </foreach>
+                </tbody>
+            </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Public:footer" />

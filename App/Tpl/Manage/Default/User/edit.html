@@ -1,0 +1,54 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4>{:L('USER_INFO')}</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form class="form-horizontal" action="{:U('user/edit')}" method="post" >
+				<input type="hidden" name="user_id" value="{$user.user_id}"/>
+				<table class="table span7">
+					<thead>
+						<tr>
+							<td>&nbsp;</td>
+							<td><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;<input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('CANCEL')}"/></td>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td>&nbsp;</td>
+							<td><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;<input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('CANCEL')}"/></td>
+						</tr>
+					</tfoot>
+					<tbody>
+						<tr>
+							<th colspan="2">{:L('BASIC_INFO')}</th>
+						</tr>
+						<tr>
+							<td class="tdleft">{:L('USER_NAME')}</td>
+							<td><if condition="session('?admin')"><input type="text" name="name" value="{$user['user_name']}"><else />{$user.user_name}</if></td>
+						</tr>
+                        <tr>
+                            <td class="tdleft">工号&nbsp;</td>
+                            <td>
+                            <if condition="session('?admin')"><input type="text" name="idcode" value="{$user['idcode']}"><else />{$user.idcode}</if>
+                            </td>
+                        </tr>
+						<tr>
+							<td class="tdleft">{:L('MODIFY_PASSWORD')}</td>
+							<td><input class="text-input small-input" type="password" name="password" id="password" value=""/></td>
+						</tr>
+
+
+					</tbody>
+				</table>
+			</form>			
+		</div> <!-- End #tab1 -->		
+	</div> <!-- End #main-content -->	
+</div>
+
+<include file="Public:footer" />	

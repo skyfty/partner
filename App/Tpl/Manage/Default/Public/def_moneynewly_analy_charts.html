@@ -1,0 +1,119 @@
+<div class="span12">
+    <div id="canvas_cycle" style="min-width: 500px; height: 500px;margin: 0 auto">{:L('TEMPORARILY_NO_DATA')}</div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="__PUBLIC__/highcharts/highcharts-3d.js"></script>
+<script type="text/javascript" src="__PUBLIC__/highcharts/modules/exporting.js"></script>
+<script type="text/javascript" src="__PUBLIC__/highcharts/modules/funnel.js"></script>
+
+
+<script type="text/javascript">
+    var charts_option = {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            renderTo:'canvas_cycle',
+            options3d: {
+                enabled: true,
+                alpha: 10,
+                depth: 70
+            }
+        },
+
+        title: {
+            text: ''
+        },
+        xAxis: {
+            categories: [{$cycle_count}],
+            labels: {
+                y:40,
+                x:15
+            }
+        },
+        yAxis: [
+            {
+                title: {
+                    text: null
+                },
+                min:0
+            },
+            {
+                title: {
+                    text: null
+                },
+                opposite: true,
+                min:0
+            }
+        ],
+
+        legend: {
+            align: 'left',
+            verticalAlign: 'bottom',
+            y: 0,
+            floating: true,
+            borderWidth: 0
+        },
+        tooltip: {
+            shared: true,
+            crosshairs: true
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                }
+            },
+            column: {
+                dataLabels: {
+                    enabled: true
+                }
+            },
+            series: {
+                cursor: 'pointer',
+                marker: {
+                    lineWidth: 1
+                }
+            }
+        },
+        series: [
+            {
+                type: 'column',
+                name: '{$cycle_title}',
+                data: [
+                    {$cycle_create_count}
+                ]
+            },
+            {
+                type: 'column',
+                name: '{$yester_cycle_title}',
+                data: [
+                    {$yester_cycle_create_count}
+                ]
+            },
+            {
+                type: 'spline',
+                name: '{$cycle_money_title}',
+                data: [
+                    {$cycle_money_count}
+                ]
+            },
+            {
+                type: 'spline',
+                name: '{$yester_cycle_money_title}',
+                data: [
+                    {$yester_cycle_money_count}
+                ]
+            },
+        ]
+    };
+
+    var chart = null;
+    function switch_chart_type(chart_t) {
+        charts_option.chart.type = chart_t;
+        chart = new Highcharts.Chart(charts_option);
+    }
+    switch_chart_type("line");
+
+</script>

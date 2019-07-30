@@ -1,0 +1,86 @@
+<include file="Public:header" />
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4>编辑账目</h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+        </div>
+        <div class="span12">
+            <form id="form1" action="{:U('account/edit', 'id='.$account['account_id'])}" method="post" enctype="multipart/form-data">
+                <input name="t" type="hidden" value="market">
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <input type="hidden" name="restrict" id="restrict" value="{$restrict}"/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <td style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    <tr><td class="tdleft" width="5%" >信息</td><td colspan="3" id="account_info"></td></tr>
+                    <tr style="display: none">
+                        <td class="tdleft" width="5%" valign="middle" id="model">
+                            服务
+                        </td>
+                        <td valign="middle" colspan="3">
+                            <span id="clause_name_Tip" style="color:red;" class="onShow"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="10%">支付方式:</td>
+                        <td>
+                            {$fields_group['0']['fields']['1']['html']}
+                        </td>
+                        <td class="tdleft" width="5%">金额:</td>
+                        <td>
+                            <input type="text" id="money" name="money" value="{$account.money}"> &nbsp;
+                            <span id="moneyTip" style="color: red; display: none;" class="onShow">
+                                <span style="color:red;">*必选项</span>
+                            </span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="5%">支付时间:</td>
+                        <td>
+                            <input style="background:white;cursor:pointer;" readonly="readonly" accuracy="time" onfocus="show_wdate_picker('yyyy-MM-dd HH:mm',this);" name="payment_time" class="Wdate" id="payment_time" type="text" value="{$account.payment_time|pregtime=###,true}">
+                        </td>
+                        <td class="tdleft" width="5%">收据号:</td>
+                        <td>
+                            <input  name="receipt_number" id="receipt_number" type="text"  value="{$account.receipt_number}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="10%">描述:</td>
+                        <td colspan="3">
+                            <textarea style="width:80%" rows="6" class="span6" id="description" name="description">{$account.description}</textarea> &nbsp;
+                            <span id="descriptionTip" style="color:red;"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#payway option[value='{$account.payway}']").prop("selected", true);
+</script>
+
+<include file="Public:footer" />

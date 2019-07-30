@@ -1,0 +1,27 @@
+
+<table class="table table-hover" id="berth_group_table">
+    <thead>
+    <tr>
+    <th style="width: 20px">&nbsp;</th>
+    <th>组名</th>
+    </thead>
+    <tbody id="data">
+    <volist name="list" id="vo">
+        <tr>
+            <td>
+                <input type="radio" name="berth_group_id" value="{$vo.berth_group_id}" />
+            </td>
+            <td>{$vo.name}</td>
+        </tr>
+    </volist>
+    </tbody>
+</table>
+
+
+<script>
+    $('#berth_group_table').dataTable({
+        "scrollX": true,
+        "order": [[ 1, "desc" ]],
+        'language': def_dataTable_lang_opt
+    });
+</script>

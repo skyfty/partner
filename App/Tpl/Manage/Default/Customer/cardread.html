@@ -1,0 +1,81 @@
+
+<object id="rcard" type="application/x-rcard"  width="0" height="0">
+    <param name="onload" value="pluginLoaded" />
+</object>
+<script>
+    function on_sex_change() {
+        var sex = $("#sex").val();
+        switch(sex) {
+            case "男": {
+                $("#appellation").val("先生");
+                break;
+            }
+            case "女": {
+                $("#appellation").val("女士");
+                break;
+            }
+            default: {
+                $("#appellation").val("");
+            }
+        }
+    }
+    $("#sex").change(on_sex_change);
+    $("#appellation").attr("readonly", "readonly");
+
+    function del_img_main(pic_pre){
+        $('#'+pic_pre).attr("src", "");
+    }
+
+    $(function(){
+        var rcard = document.getElementById('rcard');
+        if (rcard.valid) {
+            if (rcard.attachEvent) {
+                rcard.attachEvent("onperson", person);
+            } else {
+                rcard.addEventListener("person", person, false);
+            }
+            rcard.open();
+
+            <if condition="$readcard == '1'">
+            rcard.person(true);
+            </if>
+        }
+
+        function person(p) {
+            if (p && p.cardid) {
+                var cardinfo = {
+                    name: p.name,
+                    address: p.address,
+                    cardid: p.cardid,
+                    police: p.police,
+                    nation: p.nation,
+                    sex: p.sex,
+                    validstart: p.validstart.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    validend: p.validend.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    birthday: p.birthday.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    nationcode: p.nationcode,
+                    msg: p.msg
+                };
+                for (var i in cardinfo) {
+                    $("#" + i).val(cardinfo[i]);
+                }
+                rcard.attachfile(p.pic, function(imgbase){
+                    var img = "data:image/gif;base64," + imgbase;
+                    $("#card_pic_prev").attr("src", img);
+                    $("#card_pic_base64").val(imgbase);
+                    $("#main_pic_type").val("s");
+                });
+                on_cardid_change();
+                on_sex_change();
+            }
+        }
+    });
+    function on_cardid_change() {
+        var cardid = $("#cardid").val();
+        if (cardid) {
+            var birthday = getBirth(cardid);
+            $("#birthday").val(birthday);
+        }
+    }
+    $("#cardid").change(on_cardid_change)
+</script>

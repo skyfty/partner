@@ -1,0 +1,26 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">客户服务详情</a><span style="font-size: medium;color: #0088cc;"> - {$market['idcode']} - {$market['category_name']} - {$market['customer_id']|customer_show_html=###, false}</span></h4>
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <script>
+                    function logger_data_cb(d) {
+                        d._string = "type!=1";
+                    }
+                </script>
+                <include file="Market:logtable" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<include file="Public:footer" />	

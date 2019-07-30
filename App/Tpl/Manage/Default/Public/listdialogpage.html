@@ -1,0 +1,91 @@
+<tfoot id="{$Think.MODULE_NAME|strtolower}_footer">
+    <tr>
+        <td id="{$Think.MODULE_NAME|strtolower}_dialog_footer">
+            <div class="row pagination" style="margin:1px 1px">
+                <div class="span2">
+                    <span id="{$Think.MODULE_NAME|strtolower}_count">{$count_num}</span>
+                    {:L('RECORDS')}
+                    <span id="{$Think.MODULE_NAME|strtolower}_p">1</span>/<span id="{$Think.MODULE_NAME|strtolower}_total_page">{$total}</span>
+                    {:L('PAGE')}
+                </div>
+                <div class="span4">
+                    <div>
+                        <ul id="{$Think.MODULE_NAME|strtolower}_changepage">
+                            <li>
+                                <span class='current'>{:L('FIRST_PAGE')}</span>
+                            </li>
+                            <li>
+                                <span>« {:L('THE_PREVIOUS_PAGE')}</span>
+                            </li>
+                            <if condition="1 lt $total">
+                                <li>
+                                    <a class="page" href="javascript:void(0)" rel="2" onclick="{$Think.MODULE_NAME|strtolower}_changeCondition(this.rel)">
+                                        {:L('THE_NEXT_PAGE')} »
+                                    </a>
+                                </li>
+                                <else />
+                                <li>
+                                    <span>{:L('THE_NEXT_PAGE')} »</span>
+                                </li>
+                            </if>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+</tfoot>
+<tbody id="{$Think.MODULE_NAME|strtolower}_load" class="hide">
+<tr>
+    <td id="{$Think.MODULE_NAME|strtolower}_dialog_load" class="tdleft" colspan="6" style=" height:300px;text-align:center">
+        <img src="./Public/img/load.gif">
+    </td>
+</tr>
+</tbody>
+
+<script type="text/javascript">
+    function {$Think.MODULE_NAME|strtolower}_changeCondition(p){
+        $.ajax({
+            type:'get',
+            url:"{:U($Think.MODULE_NAME.'/changeContent')}",
+            data:{
+                field: $('#{$Think.MODULE_NAME|strtolower}_field').val(),
+                condition: $('#{$Think.MODULE_NAME|strtolower}_condition').val(),
+                search: $("#{$Think.MODULE_NAME|strtolower}_search").val(),
+                query: $("#{$Think.MODULE_NAME|strtolower}_query").val(),
+                p: p
+            },
+
+            beforeSend: function() {
+                $('#{$Think.MODULE_NAME|strtolower}_data').addClass('hide');
+                $('#{$Think.MODULE_NAME|strtolower}_load').removeClass('hide');
+            },
+
+            success:function(data){
+                if(data.data.list != null){
+                    $('#{$Think.MODULE_NAME|strtolower}_p').html(data.data.p);
+                    $('#{$Think.MODULE_NAME|strtolower}_count').html(data.data.count);
+                    $('#{$Think.MODULE_NAME|strtolower}_total_page').html(data.data.total);
+                    $('#{$Think.MODULE_NAME|strtolower}_data').html($("#new-{$Think.MODULE_NAME|strtolower}-template").tmpl(data.data));
+                    $('#{$Think.MODULE_NAME|strtolower}_changepage').html(change_page_list(data, "{$Think.MODULE_NAME|strtolower}_changeCondition"));
+                }else{
+                    $('#{$Think.MODULE_NAME|strtolower}_data').html('<tr><td colspan="4">{:L('DIDNOT_FIND_THE_RESULTS_YOU_WANT')}</tr>');
+                    $('#{$Think.MODULE_NAME|strtolower}_footer').addClass('hide');
+                }
+            },
+            complete: function() {
+                $('#{$Think.MODULE_NAME|strtolower}_load').addClass('hide');
+                $('#{$Think.MODULE_NAME|strtolower}_data').removeClass('hide');
+            },
+            async:false,
+            dataType:'json'
+        });
+    }
+</script>
+
+
+<script>
+    var nodes_num = document.getElementById("{$Think.MODULE_NAME|strtolower}_dialog_thead").children.length;
+    $("#{$Think.MODULE_NAME|strtolower}_dialog_load").attr('colspan',nodes_num);
+    $("#{$Think.MODULE_NAME|strtolower}_dialog_footer").attr('colspan',nodes_num);
+</script>

@@ -1,0 +1,22 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>证书课程</h4>
+		</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form id="form1" action="{:U('traincert/edit', 'id='.$traincert['traincert_id'])}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="traincert_id" value="{$traincert.traincert_id}"/>
+                <include file="Public:editfieldstable" />
+                <input name="a" type="hidden" value="edit">
+			</form>
+		</div>
+	</div>
+</div>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

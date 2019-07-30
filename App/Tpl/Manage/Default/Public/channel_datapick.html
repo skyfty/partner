@@ -1,0 +1,51 @@
+
+<include file="Customer:selectDialog" />
+<script type="text/javascript">
+    function on_customer_info(b) {
+        $('#introducer').val(b.name);
+        $('#introducer').change();
+        $('#channel_model_id').val(b.customer_id);
+        $("#channel_model").val("customer");
+    }
+</script>
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    function on_product_info(b) {
+        $('#introducer').val(b.name);
+        $('#introducer').change();
+        $('#channel_model_id').val(b.product_id);
+        $("#channel_model").val("product");
+    }
+</script>
+
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info(b) {
+        $('#introducer').val(b.name);
+        $('#introducer').change();
+        $('#channel_model_id').val(b.staff_id);
+        $("#channel_model").val("staff");
+    }
+</script>
+
+<script>
+
+    $("#origin").change(function(){
+        $("#introducer").val("");
+        $("#channel_model").val("");
+        $('#channel_model_id').val("");
+    });
+
+    $("#introducer").click(function(){
+        var origin = $("#origin").val();
+        if (origin == "阿姨介绍") {
+            select_product();
+        } else if (origin == "客户介绍") {
+            select_customer();
+        } else if(origin == "员工介绍") {
+            select_staff();
+        }
+    });
+</script>

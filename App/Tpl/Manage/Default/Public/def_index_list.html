@@ -1,0 +1,217 @@
+<td>
+    <span style="color:#{$v['color']}">
+    <if condition="($v['field'] eq 'product_id') and ($vo['product_id']!='')">
+        <a href="{:U('product/view', 'id='.$vo['product_id'])}" target="_blank" title="[{$vo['product_idcode']}]{$vo['product_name']}">
+            [{$vo['product_idcode']}]{$vo['product_name']|msubstrn=###,0,6}
+        </a>
+    <elseif condition="$v['field'] eq 'customer_id'" />
+        <a href="{:U('customer/view', 'id='.$vo['customer_id'])}" target="_blank" title="[{$vo['customer_idcode']}]{$vo['customer_name']}">
+            [{$vo['customer_idcode']}]{$vo['customer_name']|msubstrn=###,0,6}
+        </a>
+    <elseif condition="$v['field'] eq 'staff_id'" />
+        <a href="{:U('staff/view', 'id='.$vo['staff_id'])}" target="_blank" title="[{$vo['staff_idcode']}]{$vo['staff_name']}">
+            [{$vo['staff_idcode']}]{$vo['staff_name']|msubstrn=###,0,6}
+        </a>
+    <elseif condition="$v['field'] eq 'create_time'"/>
+        {$vo[$v['field']] | toDate=###,'Y-m-d H:i'}
+    <elseif condition="($v['field'] eq 'idcode') or ($v['field'] eq 'orderid')"/>
+        <a href="{:U($v['model'].'/view', 'id='.$vo[$v['model'].'_id'])}" target="_blank">
+            {$vo|idcode_format=###,$v}
+        </a>
+    <elseif condition="($v['model'] eq 'commiss') && ($v['field'] eq 'owner_role_id')"/>
+        <if condition="$vo[$v['field']]">
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+            {$vo[$v['field']]|role_html}
+        </if>
+        </if>
+    <elseif condition="$v['field'] eq 'queue_describe'"/>
+        <a href="{:U('train/view', 'id='.$vo['train_id'])}" target="_blank"   title="{$vo.queue_describe}">
+            {$vo['queue_describe']|cutString=###,20}
+        </a>
+    <elseif condition="$v['field'] eq 'queue_branch_id'"/>
+        <if condition="$vo['queue_branch_id_show'] ">
+            {$vo['queue_branch_id_show']}
+        <else/>
+            <span style="color: #08c">{$vo['branch']['name']}</span>
+        </if>
+    <elseif condition="$v['field'] eq 'train_id'"/>
+        <a href="{:U('train/view', 'id='.$vo['train_id'])}" target="_blank">
+            {$vo['train_name']}
+        </a>
+    <elseif condition="$v['field'] eq 'dorm_id'"/>
+        <a href="{:U('dorm/view', 'id='.$vo['dorm_id'])}" target="_blank">
+            {$vo['dorm_name']}
+        </a>
+    <elseif condition="$v['field'] eq 'currier_id'"/>
+        <a href="{:U('currier/view', 'id='.$vo['currier_id'])}" target="_blank">
+            [{$vo['currier_idcode']}]{$vo['currier_name']}
+        </a>
+    <elseif condition="($v['field'] eq 'queue_pos')"/>
+        <if condition="($vo['workstate_id'] eq '排岗') and ($vo['queue_pos'] != '9999999')">
+            {$vo[$v['field']]}
+        </if>
+    <elseif condition="($v['form_type'] eq 'channnel_box') or ($v['form_type'] eq 'channel_role_model_box')"/>
+        <if condition="($vo[$v['field']] neq 0)">
+        <a href="{:U('channnel/view', 'id='.$vo['channnel_id'])}" target="_blank">
+            {$vo[$v['field']]|channel_show_html}
+        </a>
+        </if>
+    <elseif condition="($v['form_type'] eq 'channel_role_id_box')"/>
+        <if condition="($vo[$v['field']] neq 0)">
+        {:channel_model_role_show_html($vo['channel_role_model'],$vo[$v['field']], true)}
+        </if>
+    <elseif condition="$v['form_type'] eq 'datetime'" />
+        <if condition="($vo[$v['field']] neq '0') and ($vo[$v['field']] neq '')">
+            <if condition="$v['is_showtime'] eq '1'">
+                {$vo[$v['field']] | toDate=###, 'Y-m-d  H:i'}
+            <else/>
+                {$vo[$v['field']] | toDate=###, 'Y-m-d'}
+            </if>
+        </if>
+    <elseif condition="$v['form_type'] eq 'mobile'"/>
+        {$vo[$v['field']]}&nbsp;
+    <elseif condition="$v['form_type'] eq 'linkaddress'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+        <else/>
+            <a href="{$vo[$v['field']]}" target="_blank">{$vo[$v['field']]}</a>
+        </if>
+    <elseif condition="$v['form_type'] eq 'berth'"/>
+        {$vo[$v['field']]|berth_show_html}
+    <elseif condition="$v['field'] eq 'status_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+            {$vo['status_name']}
+        </if>
+    <elseif condition="$v['field'] eq 'settle_state'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+        {$vo[$v['field']]}
+        <else/>
+        {$vo['settle_status_name']}
+        </if>
+    <elseif condition="$v['field'] eq 'shopkeeper_role_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+        <else/>
+            <a class="role_info" rel="{$vo['shopkeeper_role_id']}" href="javascript:void(0)">
+            {$vo.shopkeeper.user_name}
+        </a>
+        </if>
+
+    <elseif condition="$v['form_type'] eq 'user'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+            {$vo[$v['field']]|role_html}
+        </if>
+     <elseif condition="$v['field'] eq 'queue_role_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        <a class="role_info" rel="{$vo['queue_role_id']}" href="javascript:void(0)">
+            {$vo.queue.user_name}
+        </a>
+        </if>
+    <elseif condition="$v['field'] eq 'category_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        {$vo.category_name}
+        </if>
+    <elseif condition="$v['field'] eq 'queue_category_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        {$vo.queue_category_id|proudct_category_map}
+        </if>
+    <elseif condition="$v['field'] eq 'serve_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+        <else/>
+            <a href="{:U('serve/view', 'id='.$vo['serve_id'])}" target="_blank">
+                {$vo['serve_idcode']} - {$vo['serve_name']}
+            </a>
+        </if>
+    <elseif condition="$v['form_type'] eq 'se_box'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+        <else/>
+            <switch name="vo.corre">
+                <case value="product">雇员</case>
+                <case value="customer">客户</case>
+            </switch>
+        </if>
+    <elseif condition="$v['form_type'] eq 'order_classify'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+        <else/>
+            <switch name="vo.order_classify">
+                <case value="product">培训销售</case>
+                <case value="customer">客户销售</case>
+                <case value="league">加盟意向</case>
+                <case value="other">其他</case>
+                <default/>无
+            </switch>
+        </if>
+    <elseif condition="in_array($v['form_type'], array('cultivate_cert_state_box','cultivate_examine_state_box'))"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        {$vo[$v['field']]|format_cultivate_status}
+        </if>
+    <elseif condition="$v['field'] eq 'workstate_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        {$vo['workstate_name']}
+        </if>
+    <elseif condition="($v['field'] eq 'branch_id')"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        <if condition="$vo[$v['field']]">
+            {$vo['branch']['name']}
+        <else/>
+            公司总部
+        </if>
+        </if>
+    <elseif condition="$v['field'] eq 'department_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        <if condition="$vo['department_id']">
+            {$vo['department_id']|department_html}
+        </if>
+        </if>
+    <elseif condition="$v['field'] eq 'service_product'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+            {:market_service_product_html($vo['market_id'],$vo['service_product']);}
+        </if>
+    <elseif condition="$v['field'] eq 'position_id'"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+            <else/>
+        <if condition="$vo['position_id']">
+            {$vo['position_id']|position_html}
+        </if>
+        </if>
+    <elseif condition="is_field_show($v['form_type'])"/>
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+        <else/>
+            {:format_field_show_html($v['model'], $v['field'], $vo)}
+        </if>
+    <else />
+        <if condition="is_hide_field($vo[$v['field']])">
+            {$vo[$v['field']]}
+         <else/>
+            {$vo[$v['field']]}
+        </if>
+    </if>
+    </span>
+</td>

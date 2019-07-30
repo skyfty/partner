@@ -1,0 +1,22 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>编辑加盟商</h4>
+		</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form id="form1" action="{:U('league/edit', 'id='.$league['league_id'])}" method="post" enctype="multipart/form-data">
+			    <input type="hidden" name="id" value="{$league.league_id}"/>
+                <include file="Public:editfieldstable" />
+                <input name="a" type="hidden" value="edit">
+			</form>
+		</div>
+	</div>
+</div>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

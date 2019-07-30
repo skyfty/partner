@@ -1,0 +1,21 @@
+<form class="form-horizontal" action="{:U('product/edit_queue_describe')}" method="post" id="edit_queue_describe_form">
+    <table class="table">
+        <input type='hidden' name="product_id" value="{$product['product_id']}"/>
+        <input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+        <input type='hidden' name="refer_url" value="{$refer_url}"/>
+        <if condition="$Think.get.cq eq '1'">
+        <tr>
+            <td>面试次数</td>
+            <td colspan="3">
+                <input type="number" id="quiz_count" name="quiz_count" value="{$product['quiz_count']}"/>
+            </td>
+        </tr>
+        </if>
+        <tr>
+            <td>备注</td>
+            <td colspan="3">
+                <textarea rows="6" style="width: 300px" id="queue_describe" name="queue_describe">{$product['queue_describe']}</textarea>
+            </td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,59 @@
+
+
+<form id="role_add" class="form-horizontal" action="{:U('user/role_add')}" method="Post">
+
+    <table class="table">
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('POSITION_NAME')}            </td>
+            <td>
+                <input type="text" class="text-input large-input" name="name"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('WHICH_DEPARTMENT_BELONGS_TO')}            </td>
+            <td>
+                <select name="department_id">
+                    <volist name="departmentList" id="temp">
+                        <option value="{$temp.department_id}">{$temp.name}</option>
+                    </volist>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                促单费系数
+            </td>
+            <td>
+                <input type="text" class="text-input large-input" name="urge_category_ratio" id="urge_category_ratio" value=""/>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('SUPERIORS_POSITION')}
+            </td>
+            <td>
+                <select name="parent_id">
+                    <volist name="positionList" id="temp">
+                        <option value="{$temp.position_id}">{$temp.name}</option>
+                    </volist>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="tdleft" width="30%">
+                {:L('POSITION_DESCRIPTION')}            </td>
+            <td>
+                <textarea name="description"></textarea>
+
+            </td>
+        </tr>
+
+    </table>
+
+</form>
+
+

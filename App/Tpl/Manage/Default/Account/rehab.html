@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+    <link type="text/css" href="http://apps.bdimg.com/libs/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="http://apps.bdimg.com/libs/bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        function rehab_request(url, data, cb) {
+            $.ajax({'type':'get','dataType':'json','url':url,'data':data,
+                'success':function(ret){
+                    if (cb) cb(ret);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+<p>
+    <button id="click_keyword">重建关键字索引</button><div id="keyword_tips">0%</div>
+</p>
+
+<p>
+    <button>lsdjflsjdfk</button>
+</p>
+
+</body>
+</html>

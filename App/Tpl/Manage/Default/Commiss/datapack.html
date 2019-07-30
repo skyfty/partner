@@ -1,0 +1,170 @@
+<script>
+    function owner_role_id_role_select_dialog(rfn) {
+        var param = {
+            "permission":[
+                "commiss/salesedit"
+            ]
+        };
+        user_select_dialog(function(name, item){
+            $('#'+rfn+'_name').val(name);
+            $('#' + rfn).val(item).change();
+        }, param);
+    }
+</script>
+
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info(b) {
+        $('#clause_name').val(b.name);
+        $('#clause_additive').val(b.staff_id);
+        refresh_account_info();
+    }
+
+</script>
+
+<script>
+    $(function(){
+        $("#telephone").ajaxValidator({
+            dataType : "json",
+            type : "GET",
+            async : false,
+            errortips:"",
+            <if condition="ACTION_NAME eq 'edit'">
+            isValid : true,
+            data : {
+                id:{$model_id}
+            },
+            </if>
+            url : "/index.php?m=commiss&a=validate",
+            success : function(data){
+                if( data.status == 1 ) {
+                    if (data.data)
+                    {
+                        $("#telephone").attr("errortips",  data.data);
+                    } else {
+                        $("#telephone").attr("errortips",  "该手机号码不可用，请更换手机号码");
+                    }
+                    return false;
+                }
+                if( data.status == 0 )
+                    return true;
+
+                $("#form1").submit();
+                return false;
+            },
+            beforeSend:function(e,xhr,o){
+                xhr.url += "&order_classify=" + $("#order_classify").val();
+            },
+            onError : function(){
+                return $("#telephone").attr("errortips");
+            },
+            onWait : "正在对手机号码进行合法性校验，请稍候..."
+        });
+    });
+
+</script>
+
+<script id="channel_role_model_chosen_templ" type="text/x-jquery-tmpl">
+<div class="chosen-container chosen-container-single" style="width: 220px;" title="" id="channel_role_model_chosen_cover">
+    <a class="chosen-single">
+        <span>
+        ${channel_role_model_name}
+        </span>
+        <input type="hidden" name="channel_role_model_saver" value="${channel_role_model}">
+    </a>
+</div>
+</script>
+<script>
+    function channel_role_model_change() {
+        $("#channel_role_model_chosen").show();
+        $("#channel_role_model_chosen_cover").remove();
+
+        $('#channel_role_id_name').removeAttr("disabled");
+        $('#telephone').qtip('destroy', true);
+
+        $('#channel_role_model').trigger('chosen:updated');
+
+        var order_classify = $("#order_classify").val();
+        var telephone = $("#telephone").val();
+        if (!isMobile(telephone) || order_classify == "league" || order_classify == "other") {
+            return;
+        }
+
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("channel/get_customer_product_channel")}',
+            'data':{
+                "telephone":telephone,
+                "model":order_classify
+            },
+            'success':function(data){
+                if(data.status == 1){
+                    var channel_data = null;
+                    if (data.data['product']) {
+                        channel_data = data.data['product'];
+                        $("#order_classify option[value='product']").prop("selected", true);
+
+                    } else if (data.data['customer']) {
+                        channel_data = data.data['customer'];
+                        $("#order_classify option[value='customer']").prop("selected", true);
+                    }
+                    if (channel_data) {
+                        $("#channel_role_model option[value='"+channel_data.channel_role_model+"']").prop("selected", true);
+                        $('#channel_role_model').trigger('chosen:updated');
+
+                        $('#channel_role_id_name').val(channel_data.channel_role_id_name);
+                        $('#channel_role_id').val(channel_data.channel_role_id);
+
+                        $('#telephone').qtip(
+                        {
+                            hide: 'unfocus',
+                            show:true,
+                            style: 'qtip-bootstrap',
+                            content: '该电话在客户管理/雇员管理已存在，渠道自动填写'
+                        });
+                    }
+                    if (channel_data) {
+                        $('#channel_role_id_name').attr("disabled","disabled");
+                        $("#channel_role_model_chosen").hide();
+                        $("#channel_role_model").after($("#channel_role_model_chosen_templ").tmpl(channel_data));
+                    }
+                }
+            }
+        });
+    }
+    function update_channel_input_html() {
+        if ($("#order_classify").val() == "" || $("#order_classify").val() == "league" || $("#order_classify").val() == "other") {
+            $('#channel_role_id_name').attr("disabled","disabled");
+            $("#channel_role_model_chosen").hide();
+            var crm = $("#channel_role_model option:selected").html();
+            $("#channel_role_model").after($("#channel_role_model_chosen_templ").tmpl({"channel_role_model_name":crm}));
+        } else {
+            $("#channel_role_model_chosen").show();
+            $("#channel_role_model_chosen_cover").remove();
+            $('#channel_role_id_name').removeAttr("disabled");
+            $('#channel_role_model').trigger('chosen:updated');
+        }
+    }
+    $(function(){
+
+        $("#order_classify").change(function(){
+            $("#telephone").focus();
+            var order_classify = $(this).val();
+            if (order_classify == "league" || order_classify == "other") {
+                $("#communicate option[value='已完成']").removeAttr("disabled");
+            } else {
+            <if condition="$commiss['related_model_id'] eq ''">
+                $("#communicate option[value='已完成']").prop("disabled", "disabled");
+            </if>
+            }
+        });
+        update_channel_input_html();
+
+        $("#telephone").blur(function(){
+            channel_role_model_change();
+        });
+    });
+
+</script>

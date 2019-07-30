@@ -1,0 +1,325 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+<style>
+    div.view {font-size:14px;background:#F4F4F4;padding:13px 5px 3px 5px;color:#000000}
+    div.view a  {font-size:12px;color:#000000;padding-right:2px}
+    div.view b  {color:#000000}
+</style>
+
+<div class="container">
+<div class="page-header" style="border:none; ">
+    <include file="Product:navcat" />
+</div>
+<include file="Public:alert" />
+<div class="row-fluid view">
+    <div class="span12">
+        <ul id="sddm" style="margin:0px 0px 0px 0px">
+            <li>
+                <i class="icon-tags"></i>
+            </li>
+
+            <volist name="queue_category" id="cat">
+            <li>
+                &nbsp; <a <if condition="($cat['category_id'] eq $queue_category_id)"> href="{:U('')}&{:FP($parameter, 'queue_category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_category_id='.$cat['category_id'])}"</if>>
+                {$cat['name']}
+                </a>
+            </li>
+            </volist>
+            <li>
+                &nbsp; <a    <if condition="($_GET['queue_category_id'] eq 'all')"> href="{:U('')}&{:FP($parameter, 'queue_category_id=all')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'queue_category_id=all')}"</if>>
+                全部
+            </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="row-fluid" style="padding-top: 15px">
+    <div class="span12">
+        <div class="pull-left">
+            <form class="form-inline" id="searchForm" action="" method="get">
+            <ul class="nav pull-left">
+                <if condition="$assort eq 'md'">
+                    <li class="pull-left">
+                        {:branch_select_html("bybr", $branch,true, false)}&nbsp;&nbsp;
+                        <script>
+                            $(function() {
+                                $("#bybr").change(def_short_search_select);
+                            });
+                        </script>
+                    </li>
+                </if>
+
+                <li class="pull-left">
+                    <ul class="nav pull-left">
+                        <li class="pull-left">
+                            <select id="field" style="margin-right: 5px;" onchange="changeCondition()" name="field">
+                                <option class="text" value="all">{:L('ANY_FIELD')}</option>
+                                <volist name="field_array" id="v">
+                                    <if condition="$v['field'] neq 'category_id'">
+                                        <if condition="$v['form_type'] eq 'datetime'">
+                                            <option is_showtime="{$v['is_showtime']}" class="{$v['form_type']}" value="{$v[field]}" rel="product">{$v[name]}</option>
+                                        <else/>
+                                            <option class="{$v['form_type']}" value="{$v[field]}" rel="product">{$v[name]}</option>
+                                        </if>
+                                    </if>
+
+                                </volist>
+                            </select>&nbsp;
+                        </li>
+                        <script>
+                            function short_search_format( ul, item ) {
+                                return $("#product-short-search").tmpl(item).appendTo( ul )
+                            }
+                        </script>
+                        <include file="Public:def_index_search_form" />
+                    </ul>
+
+                </li>
+            </ul>
+            </form>
+        </div>
+        <div class="pull-right">
+            <div class="btn-group" data-toggle="buttons-radio">
+                <a type="button" class="btn btn-mini btn-primary  <eq name='assort' value='zb'>active</eq>" href="{:U('')}&{:FP($parameter, 'assort=zb')}">总部调度</a>
+                <a type="button" class="btn btn-mini btn-primary <eq name='assort' value='md'>active</eq>" href="{:U('')}&{:FP($parameter, 'assort=md')}">门店调度</a>
+            </div>
+            <div class="btn-group">
+                <a href="javascript:void(0);" id="excelExport"  class="btn btn-mini btn-primary">
+                    </i>导出到Excel
+                </a>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <div class="row-fluid">
+
+    <div class="span12">
+        <form id="product_list_form" action="" method="Post">
+            <input type="hidden" name="m" value="product"/>
+            <input type="hidden" name="a" value="index" id="product_list_action"/>
+            <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+                <thead>
+                <tr id="childNodes_num">
+                    <th style="width:13px;">
+                        <input class="check_all" id="check_all" type="checkbox" />
+                    </th>
+                    <include file="Product:model_list_header" />
+                    <th>
+                        级别
+                    </th>
+                    <th style="width:130px;text-align: center"  >{:L('OPERATION')}</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td id="td_colspan">
+                        {$page}
+                    </td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <volist name="list" id="vo">
+                    <if condition="$vo['healthy_expire'] eq '是'">
+                        <tr  class="warning">
+                    <else/>
+                        <tr>
+                    </if>
+                    <td>
+                        <input name="product_id[]" class="check_list" type="checkbox" value="{$vo.product_id}" <neq name="vo['is_owner']" value="true"> disabled="disabled" is_owner='0'<else/>is_owner='1'</neq> />
+                    </td>
+                    <volist name="field_array" id="v">
+                        <include file="Public:def_index_list" />
+                    </volist>
+                    <td>
+                        {$vo['catelevel']}
+                    </td>
+                    <td style="text-align: center; width: 130px;letter-spacing:3px">
+                        <if condition="$assort eq 'zb'">
+                            <if condition="vali_permission('product','adjuect_branch_queue/md')">
+                            <a rel="{$vo['product_id']}" href="javascript:void(0)" data-toggle="tooltip" class="adjuect_branch"  title="调度到门店队列">
+                                <i class="icon-share"></i>
+                            </a>
+                            </if>
+
+                            <if condition="vali_permission('product','pos_branch_queue/zb')">
+                            <a rel="{$vo['product_id']}" href="javascript:void(0)" data-toggle="tooltip" class="adjuect_pos" title="调整位置">
+                                <i class="icon-resize-vertical"></i>
+                            </a>
+                            </if>
+                            <if condition="vali_permission('product','pause_branch_queue/zb')">
+                            <a  href="{:U('product/pause_queue','product_id='.$vo['product_id'])}" data-toggle="tooltip" class="pause_queue"  title="<eq name="vo['queue_state']" value="1">暂停<else/>开始</eq>">
+                                <eq name="vo['queue_state']" value="1"><i class="icon-pause"></i><else/><i class="icon-play"></i></eq>
+                            </a>
+                            </if>
+                            <if condition="vali_permission('product','edit_queue_describe/zb')">
+                            <a rel="{$vo['product_id']}" cq="0" href="javascript:void(0);"  data-toggle="tooltip" class="edit_queue_describe"  title="修改备注"><i class="icon-edit"></i></a>
+                            </if>
+                            <if condition="vali_permission('product','exit_branch_queue/zb')">
+                            <if condition="$vo['workstate_id'] eq '排岗'">
+                            <a href="{:U('product/adjuect_branch_queue', 'workstate_id=空闲&queue_branch_id=-1&product_id='.$vo['product_id'])}" data-toggle="tooltip" class="exit_queue" title="退出总部排岗">
+                                <i class="icon-retweet"></i>
+                            </a>
+                            <else/>
+                                <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);" title="退出总部排岗">
+                                    <i class="icon-retweet"></i>
+                                </a>
+                            </if>
+                            </if>
+                        <elseif condition="$vo['workstate_id'] eq '面试'"/>
+                            <if condition="vali_permission('product','exit_branch_queue/md')">
+                            <a href="{:U('product/exit_branch_queue','product_id='.$vo['product_id'])}" data-toggle="tooltip" class="adjuect_branch_reset"  title="退出门店排岗">
+                                <i class="icon-retweet"></i>
+                            </a>
+                             </if>
+
+                            <if condition="vali_permission('product','pos_branch_queue/md')">
+                                <a rel="{$vo['product_id']}" href="javascript:void(0)" data-toggle="tooltip" class="adjuect_pos" title="调整位置">
+                                    <i class="icon-resize-vertical"></i>
+                                </a>
+                            </if>
+                            <if condition="vali_permission('product','pause_branch_queue/md')">
+                                <a  href="{:U('product/pause_queue','product_id='.$vo['product_id'])}" data-toggle="tooltip" class="pause_queue"  title="<eq name="vo['queue_state']" value="1">暂停<else/>开始</eq>">
+                                    <eq name="vo['queue_state']" value="1"><i class="icon-pause"></i><else/><i class="icon-play"></i></eq>
+                                </a>
+                            </if>
+                            <if condition="vali_permission('product','edit_queue_describe/md')">
+                            <a rel="{$vo['product_id']}" cq="1" href="javascript:void(0);"  data-toggle="tooltip" class="edit_queue_describe"  title="修改备注"><i class="icon-edit"></i></a>
+                            </if>
+                        <else/>
+                            <if condition="vali_permission('product','exit_branch_queue/md')">
+                                <a href="{:U('product/exit_branch_queue','product_id='.$vo['product_id'])}" data-toggle="tooltip" class="adjuect_branch_reset"  title="退出门店排岗">
+                                    <i class="icon-retweet"></i>
+                                </a>
+                            </if>
+                            <if condition="vali_permission('product','edit_queue_describe/md')">
+                            <a rel="{$vo['product_id']}" cq="1" href="javascript:void(0);"  data-toggle="tooltip" class="edit_queue_describe"  title="修改备注"><i class="icon-edit"></i></a>
+                            </if>
+                        </if>
+                    </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+
+    function changeContent(){
+        var a = $("#select1  option:selected").val();
+        window.location.href="{:U('product/index', 'by=')}"+a;
+    }
+    $(function(){
+
+        <if condition="$Think.get.field eq 'skill'">
+            $("#search option[value='{$Think.get.category_id}']").prop("selected", true);
+            on_category_id_change();
+        </if>
+
+        $("#check_all").click(function(){
+            $("input[class='check_list'][is_owner='1']").prop('checked', $(this).prop("checked"));
+        });
+
+        $(".pause_queue").click(function(){
+            var href = $(this).attr("href");
+            var title = $(this).attr("title");
+            art.dialog.confirm('确实要'+title+'调度吗', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+        $(".adjuect_pos").click(function(){
+            var product_id = $(this).attr("rel");
+            var dialog = art.dialog({
+                id: 'adjuect_pos',
+                title: "调整位置",
+                lock:true,
+                ok: function () {
+                    show_lock_tips("正在提交...");
+                    $('#adjuect_queue_pos_form').submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url:'{:U("product/adjuect_queue_pos","product_id=")}' + product_id,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        });
+
+        $(".adjuect_branch").click(function(){
+            var product_id = $(this).attr("rel");
+            var dialog = art.dialog({
+                id: 'adjuect_branch',
+                title: "调度到门店",
+                lock:true,
+                ok: function () {
+                    show_lock_tips("正在提交...");
+                    $('#adjuect_branch_queue_form').submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url:'{:U("product/adjuect_branch_queue","product_id=")}' + product_id,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        });
+
+        $(".edit_queue_describe").click(function(){
+            var product_id = $(this).attr("rel");
+            var dialog = art.dialog({
+                id: 'edit_queue_describe',
+                title: "修改备注",
+                lock:true,
+                ok: function () {
+                    show_lock_tips("正在提交...");
+                    $('#edit_queue_describe_form').submit();
+                },
+                cancel:true
+            });
+            var cq = $(this).attr("cq");
+
+            $.ajax({
+                url:'{:U("product/edit_queue_describe","product_id=")}' + product_id + "&cq=" + cq,
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+        });
+
+        $(".adjuect_branch_reset").click(function(){
+            var href = $(this).attr("href");
+            art.dialog.confirm('确实要退出门店排岗吗', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+        $(".exit_queue").click(function(){
+            var href = $(this).attr("href");
+            var title = $(this).attr("title");
+            art.dialog.confirm('确实要'+title+'吗？', function(){
+                show_lock_tips("正在提交...");
+                window.location.replace(href);
+            });
+            return false;
+        });
+
+    });
+
+</script>
+<include file="Public:export_dialog" />
+
+<include file="Public:footer" />

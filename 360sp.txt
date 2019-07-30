@@ -1,0 +1,1 @@
+http://www.ourbaby.cc/(\w+)/	http://m.ourbaby.cc/\1/

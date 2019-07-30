@@ -1,0 +1,95 @@
+<include file="Public:header" />
+<div class="container">
+	<div class="page-header">
+		<h4>{:L('SYSTEM_SETTING')}</h4>
+	</div>
+	<include file="Public:alert" />	
+	<div class="tabbable">
+        <include file="Setting:settingnav" />
+
+		<div class="row">
+			<form class="form-horizontal" enctype="multipart/form-data" action="{:U('setting/defaultInfo')}" method="post">
+				<table class="span12 table">
+					<thead>
+						<tr>
+							<th colspan="2">{:L('THE_DEFAULT_INFORMATION')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="tdleft">{:L('SYSTEM_NAME')}</td>  
+							<td>
+								<input name="name" id="name" type="text" value="{$defaultinfo.name}">
+							</td>
+						</tr>
+						<tr>
+							<td class="tdleft">{:L('SYSTEM_DESCRIBE')}</td>  
+							<td>
+								<input name="description" id="description" type="text" value="{$defaultinfo.description}">
+							</td>
+						</tr>
+						<tr>
+							<th colspan="2">{:L('SECURITY_AND_DEBUGGING')}</th>
+						</tr>
+						<tr>
+							<td class="tdleft">{:L('ALLOW_THE_UPLOAD_FILE_TYPE')}</td>  
+							<td>
+								<input name="allow_file_type" id="name" type="text" value="{$defaultinfo.allow_file_type}">
+								<span style="color:red;">{:L('USE_COMMAS_BETWEEN_TYPES')} </span>
+							</td>
+						</tr>
+						<tr>
+							<td class="tdleft">{:L('CLEAR_THE_CACHE')}</td>  
+							<td>
+								<input type="button" class="btn" id="clear" value="{:L('EMPTY')}"/>
+							</td>
+						</tr>
+
+                        <tr>
+							<th colspan="2">{:L('OTHER_SETTING')}</th>
+						</tr>
+                        <tr>
+                            <td class="tdleft">提醒时间段</td>
+                            <td>
+                                <input type="text" class="Wdate" name="remind_bt" id="remind_bt" value="{$defaultinfo.remind_bt|toDate=###,'H:i'}" onFocus="WdatePicker({dateFmt:'HH:mm'})"/>
+                                <input type="text" class="Wdate" name="remind_et" id="remind_et" value="{$defaultinfo.remind_et|toDate=###,'H:i'}" onFocus="WdatePicker({dateFmt:'HH:mm'})"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft">客服电话</td>
+                            <td>
+                                <input name="commiss_telephone" id="commiss_telephone" type="text" value="{$defaultinfo.commiss_telephone}">
+                            </td>
+                        </tr>
+						<tr>
+							<td class="tdleft">客服联络时间间隔</td>
+							<td>
+								<input name="commiss_remind_limit" id="commiss_remind_limit" type="text" value="{$defaultinfo.commiss_remind_limit}">天
+							</td>
+						</tr>
+                        <!--<tr>-->
+                            <!--<td class="tdleft">数据备份</td>-->
+                            <!--<td>-->
+                                <!--<a id="backup" target="_blank" class="btn btn-default" href="{:U('setting/backup')}">开始备份</a>-->
+                            <!--</td>-->
+                        <!--</tr>-->
+						<tr>
+							<td>&nbsp;</td>  
+							<td>
+								<input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div> <!-- End #main-content -->
+</div>
+<script type="text/javascript">
+$(function(){
+    $('#backup').click(function(){
+        return confirm("确实要执行备份吗?\n备份会执行长时间操作， 在这其间请停止操作系统。\r备份完毕后可将备份文件下载到本地保存， 防止丢失。如果长时间没有状态更新， 可尝试稍后刷新页面");
+    });
+});
+</script>
+<include file="Public:footer" />	

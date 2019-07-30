@@ -1,0 +1,218 @@
+<volist name="field_list" id="v" key="k">
+    <li class="<if condition="$v['form_type'] eq 'address'">span8<else/>span5</if> pull-left" style="height:26px;margin-top:20px;">
+    <if condition="$k%2 eq 0">&nbsp;&nbsp;</if>
+    {$v[name]}：
+    <if condition="($v.form_type eq 'number') or ($v.form_type eq 'floatnumber')">
+        <select style="width:auto" name="{$v[field]}[condition]">
+            <option value="gt" <if condition="$_GET[$v[field]][condition] eq 'gt'">selected="selected"</if>>大于</option>
+            <option value="lt" <if condition="$_GET[$v[field]][condition] eq 'lt'">selected="selected"</if>>小于</option>
+            <option value="eq" <if condition="$_GET[$v[field]][condition] eq 'eq'">selected="selected"</if>>等于</option>
+            <option value="neq" <if condition="$_GET[$v[field]][condition] eq 'neq'">selected="selected"</if>>不等于</option>
+        </select>
+        <input name="{$v['field']}[value]" type="text" class="{$v['form_type']}" value="{$_GET[$v['field']][value]}">
+    <elseif condition="$v.form_type eq 'address'" />
+        <select style="width:auto" name="{$v[field]}[condition]">
+            <option value="start_with" <if condition="$_GET[$v[field]][condition] eq 'start_with'">selected="selected"</if>>{:L('IN')}</option>
+            <option value="not_start_with" <if condition="$_GET[$v[field]][condition] eq 'not_start_with'">selected="selected"</if>>{:L('NOTIN')}</option>
+        </select>
+        <select name="{$v['field']}[value][state]" id="{$v['field']}_state" onchange="area_change(this.value, 1,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area');" class="ddlbox"   style='width:90px'>
+            <option value="0">选择省份
+            </option>
+        </select>
+        <select name="{$v['field']}[value][city]" onchange="area_change(this.value, 2,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area');" id="{$v['field']}_city" class="ddlbox"   style='width:90px'>
+            <option value="0">选择城市</option>
+        </select>
+        <select name="{$v['field']}[value][area]" onchange="area_change(this.value, 3,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area');" id="{$v['field']}_area" class="ddlbox"   style='width:90px'>
+            <option value="0">选择地区</option>
+        </select>
+        <input type="text" id="{$v['field']}_street" name="{$v['field']}[value][street]" placeholder="详细地址" class="input-large" style='width:300px'>
+        <script>area_change(0, 0,'{$v[field]}_state','{$v[field]}_city','{$v[field]}_area','','','');</script>
+    <elseif condition="$v.form_type eq 'datetime'" />
+        <input type="hidden" name="{$v[field]}[condition]"  value="tbetween"/>
+        <input  type="text" style="width:75px" placeholder="开始时间"  name="{$v['field']}[value][0]" value="{$_GET[$v['field']][value][0]}" onFocus="WdatePicker()"/> -
+        <input   type="text" style="width:75px" placeholder="结束时间" name="{$v['field']}[value][1]" value="{$_GET[$v['field']][value][1]}" onFocus="WdatePicker()"/>
+    <elseif condition="$v.field eq 'is_verify'" />
+        <select style="width:auto" name="is_verify"  id="is_verify">
+            <option value="">{:L('ALL')}</option>
+            <option value="-1">审核未通过</option>
+            <option value="0">待审核</option>
+            <option value="1">审核通过</option>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+            $("#is_verify option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="($v.field eq 'order_state') and ($v.model eq 'trainorder')" />
+        <select style="width:auto" name="order_state"  id="order_state">
+            <option value="">{:L('ALL')}</option>
+            <option value="已撤销">已撤销</option>
+            <option value="在培训">在培训</option>
+            <option value="已完成">已完成</option>
+            <option value="待培训">待培训</option>
+            <option value="待付款">待付款</option>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+            $("#order_state option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="($v.field eq 'state') and ($v.model eq 'trade')" />
+        <select style="width:auto" name="state"  id="state">
+            <option value="">{:L('ALL')}</option>
+            <option value="已撤销">已撤销</option>
+            <option value="待开始">待开始</option>
+            <option value="进行中">进行中</option>
+            <option value="已结束">已结束</option>
+            <option value="待付款">待付款</option>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+                    $("#state option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="($v.field eq 'origin') and ($v.model eq 'market')" />
+        {:market_origin_select('origin', $_GET['origin'])}
+    <elseif condition="($v.field eq 'branch_id')" />
+        {:branch_select("branch_id", $_GET['branch_id'], "", true)}
+    <elseif condition="$v.field eq 'webshow'" />
+        <select style="width:auto" name="webshow"  id="webshow">
+            <option value="">请选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+            $("#webshow option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="$v.field eq 'product_insurance'" />
+        <select style="width:auto" id="product_insurance" name="product_insurance">
+            <option value="">请选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+            $("#product_insurance option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="($v.form_type == 'p_box')" />
+        {:proudct_category_select("category_id", $_GET[category_id], "请选择")}
+    <elseif condition="($v.form_type == 's_box')" />
+        <select  name="category_id" id="category_id_value" style="width: 100px">
+            <option value="">请选择</option>
+            <foreach name="v['boxdata']" item="vo">
+                <option value="{$key}">{$vo}</option>
+            </foreach>
+        </select>
+        {$Think.get.catelevel|plevelcheckbox}
+        <script>
+            <if condition="!empty($_GET[category_id])">
+                    $("#category_id_value option[value='{$_GET[category_id]}']").prop("selected", true);
+            </if>
+        </script>
+    <elseif condition="($v.form_type == 'box') or ($v.form_type == 'w_box')" />
+        <select style="width:auto" name="{$v[field]}[condition]">
+            <option value="is" <if condition="$_GET[$v[field]][condition] eq 'is'">selected="selected"</if>>{:L('YES')}</option>
+            <option value="isnot" <if condition="$_GET[$v[field]][condition] eq 'isnot'">selected="selected"</if>>不是 </option>
+        </select>
+        <select  name="{$v['field']}[value]" id="{$v['field']}_value">
+            <option value="">请选择</option>
+            <foreach name="v['boxdata']" item="vo">
+                <option value="{$key}">{$vo}</option>
+            </foreach>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+            $("#{$v['field']}_value option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="($v.form_type == 'user')" />
+        <select style="width:auto" name="{$v[field]}[condition]">
+            <option value="is" <if condition="$_GET[$v[field]][condition] eq 'is'">selected="selected"</if>>{:L('YES')}</option>
+            <option value="isnot" <if condition="$_GET[$v[field]][condition] eq 'isnot'">selected="selected"</if>>不是 </option>
+            <option value="is_empty" <if condition="$_GET[$v[field]][condition] eq 'is_empty'">selected="selected"</if>>{:L('MANDATORY')}</option>
+            <option value="is_not_empty" <if condition="$_GET[$v[field]][condition] eq 'is_not_empty'">selected="selected"</if>>{:L('ISNOTEMPTY')}</option>
+        </select>
+        <select  name="{$v['field']}[value]" id="{$v['field']}_value">
+            <option value="">请选择</option>
+            <foreach name="v['boxdata']" item="vo">
+                <option value="{$key}">{$vo['user_name']}</option>
+            </foreach>
+        </select>
+        <script>
+            <if condition="!empty($_GET[$v[field]])">
+            $("#{$v['field']}_value option[value='{$_GET[$v[field]][value]}']").attr('selected','selected');
+            </if>
+        </script>
+    <elseif condition="$v.form_type eq 'b_box'" />
+        {$v['field']|fmtgf|business_status_field_html=###,$_GET[$v['field']][value]}
+    <else />
+        <select style="width:auto" name="{$v[field]}[condition]">
+            <option value="contains" <if condition="$_GET[$v[field]][condition] eq 'contains'">selected="selected"</if>>{:L('INCLUDE')}</option>
+            <option value="not_contain" <if condition="$_GET[$v[field]][condition] eq 'not_contain'">selected="selected"</if>>{:L('EXCLUSIVE')}</option>
+            <option value="is" <if condition="$_GET[$v[field]][condition] eq 'is'">selected="selected"</if>>{:L('YES')}</option>
+            <option value="isnot" <if condition="$_GET[$v[field]][condition] eq 'isnot'">selected="selected"</if>>{:L('NO')}</option>
+            <option value="start_with" <if condition="$_GET[$v[field]][condition] eq 'start_with'">selected="selected"</if>>{:L('BEGINNING_CHARACTER')}</option>
+            <option value="end_with" <if condition="$_GET[$v[field]][condition] eq 'end_with'">selected="selected"</if>>{:L('TERMINATION_CHARACTER')}</option>
+            <option value="is_empty" <if condition="$_GET[$v[field]][condition] eq 'is_empty'">selected="selected"</if>>{:L('MANDATORY')}</option>
+            <option value="is_not_empty" <if condition="$_GET[$v[field]][condition] eq 'is_not_empty'">selected="selected"</if>>{:L('ISNOTEMPTY')}</option>
+        </select>
+        <input name="{$v['field']}[value]" type="text" class="{$v['form_type']}" value="{$_GET[$v['field']][value]}" rel="product">
+    </if>
+    </li>
+    <if condition="$k%2 eq 0"></if>
+</volist>
+
+
+<script>
+
+    function onclick_category_id_value_comp(sel) {
+        var dialog = art.dialog({
+            id: 'onclick_category_id_value_comp',
+            title: "选择组",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            ok: function () {
+                var select_module = [];
+                var selgroup = $('input:radio[name={$module_name}_group_id]:checked').val();
+                $("input[class='check_list']").each(function() {
+                    if (true == $(this).prop("checked")) {
+                        select_module.push($(this).val());
+                    }
+                });
+
+                if (select_module.length == 0) {
+                    alert("请选择项目");
+                } else {
+                    $.ajax({
+                        type: 'get',
+                        url: "{:U($module_name.'/addgroupstance')}",
+                        data:{
+                            module_group_id:selgroup,
+                            module_id:select_module
+                        },
+                        success: function (data) {
+                            if (data) {
+                                art.dialog.tips('设置成功！已经保存在服务器');
+
+                            }
+                        },
+                        dataType:'json'
+                    });
+                }
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("Product/combination")}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    }
+
+</script>

@@ -1,0 +1,454 @@
+<include file="Public:header" />
+<div class="container">
+<!-- Docs nav ================================================== -->
+<div class="page-header">
+    <h4><a name="tab">{:L('ACCOUNT_DETAILS')}</a>&nbsp;&nbsp;{$account['state_tip']}</h4>
+</div>
+<div class="row">
+<div class="span12">
+<include file="Public:alert" />
+<div class="tab-content">
+<table class="table">
+    <thead>
+    <tr>
+        <td colspan="4">
+            <p style="font-size: 14px;">
+                <if condition="is_ious($account['clause_type_id']) or ($account['is_active'])">
+                    <a href="javascript:void(0);" style="color: #D2CDCD" class="disabled"  data-toggle="tooltip">{:L('DELETE')}</a> |
+                <else/>
+                    <a href="{:U('account/delete','id='.$account['account_id'])}&dire={$dire}&t={$t}&refer_url={$refer_url|urlencode}" class="del_confirm">{:L('DELETE')}</a> |
+                </if>
+                <a href="{:U('account/edit','id='.$account['account_id'])}&dire={$dire}&t={$t}&refer_url={$refer_url|urlencode}" role="button"  data-toggle="modal">编辑</a> |
+                <a href="#dialog-change-account-state" role="button"  data-toggle="modal">修改状态</a> |
+                <if condition="($Think.get.t eq 'flow') and (in_array($account['clause_type_id'], array(123, 18))) and ($account['state']==0)">
+                    <a href="#dialog-pay" role="button"  data-toggle="modal">支付</a> |
+                </if>
+                <if condition="($Think.get.t eq 'market')">
+                    <a href="javascript:void(0);" role="button" ref="{$account['account_id']}" onclick="change_payment_verify({$account['account_id']});">审核
+                    [
+                    <switch name="account.payment_verify">
+                        <case value="0">待确认</case>
+                        <case value="1">确认</case>
+                        <default />无法确认
+                    </switch>
+                    ] </a>|
+                </if>
+                <a href="{$refer_url}">{:L('RETURN')}</a>
+            </p>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="tdleft"><b>{:L('CREATOR_ROLE')}</b>:</td>
+        <td>
+            <a class="role_info" rel="{$account['creator_role_id']}" href="javascript:void(0)">
+                {$account['creator_name']}
+            </a>
+        </td>
+        <td class="tdleft"><b>{:L('CREATE_TIME')}</b>:</td>
+        <td>{$account['create_time']|date="Y-m-d H:m:s",###}</td>
+    </tr>
+    <tr>
+        <td class="tdleft"><b>账户类型</b>:</td>
+        <td>
+            <switch name="account.module_id">
+                <case value="product">雇员</case>
+                <case value="customer">客户</case>
+                <case value="flow">流水</case>
+                <case value="market">客户服务</case>
+                <case value="cultivate">培训</case>
+                <default />公司
+            </switch>
+        </td>
+        <td class="tdleft"><b>账户</b>:</td>
+        <td>{$account.show_module}</td>
+    </tr>
+    <tr>
+        <th colspan="4">基本信息</th></tr>
+    <tr>
+        <td class="tdleft" width="15%">流水号:</td>
+        <td colspan="3">{$account['flowid']}</td>
+    </tr>
+    <tr>
+        <td class="tdleft" width="15%">项目:</td>
+        <td width="35%">
+            <span>{$account['clause_name']}</span>
+        </td>
+        <td class="tdleft" width="15%">金额:</td>
+        <td width="35%">
+            <span style="color:#333333">{$account['money']|number_format=###,2}</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="tdleft" width="15%">支付方式:</td>
+        <td width="35%">
+            <span style="color:#333333">{$account['payway']}</span>
+        </td>
+        <td class="tdleft" width="15%">收据号:</td>
+        <td width="35%">
+            <span style="color:#333333">{$account['receipt_number']}</span>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tdleft" width="15%">描述:</td>
+        <td colspan="3">{$account['description']}</td>
+    </tr>
+    </tbody>
+</table>
+<if condition="$account.infow neq ''">
+    <table class="table">
+        <tbody>
+        <tr>
+            <th colspan="4">相关账户信息</th>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">账户类型:</td>
+            <td width="35%">
+                <switch name="account.infow.module_id">
+                    <case value="product">雇员</case>
+                    <case value="customer">客户</case>
+                    <case value="flow">流水</case>
+                    <default />公司
+                </switch>
+            </td>
+            <td class="tdleft" width="15%">账目类型:</td>
+            <td width="35%">
+                {$account.infow.name}
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">账户名:</td>
+            <td width="35%">
+                {$account.infow.show_infow}
+            </td>
+            <td class="tdleft" width="15%">服务类别:</td>
+            <td width="35%">
+                {$account.category_name}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</if>
+
+
+<if condition="$account.trade neq ''">
+    <table class="table">
+        <tbody>
+        <tr>
+            <th colspan="4">产品订单信息</th>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">订单号:</td>
+            <td width="35%">
+                <a href="{:U('trade/view','id='.$account['trade']['trade_id'])}"  target="_blank">
+                    {$account.trade.orderid}
+                </a>
+            </td>
+            <td class="tdleft" width="15%">金额:</td>
+            <td width="35%">
+                {$account.trade.price}
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">产品名称:</td>
+            <td>
+                <a href="{:U('serve/view','id='.$account['trade']['serve_id'])}"  target="_blank">
+                    {$account.trade.serve_name}
+                </a>
+            </td>
+            <td class="tdleft" width="15%">相关方:</td>
+            <td>
+                 {$account.trade.corre_info}
+            </td>
+
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">责任人:</td>
+            <td width="35%">
+                <if condition="$account.trade.owner_role">
+                    &nbsp;<a class="role_info" rel="{$account['trade']['owner_role_id']}" href="javascript:void(0)">{$account.trade.owner_role.user_name}</a>
+                </if>
+            </td>
+            <td class="tdleft" width="15%">服务类别:</td>
+            <td width="35%">
+                <if condition="$account.trade.category_name">
+                    {$account.trade.category_name}
+                </if>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</if>
+
+
+<if condition="$account.market neq ''">
+    <table class="table">
+        <tbody>
+        <tr>
+            <th colspan="4">客户服务信息</th>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">订单号:</td>
+            <td width="35%">
+                <a href="{:U('market/view','id='.$account['market']['market_id'])}"  target="_blank">
+                    {$account.market.market_idcode}
+                </a>
+            </td>
+            <td class="tdleft" width="15%">客户:</td>
+            <td width="35%">
+                {$account.market.corre_info}
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">服务类别:</td>
+            <td>
+                {$account.market.category_name}
+            </td>
+            <td class="tdleft" width="15%">服务级别:</td>
+            <td>
+                {$account.market.level}
+
+            </td>
+
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">服务价格:</td>
+            <td width="35%">
+                {$account.market.money}
+
+            </td>
+            <td class="tdleft" width="15%">预约开始时间:</td>
+            <td width="35%">
+                {$account.market.demand_start_time|toDate=###}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</if>
+
+
+<if condition="$account.cultivate neq ''">
+    <table class="table">
+        <tbody>
+        <tr>
+            <th colspan="4">培训信息</th>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">订单号:</td>
+            <td width="35%">
+                <a href="{:U('cultivate/view','id='.$account['cultivate']['cultivate_id'])}"  target="_blank">
+                    {$account.cultivate.cultivate_idcode}
+                </a>
+            </td>
+            <td class="tdleft" width="15%">客户:</td>
+            <td width="35%">
+                {$account.cultivate.corre_info}
+            </td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">服务类别:</td>
+            <td>
+                {$account.cultivate.category_name}
+            </td>
+            <td class="tdleft" width="15%">服务价格:</td>
+            <td width="35%">
+                {$account.cultivate.money}
+
+            </td>
+        </tr>
+        <tr>
+
+            <td class="tdleft" width="15%">开始时间:</td>
+            <td colspan="3">
+                {$account.cultivate.start_time|toDate=###}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</if>
+
+
+    <if condition="$Think.get.t eq 'flow'">
+    <table class="table table-hover">
+        <tr>
+            <th>日志</th>
+        </tr>
+    </table>
+    <div id="log-tabs">
+        <table class="table">
+            <if condition="$account['log'] eq null">
+                <tr>
+                    <td>没有记录</td>
+                </tr>
+                <else />
+                <volist name="account['log']" id="vo">
+                    <tr>
+                        <td>
+                            <notempty name="vo.owner.user_name">
+                                <a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">
+                                    {$vo.owner.user_name}
+                                </a>
+                            </notempty> &nbsp;
+                            {$vo.create_date|date="Y-m-d  g:i:s a",###} &nbsp;
+                            <notempty name="vo.create_date"> &nbsp; </notempty>
+                            {$vo.subject}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <pre>{$vo.content}</pre>
+                        </td>
+                    </tr>
+                </volist>
+            </if>
+        </table>
+    </div>
+</if>
+</div>
+</div>
+</div>
+</div>
+
+<form class="form-horizontal" action="{:U('account/change_state')}" method="post">
+    <input type='hidden' name="id" value="{$account['account_id']}"/>
+    <div id="dialog-change-account-state" class="modal fade" role="dialog"  aria-hidden="true"  style="width:300px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    改变账目状态
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <label class="radio">
+                    <input type="radio" name="state" value="1" <if condition='$account.state eq 1'>checked</if>/>完成
+                </label>
+                <label class="radio">
+                    <input type="radio" name="state" value="0" <if condition='$account.state eq 0'>checked</if>/>未完成
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#dialog-change-account-state").on("hidden", function() {
+            $(this).removeData("modal");
+        });
+    </script>
+</form>
+
+<form class="form-horizontal" action="{:U('account/pay')}" method="post" id="payform">
+    <input type='hidden' name="id" value="{$account['account_id']}"/>
+    <div id="dialog-pay" class="modal fade" role="dialog"  aria-hidden="true"  style="width:350px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                </button>
+                <h4 class="modal-title">
+                    支付方式
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                    <p>
+                    <select name="paymodel" id="paymodel" onchange="paymodel_change(this.value)" style="width: 100%">
+                        <if condition="$infow_model['wxbind'] eq '已绑定'">
+                        <option value="wxpay">微信</option>
+                        </if>
+                        <if condition="$infow_model['blank_number'] neq ''">
+                        <option value="blank">网上银行</option>
+                        </if>
+                        <option value="aplay">支付宝</option>
+                        <option value="cash">现金</option>
+                        <option value="other">其他</option>
+                    </select>
+                    </p>
+                    <div id="state_radio" class="well" style="display: none">
+                    </div>
+                    <div id="wxpass"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    支付
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#dialog-pay").on("hidden", function() {
+            $(this).removeData("modal");
+        });
+        $("#dialog-pay").on("show", function() {
+            paymodel_change($("#paymodel option:selected").val())
+        });
+        function paymodel_change(pm) {
+            $.ajax({
+                'type':'get',
+                'dataType':'json',
+                'url':'{:U("Account/getpaymodel_info")}',
+                'data':{
+                    "pm":pm,
+                    "id":"{$account['account_id']}"
+                },
+                'success':function(data){
+                    var html = "";
+                    if (data) {
+                        switch(pm) {
+                            case "wxpay": {
+                                html +="<span>微信号：" + data.wechat + "</span><br/>";
+                                html +="<span>绑定手机号：" + data.wxmobile + "</span><br/>";
+                                html +="<span>绑定手机号：" + data.wxmobile + "</span><br/>";
+                                break;
+                            }
+                            case "blank": {
+                                html +="<span>银行账号：" + data.blank_number + "</span><br/>";
+                                html +="<span>开户银行：" + data.blank_name + "</span><br/>";
+                                html +="<span>开户人：" + data.blank_account + "</span><br/>";
+                                break;
+                            }
+                        }
+                    }
+                    if (html != "") {
+                        $("#state_radio").html(html);
+                        $("#state_radio").show();
+                    } else {
+                        $("#state_radio").hide();
+                    }
+
+                    if (pm == "wxpay") {
+                        $("#wxpass").html("<span>支付密码：</span><input type='password' id='paypass' name='paypass'>");
+                    } else {
+                        $("#wxpass").html("");
+                    }
+                }
+            });
+        }
+
+        $("#payform").submit(function(){
+            if ($("#paymodel option:selected").val() == "wxpay") {
+                if ($("#paypass").val() == "") {
+                    alert("请输入支付密码!!");
+                    return false;
+                }
+            }
+            return confirm("确实要提交支付吗?");
+        });
+    </script>
+</form>
+
+<include file="Account:public_view" />
+<include file="Public:footer" />

@@ -1,0 +1,28 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>添加分组</h4>
+    </div>
+
+    <include file="Public:alert" />
+    <div class="span12">
+        <form class="form-horizontal" action="{:U('trade/groupadd')}" method="post" name="form1" id="form1">
+            <input type="hidden" name="refer_url" value="{$refer_url}"/>
+            分组名：
+            <input type="text" name="group_name" id="name" class="span7" value="{$trade_group['name']}"/>&nbsp;&nbsp;
+            <include file="Public:groupedittable" />
+        </form>
+    </div>
+</div>
+<script>
+
+    $("#return_btn").click(function(){
+        window.location.assign("{:U('trade/index', 'act=group')}");
+
+    });
+    $(".group_radio").change(function(b){
+        window.location.assign("{:U('trade/groupadd', 'group_type')}" + $(this).val());
+    });
+</script>
+<include file="Public:footer" />

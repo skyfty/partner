@@ -1,0 +1,231 @@
+<include file="Public:header" />
+<div class="container" style="width: 1300px">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4>{:L('PRODUCTION_EDITOR')}</h4>
+    </div>
+    <div class="row">
+        <div class="span10" style="width: 1300px">
+            <include file="Public:alert" />
+        </div>
+        <div class="span10" style="width: 1300px">
+            <form id="form1" action="{:U('product/skilledit', 'id='.$product['product_id'].'&assort='.$assort)}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="product_id" value="{$product.product_id}"/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <td style="text-align:center;" colspan="4"><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align:center;" colspan="4"><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                    <volist name="fields_group" id="gvo">
+                        <tr><th colspan="4">{$gvo.name}</th></tr>
+                        <php>$j=0;</php>
+                        <volist name="gvo['fields']" id="vo">
+                            <if condition="$vo['operating'] != '4'">
+                                <php>$j++;</php>
+                                <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address' or $vo['one_row'] == '1'">
+                                    <if condition="$i%2 == 0">
+                                        <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </if>
+                                    <tr>
+                                        <td class="tdleft" width="15%">{$vo.name}:</td>
+                                        <td colspan="3">{$vo.html}</td>
+                                    </tr>
+                                    <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                                        <php>$i++;</php>
+                                    </if>
+                                    <else/>
+                                    <if condition="$i%2 != 0">
+                                        <tr>
+                                    </if>
+                                    <td class="tdleft" width="15%">{$vo.name}:</td>
+                                    <td width="35%">{$vo.html}</td>
+                                    <if condition="$i%2 == 0">
+                                        </tr>
+                                    </if>
+                                    <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                                        <td colspan="2">&nbsp;</td>
+                                        </tr>
+                                    </if>
+                                </if>
+                            </if>
+                        </volist>
+                    </volist>
+
+                    <volist name="skill_list" id="skill_field_list">
+                        <tr><th  colspan="4">{:L('PRODUCT_CATEGORY')}</th></tr>
+                        <tr>
+                            <td class="tdleft">{:L('BASIC_INFORMATION')}</td>
+                            <td colspan="3">
+                                <table  class="table table-striped">
+                                    <php>$j=0;</php>
+                                    <volist name="skill_field_list['main']" id="vo">
+                                        <php>$j++;</php>
+                                        <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address' or $vo['one_row'] == '1'">
+                                            <if condition="$i%2 == 0">
+                                                <td colspan="2">&nbsp;</td>
+                                                </tr>
+                                            </if>
+                                            <tr>
+                                                <td class="tdleft" width="15%">{$vo.name}:</td>
+                                                <td colspan="3">{$vo.html}</td>
+                                            </tr>
+                                            <if condition="$i%2 != 0 && count($field_list['main']) != $j">
+                                                <php>$i++;</php>
+                                            </if>
+                                            <else/>
+                                            <if condition="$i%2 != 0">
+                                                <tr>
+                                            </if>
+                                            <td class="tdleft" width="15%">{$vo.name}:</td>
+                                            <td width="35%">{$vo.html}</td>
+                                            <if condition="$i%2 == 0">
+                                                </tr>
+                                            </if>
+                                            <if condition="$i%2 != 0 && count($field_list['main']) == $j">
+                                                <td colspan="2">&nbsp;</td>
+                                                </tr>
+                                            </if>
+                                        </if>
+                                    </volist>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft">{:L('ADDITIONAL_INFORMATION')}</td>
+                            <td colspan="3">
+                                <table  class="table table-striped">
+                                    <php>$j=0;</php>
+                                    <volist name="skill_field_list['data']" id="vo">
+                                        <php>$j++;</php>
+                                        <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address' or $vo['one_row'] == '1'">
+                                            <if condition="$i%2 == 0">
+                                                <td colspan="2">&nbsp;</td>
+                                                </tr>
+                                            </if>
+                                            <tr>
+                                                <td class="tdleft" width="15%">{$vo.name}:</td>
+                                                <td colspan="3">{$vo.html}</td>
+                                            </tr>
+                                            <if condition="$i%2 != 0 && count($field_list['main']) != $j">
+                                                <php>$i++;</php>
+                                            </if>
+                                            <else/>
+                                            <if condition="$i%2 != 0">
+                                                <tr>
+                                            </if>
+                                            <td class="tdleft" width="15%">{$vo.name}:</td>
+                                            <td width="35%">{$vo.html}</td>
+                                            <if condition="$i%2 == 0">
+                                                </tr>
+                                            </if>
+                                            <if condition="$i%2 != 0 && count($field_list['main']) == $j">
+                                                <td colspan="2">&nbsp;</td>
+                                                </tr>
+                                            </if>
+                                        </if>
+                                    </volist>
+                                </table>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <input name="a" type="hidden" value="skilledit">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="hide" id="dialog-validate" title="{:L('PRODUCT_TEST_RESULTS')}">
+    {:L('SELECT_ALL_OF_CUSTOMERS')}
+    <div id="search_content"></div>
+</div>
+
+<script type="text/javascript">
+
+$("#dialog-validate").dialog({
+    autoOpen: false,
+    modal: true,
+    width: 400,
+    maxHeight: 400,
+    buttons: {
+        "{:L('CONFIRM')}": function () {
+            $(this).dialog("close");
+        }
+    },
+    position: ["center", 100]
+});
+
+<if condition="in_array($product['station_state'], array('其他录用', '签约', '试用', '无底薪签约'))">
+$('#workstate_id').attr("disabled", "disabled");
+</if>
+
+$('#station_state').change(function(){
+    var ss = $(this).val();
+    if(ss == "其他录用" || ss == "签约" ||ss == "试用" ||ss == "无底薪签约"){
+        $('#workstate_id').removeAttr("disabled");
+    } else {
+        $('#workstate_id').attr("disabled", "disabled");
+    }
+});
+
+
+$(function(){
+    $('#owner_name').click(
+        function(){
+            $('#dialog-role-list').dialog('open');
+            $('#dialog-role-list').load("{:U('user/listDialog')}");
+        }
+    );
+
+});
+</script>
+
+<script src="__PUBLIC__/js/md5.min.js?t=20140830" type="text/javascript"></script>
+<script>
+    function on_picfilechange() {
+        var self = $(this);
+        var real = self.attr("real");
+        if (real != "certificate_pic")
+            return false;
+        var file = self.val();
+        var filename  = file.substring(file.lastIndexOf("\\")+1);
+        var filemd5 = md5(filename);
+        art.dialog.open('{:U("setting/certificate_fields")}', {
+            id: 'certificate_pic',
+            title: "选择证书类别",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 600,
+            height: 200,
+            ok: function () {
+                var certificate = $(this.iframe.contentWindow.document).find('input:radio[name="certificate"]:checked').val();
+                if ( $("#" + filename).length <= 0 ) {
+                    self.append("<input type='hidden' name='"+filename+"' id='"+filename+"' value='"+certificate+"'/>")
+                } else {
+                    $("#" + filename).val(certificate);
+                }
+                return true;
+            },
+            cancel:true
+        });
+    }
+    $(function(){
+        $("input[real='certificate_pic']").change(on_picfilechange);
+    });
+</script>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

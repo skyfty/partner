@@ -1,0 +1,116 @@
+<include file="Public:header" />
+
+<div class="container">
+
+    <div class="page-header">
+        <include file="Serve:navcat" />
+    </div>
+    <include file="Public:alert" />
+
+    <div class="row-fluid">
+        <div class="span2 knowledgecate">
+            <include file="Trade:leftnav" />
+        </div>
+        <div class="span10">
+            <form id="form1" action="{:U('')}" method="Post">
+                <table class="display group-data-tables" cellspacing="0" width="100%">
+                    <thead>
+                    <tr id="childNodes_num">
+                        <th width="5%">选项</th>
+                        </th>
+                        <th>分组名称</th>
+                        <th style="width:130px;">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td style="text-align: center">
+                                <input type="checkbox" class="list" name="module_group_id[]" value="{$vo.trade_group_id}"/>
+                            </td>
+                            <td>
+                                {$vo.name}
+                            </td>
+
+                            <td>
+                                <a href="{:U('trade/index', 'act=groupsearch&module_group_id='.$vo['trade_group_id'].'&group_type='.$vo['group_type'])}">
+                                    <i class="icon-th-list"></i>
+                                </a>&nbsp;
+
+                                <if condition="$vo['group_type'] eq 0">
+                                    <a href="{:U('trade/groupedit', 'module_group_id='.$vo['trade_group_id'])}">
+                                        <i class="icon-edit"></i>
+                                    </a>&nbsp;
+                                <else/>
+                                    <a href="{:U('trade/groupstance', 'module_group_id='.$vo['trade_group_id'])}">
+                                        <i class="icon-edit"></i>
+                                    </a>&nbsp;
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th >
+                            <input type="checkbox" id="check_all">
+                        </th>
+                        <th colspan="2" style="text-align: left;font-size:15px;padding:10px 18px 6px 10px">
+                            <a href="javascript:void(0);"  id="delete" >删除</a>
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    th, td { white-space: nowrap; }
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+</style>
+<script id="groupadd-tmpl" type="text/x-jquery-tmpl">
+<div style="float:left">
+   <a href="{:U('trade/groupadd')}" class="btn btn-primary">
+        <i class="icon-plus"></i>&nbsp;新建分组
+    </a>&nbsp;
+</div>
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.group-data-tables').dataTable( {
+            "aoColumnDefs": [
+                {
+                    "bSortable": false,
+                    "aTargets": [ 0,2 ]
+                }
+            ],
+            "order": [[ 1, "desc" ]],
+            'language': def_dataTable_lang_opt
+        } );
+        $("#DataTables_Table_0_length").html($("#groupadd-tmpl").tmpl());
+    });
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        $("#check_all").click(function(){
+            $("input[class='list']").prop('checked', $(this).prop("checked"));
+        });
+    });
+
+    $('#delete').click(function(){
+        if(confirm('确实要删除分组吗？')){
+            $("#form1").attr('action', '{:U("trade/groupdelete")}');
+            $("#form1").submit();
+        }
+    });
+</script>
+
+<include file="Public:footer" />	

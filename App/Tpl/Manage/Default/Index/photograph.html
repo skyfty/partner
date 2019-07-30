@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link type="text/css" href="http://apps.bdimg.com/libs/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="http://apps.bdimg.com/libs/bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src='http://apps.bdimg.com/libs/jqueryui/1.9.2/jquery-ui.min.js'></script>
+
+    <script src="__PUBLIC__/jquery-webcam/jquery.webcam.js" type="text/javascript"></script>
+    <link  href="__PUBLIC__/cropper/cropper.css" rel="stylesheet">
+    <script src="__PUBLIC__/cropper/cropper.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.artDialog.js?skin=default"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/iframeTools.js"></script>
+</head>
+
+<body style="margin: 0px;padding: 0px">
+
+<div id="webcam" style="float: left;width: 600px; height: 450px;">
+</div>
+<div id="cropper" style="width: 600px; height: 450px;">
+</div>
+<script>
+    var canvas_width = 600, canvas_height = 450;
+    var photocallback = art.dialog.data('photocallback');
+
+    var webcam_state = 0;
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute('width', canvas_width);
+    canvas.setAttribute('height', canvas_height);
+
+    var  ctx = null, image = [];
+    var pos = 0;
+
+    ctx = canvas.getContext("2d");
+    image = ctx.getImageData(0, 0, canvas_width, canvas_height);
+
+    function onWebcamSave(data) {
+        var col = data.split(";");
+        var img = image;
+        for(var i = 0; i < canvas_width; i++) {
+            var tmp = parseInt(col[i]);
+            img.data[pos + 0] = (tmp >> 16) & 0xff;
+            img.data[pos + 1] = (tmp >> 8) & 0xff;
+            img.data[pos + 2] = tmp & 0xff;
+            img.data[pos + 3] = 0xff;
+            pos+= 4;
+        }
+        if (pos >= 4 * canvas_width * canvas_height) {
+            ctx.putImageData(img, 0, 0);
+            pos = 0;
+            var imgbase = canvas.toDataURL("image/png");
+            $("#cropper").html('<img id="image" src="'+imgbase+'"/>');
+            $('#image').cropper({
+            });
+            $("#webcam").children().css({"width":0, "height":0});
+            webcam_state = 1;
+        }
+    }
+    $(function() {
+        $("#webcam").webcam({
+            width: canvas_width,
+            height: canvas_height,
+            mode: "callback",
+            swffile: "/Public/jquery-webcam/jscam.swf",
+            onSave: onWebcamSave,
+            onCapture: function () {
+                webcam.save();
+            }
+        });
+    });
+
+    function restart_webcam() {
+        webcam_state = 0;
+        $("#cropper").html('');
+        $("#webcam").children().css({"width":canvas_width, "height":canvas_height});
+    }
+
+    function cropper_webcam() {
+        var image = $('#image').cropper('getCroppedCanvas');
+        var imgbase = image.toDataURL("image/png");
+        photocallback(imgbase)
+    }
+
+</script>
+</body>

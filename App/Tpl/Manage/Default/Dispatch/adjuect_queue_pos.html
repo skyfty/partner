@@ -1,0 +1,14 @@
+<form class="form-horizontal" action="{:U('dispatch/adjuect_queue_pos')}" method="post" id="adjuect_queue_pos_form">
+    <table class="table">
+        <input type='hidden' name="product_id" value="{$product['product_id']}"/>
+        <input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+        <input type='hidden' name="refer_url" value="{$refer_url}"/>
+        <tr>
+            <td></td>
+            <td colspan="3">
+                <input type="radio" name="state" value="nf"/>最前 <input type="radio" name="state" value="f"/>前调 <input type="number" name="pos_val_f"/><br/><br/>
+                <input type="radio" name="state" value="nl"/>最后 <input type="radio" name="state" value="l"/>后调 <input type="number" name="pos_val_l"/><br/>
+            </td>
+        </tr>
+    </table>
+</form>

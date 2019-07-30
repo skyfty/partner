@@ -1,0 +1,21 @@
+<form class="form-horizontal" action="{:U('Log/add')}" method="post" id="add-log">
+	<input type='hidden' name="r" <present name="r">value="{$r}"</present>/>
+	<input type='hidden' name="module" <present name="r">value="{$module}"</present>/> 
+	<input type='hidden' name="id" <present name="r">value="{$model_id}"</present>/> 
+	<input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+    <input type='hidden' name="assort" value="{$Think.get.assort}"/>
+    <input type='hidden' name="category_id" value="1"/>
+	<if condition="$Think.get.type">
+		<input type='hidden' name="type" value="{$Think.get.type}"/>
+	</if>
+    <table class="table">
+		<tr>
+			<td class="tdleft">{:L('SUBJECT')}</td>
+			<td colspan="3"><input class="span3" type="text" name="subject" id="subject" placeholder="{:L('LESS_THAN_50_CHARACTER')}" /></td>
+		</tr>
+		<tr>
+			<td class="tdleft">{:L('CONTENT')}</td>
+			<td colspan="3"><textarea rows="6" class="span7" name="content"></textarea></td>
+		</tr>
+	</table>
+</form>

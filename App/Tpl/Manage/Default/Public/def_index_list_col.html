@@ -1,0 +1,13 @@
+<if condition="$_GET['asc_order'] == $vo['field']">
+    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'])}"  title="{$vo.link_title}">
+        {$vo.name} &nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+    </a>
+<elseif condition="$_GET['desc_order'] == $vo['field']"/>
+    <a href="{:U('')}&{:FP($parameter, 'desc_order=&asc_order='.$vo['field'])}"  title="{$vo.link_title}">
+        {$vo.name}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+    </a>
+<else/>
+    <a href="{:U('')}&{:FP($parameter, 'asc_order=&desc_order='.$vo['field'])}"  title="{$vo.link_title}">
+        {$vo.name}
+    </a>
+</if>

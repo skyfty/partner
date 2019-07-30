@@ -1,0 +1,826 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+        </div>
+        <div class="span12">
+            <form action="{:U('account/add')}" method="post" id="form1" enctype="multipart/form-data">
+                <input type="hidden" name="t" id="t" value="{$t}"/>
+                <input type="hidden" name="refer_url" id="refer_url" value="{$refer_url}"/>
+                <input type="hidden" name="account_type" id="account_type" value="{$t}"/>
+                <input type="hidden" name="income_or_expenses" id="income_or_expenses" value="{$dire}"/>
+                <input type="hidden" name="submit_time" value="{$submit_time}"/>
+                <input type="hidden" name="restrict" id="restrict" value="{$restrict}"/>
+                <input type="hidden" name="quarry" id="quarry" value="1"/>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td  style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="button" onclick="on_click_return()" value="{:L('RETURN')}"/></td>
+
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td  style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="button" onclick="on_click_return()" value="{:L('RETURN')}"/></td>
+                        </td>
+                    </tr>
+                    </tfoot>
+
+                    <tbody>
+                    <tr><td class="tdleft" width="15%" >信息</td><td colspan="3" id="account_info"></td></tr>
+                    <tr <if condition="($clause_additive != '') || ($t == 'inernal') || ($t == 'flow')">style="display:none"</if> >
+                    <td class="tdleft" width="5%" valign="middle" id="model">
+                        <switch name="t">
+                            <case value="product">雇员</case>
+                            <case value="customer">客户</case>
+                            <case value="staff">员工</case>
+                            <case value="flow">流水</case>
+                            <default />公司
+                        </switch>
+                    </td>
+                    <td valign="middle" colspan="3">
+                        <input type="hidden" name="clause_additive" id="clause_additive" value="{$clause_additive}">
+                        <input type="text" name="clause_name" id="clause_name" value="{$clause['name']}">
+                        <input type="hidden" name="clause_idcode" id="clause_idcode" value="{$clause['idcode']}">
+                        <span id="clause_name_Tip" style="color:red;" class="onShow"></span>
+                    </td>
+                    </tr>
+                    <volist name="fields_group" id="gvo">
+                        <php>$j=0;</php>
+                        <volist name="gvo['fields']" id="vo">
+                            <php>$j++;</php>
+                            <if condition="$vo['one_row'] == '1' or $vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['form_type'] == 'address'">
+                                <if condition="$i%2 == 0">
+                                    <td colspan="2">&nbsp;</td>
+                                    </tr>
+                                </if>
+                                <tr>
+                                    <td class="tdleft" width="15%">{$vo.name}:</td>
+                                    <td colspan="3">
+                                        {$vo.html}
+                                        <if condition="$vo.field == 'clause_type_id'">
+                                            <span id="deta_ious"></span>
+                                            <span id="deta_related"></span>
+                                            <span id="deta_clause_type_id"></span>
+                                        </if>
+
+                                    </td>
+                                </tr>
+                                <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                                    <php>$i++;</php>
+                                </if>
+                            <else/>
+                                <if condition="$i%2 != 0">
+                                    <tr>
+                                </if>
+                                <td class="tdleft" width="15%">{$vo.name}:</td>
+                                <td >{$vo.html}
+                                    <if condition="$vo.field == 'money'">
+                                        <span id="deta_use_settle_time"></span>
+
+                                    </if>
+                                </td>
+
+                                <if condition="$i%2 == 0">
+                                    </tr>
+                                </if>
+                                <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                                    <td colspan="2">&nbsp;</td>
+                                    </tr>
+                                </if>
+                            </if>
+                        </volist>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div> <!-- End #tab1 -->
+    </div> <!-- End #main-content -->
+</div>
+
+<include file="Product:selectDialog" />
+<script type="text/javascript">
+    function product_callback_clause(name, idcode, item) {
+        $('#clause_name').val(name);
+        $('#clause_idcode').val(idcode);
+        $('#clause_additive').val(item);
+        refresh_account_info();
+        get_account_tip($('#clause_type_id').val(), "{$t}", $("#clause_additive").val());
+    }
+    function product_callback_name(name, idcode, item) {
+        $('#product_name').val(name);
+        $('#product_id').val(item);
+        refresh_account_info();
+        get_account_tip($('#clause_type_id').val(), "{$t}", $("#clause_additive").val());
+    }
+    var product_callback = product_callback_clause;
+
+    function select_product_native(n) {
+        if (n == "product_name") {
+            product_callback = product_callback_name;
+        } else {
+            product_callback = product_callback_clause;
+        }
+
+        art.dialog.open('{:U("product/listDialog")}', {
+            id: 'N3690',
+            title: "选择雇员",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 510,
+            ok: function () {
+                var iframe = $(this.iframe.contentWindow.document);
+                var item = iframe.find('input:radio[name="product_id"]:checked').val();
+                var idcode = iframe.find('input:radio[name="product_id"]:checked').parent().next().html();
+                var name = iframe.find('input:radio[name="product_id"]:checked').parent().next().next().html();
+                product_callback(name, idcode, item);
+            },
+            cancel: true
+        });
+    }
+    <if condition="($Think.get.t == 'product')">
+    $('#clause_name').click(select_product_native);
+    </if>
+</script>
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info(b) {
+        $('#staff_id').val(b['staff_id']);
+        $('#staff_name').val(b['name']);
+        $('#clause_name').val(b.name);
+        $('#clause_additive').val(b.staff_id);
+
+        refresh_account_info();
+    }
+
+    <if condition="($Think.get.t == 'staff')">
+        $('#clause_name').click(function(){
+            select_staff();
+        });
+    </if>
+</script>
+
+<include file="Trade:selectDialog" />
+<script type="text/javascript">
+    function on_trade_info(b) {
+        $('#trade_name').val(b.orderid);
+        $('#trade_id').val(b.trade_id);
+        $('#related_owner_role_id').val(b.owner_role_id);
+        refresh_account_info();
+        get_account_tip($('#clause_type_id').val(), "{$t}", $("#clause_additive").val());
+    }
+
+    function on_click_trade() {
+        select_trade("{$Think.get.t}",$("#clause_additive").val());
+    }
+</script>
+
+
+<include file="Customer:selectDialog" />
+<script type="text/javascript">
+    function select_customer_native(n) {
+        select_customer({}, function(b){
+            if (n == "customer_name") {
+                $('#customer_id').val(b['customer_id']);
+                $('#customer_name').val(b['name']);
+            } else {
+                $('#clause_name').val(b.name);
+                $('#clause_additive').val(b.customer_id);
+            }
+            refresh_account_info();
+        });
+    }
+
+    <if condition="($Think.get.t == 'customer')">
+        $('#clause_name').click(function(){
+            select_customer_native();
+        });
+    </if>
+</script>
+
+<include file="Market:selectDialog" />
+<script>
+    function select_product_bymarket(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("market/product_listDialog")}', {
+            id: 'select_product_dialog',
+            title: "选择雇员",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var market_product_id = $(this.iframe.contentWindow.document).find('input:radio[name="market_product_id"]:checked').val();
+                var product_id = $(this.iframe.contentWindow.document).find('#product_id_'+market_product_id).val();
+                var data = {
+                    'product_id': product_id
+                };
+                request_product_info(data, function(b){
+                    b['market_product_id'] = market_product_id;
+                    cb?cb(b):on_product_info(b);
+                });
+            },
+            cancel:true
+        });
+    }
+
+    function market_select_product() {
+        var market_id = $('#market_id').val();
+        var model = "Market";
+        var query = "market.market_id=" + market_id;
+
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "224":{
+                model = "MarketChannelProduct";
+                query ="market_channel.channel_model='product' and market.market_id=" + market_id;
+                break;
+            }
+
+            case "252":
+            case "217":{
+                model = "MarketProduct";
+                query = "market.market_id=" + market_id;
+                break;
+            }
+        }
+
+        if (model == "MarketProduct") {
+            select_product_bymarket({"model":model,"query":query}, function(b){
+                $('#product_id').val(b['product_id']);
+                $('#product_name').val(b['name']);
+                $('#market_product_id').val(b['market_product_id']);
+            });
+        } else {
+            select_product({"model":model,"query":query}, function(b){
+                $('#product_id').val(b['product_id']);
+                $('#product_name').val(b['name']);
+            });
+        }
+    }
+
+    function market_select_customer() {
+        var market_id = $('#market_id').val();
+        var model = "Customer";
+        var query = "";
+
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "222":{
+                model = "MarketChannelCustomer";
+                query ="market_channel.channel_model='customer' and market.market_id=" + market_id;
+                break;
+            }
+        }
+        select_customer({"model":model,"query":query}, function(b){
+            $('#customer_id').val(b['customer_id']);
+            $('#customer_name').val(b['name']);
+        });
+    }
+
+    function market_select_staff() {
+        var market_id = $('#market_id').val();
+        var model = "Staff";
+        var query = "";
+
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "228":{
+                model = "MarketChannelStaff";
+                query ="market_channel.channel_model='staff' and market.market_id=" + market_id;
+                break;
+            }
+            case "225":{
+                model = "MarketUrge";
+                query ="market.market_id=" + market_id;
+                break;
+            }
+        }
+        select_staff({"model":model,"query":query}, function(b){
+            $('#staff_id').val(b['staff_id']);
+            $('#staff_name').val(b['name']);
+        });
+    }
+
+    function on_market_info(b) {
+        $('#market_name').val(b.idcode);
+        $('#market_id').val(b.market_id);
+        $('#related_owner_role_id').val(b.owner_role_id);
+        if (b['settle_state'] != 918) {
+            $('#market_use_settle_time_span').hide();
+        } else {
+            $('#market_use_settle_time_span').show();
+        }
+
+        var clause_type = $('#clause_type_id option:selected').val();
+        var inflow = $('#clause_type_id option:selected').attr("inflow");
+        if (inflow && inflow != "inernal") {
+            if (inflow == "product") {
+                market_select_product(b.market_id);
+            }else if (inflow == "customer"){
+                if (clause_type == "236" || clause_type == "250" || clause_type == "222") {
+                    $('#customer_id').val(b['customer_id']);
+                    $('#customer_name').val(b['customer_name']);
+                    $('#customer_name').attr("disabled", "disabled");
+                } else {
+                    market_select_customer(b.market_id);
+                }
+            }else if (inflow == "staff"){
+                market_select_staff(b.market_id);
+            }
+        }
+        refresh_account_info();
+        get_account_tip($('#clause_type_id').val(), "{$t}", $("#clause_additive").val());
+    }
+    function on_click_market() {
+        var param = {
+            "no_settle_state":1
+        };
+        <if condition="($Think.get.t != 'inernal')">
+            var clause_additive = $("#clause_additive").val();
+            if(clause_additive){
+                param['id'] = clause_additive;
+            }
+            var clause_type_id = $("#clause_type_id").val();
+            switch(clause_type_id) {
+                case "240":case "242": case "238":{
+                    param['module'] = "channel";
+                    param['channel_model'] = "{$Think.get.t}";
+                    break;
+                }
+                case "244":{
+                    param['module'] = "urge";
+                    break;
+                }
+                default: {
+                    param['module'] = "{$Think.get.t}";
+                    break;
+                }
+            }
+        </if>
+        select_market(param);
+    }
+
+    <if condition="$Think.get.market_id != ''">
+    request_market_info({ 'id': "{$Think.get.market_id}" }, on_market_info);
+    </if>
+</script>
+
+
+
+<include file="Cultivate:selectDialog" />
+<script>
+    function cultivate_select_product() {
+        var cultivate_id = $('#cultivate_id').val();
+        var model = "ProductCultivate";
+        var query = "cultivate.cultivate_id=" + cultivate_id;
+
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "279":{
+                model = "CultivateChannelProduct";
+                query ="cultivate_channel.channel_role_model='2' and cultivate.cultivate_id=" + cultivate_id;
+                break;
+            }
+        }
+
+        select_product({"model":model,"query":query}, function(b){
+            $('#product_id').val(b['product_id']);
+            $('#product_name').val(b['name']);
+        });
+    }
+
+    function cultivate_select_customer() {
+        var cultivate_id = $('#cultivate_id').val();
+        var model = "CustomerCultivate";
+        var query = "";
+
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "277":{
+                model = "CultivateChannelCustomer";
+                query ="cultivate_channel.channel_role_model='3' and cultivate.cultivate_id=" + cultivate_id;
+                break;
+            }
+        }
+        select_customer({"model":model,"query":query}, function(b){
+            $('#customer_id').val(b['customer_id']);
+            $('#customer_name').val(b['name']);
+        });
+    }
+
+    function cultivate_select_staff() {
+        var cultivate_id = $('#cultivate_id').val();
+        var model = "StaffCultivate";
+        var query = "";
+
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "275":{
+                model = "CultivateChannelStaff";
+                query ="cultivate_channel.channel_role_model='4' and cultivate.cultivate_id=" + cultivate_id;
+                break;
+            }
+            case "265":{
+                model = "CultivateUrge";
+                query ="cultivate.cultivate_id=" + cultivate_id;
+                break;
+            }
+        }
+        select_staff({"model":model,"query":query}, function(b){
+            $('#staff_id').val(b['staff_id']);
+            $('#staff_name').val(b['name']);
+        });
+    }
+
+    function on_cultivate_info(b) {
+        $('#cultivate_name').val(b.idcode);
+        $('#cultivate_id').val(b.cultivate_id);
+        $('#related_owner_role_id').val(b.owner_role_id);
+        if (b['settle_state'] != 918) {
+            $('#cultivate_use_settle_time_span').hide();
+        } else {
+            $('#cultivate_use_settle_time_span').show();
+        }
+
+        var inflow = $('#clause_type_id option:selected').attr("inflow");
+        if (inflow && inflow != "inernal") {
+            if (inflow == "product") {
+                cultivate_select_product(b.cultivate_id);
+            }else if (inflow == "customer"){
+                cultivate_select_customer(b.cultivate_id);
+            }else if (inflow == "staff"){
+                cultivate_select_staff(b.cultivate_id);
+            }
+        }
+        refresh_account_info();
+        get_account_tip($('#clause_type_id').val(), "{$t}", $("#clause_additive").val());
+    }
+    function on_click_cultivate() {
+        var param = {
+            "no_settle_state":1
+        };
+        <if condition="($Think.get.t != 'inernal')">
+        var clause_additive = $("#clause_additive").val();
+        if(clause_additive){
+            param['id'] = clause_additive;
+        }
+        var clause_type_id = $("#clause_type_id").val();
+        switch(clause_type_id) {
+            case "279":case "277": case "275":{
+                param['module'] = "channel";
+                param['channel_model'] = "{$Think.get.t}";
+                break;
+            }
+            case "273":{
+                param['module'] = "urge";
+                break;
+            }
+            default: {
+                param['module'] = "{$Think.get.t}";
+                break;
+            }
+        }
+        </if>
+        select_cultivate(param);
+    }
+    <if condition="$Think.get.cultivate_id != ''">
+    request_cultivate_info({ 'id': "{$Think.get.cultivate_id}" }, on_cultivate_info);
+    </if>
+</script>
+
+
+<include file="Account:newfieldvalid" />
+<script>
+
+    $(function(){
+        <if condition="$Think.get.money != ''">
+           $("#money").val("{$Think.get.money}");
+        </if>
+
+        <if condition="$Think.get.type_id != ''">
+           $("#clause_type_id option[value='{$Think.get.type_id}']").prop("selected", true);
+        </if>
+
+        <if condition="$clause_additive != ''">
+          get_account_tip($("#clause_type_id").val(), "{$t}", "{$clause_additive}");
+        </if>
+
+        <if condition="($clause_additive == '') && ($t!='inernal') && ($t!='flow')">
+        $("#clause_type_id").attr("disabled", "disabled");
+        $("#money").attr("disabled", "disabled");
+        </if>
+
+    });
+
+    function show_related_html(related, inflow) {
+        if (related == "trade") {
+            var htmltext = "订单号：<input type='text' name='trade_name' id='trade_name' value='' onclick='on_click_trade()'/>";
+            htmltext += "<input type='hidden' id='trade_id' name='trade_id' value=''/>";
+            htmltext += "<input type='hidden' id='related_owner_role_id' name='related_owner_role_id' value=''/>";
+            $("#deta_related").html(htmltext);
+            return true;
+        }else if (related == "market") {
+            var htmltext = "订单号：<input type='text' name='market_name' id='market_name' value=''  <if condition="!in_array('market_name', $_GET['lockele'])">onclick='on_click_market()' </if>/>";
+            htmltext += "<input type='hidden' id='market_id' name='market_id' value=''/>";
+            htmltext += "<input type='hidden' id='related_owner_role_id' name='related_owner_role_id' value=''/>";
+            if (inflow && inflow != "inernal") {
+                htmltext += "<input type='hidden' id='"+inflow+"_id' name='"+inflow+"_id' value=''/>";
+                var inflow_info = {"product":"雇员", "customer":"客户", "staff":"员工"};
+                htmltext += "&nbsp;" + inflow_info[inflow];
+                htmltext += "<input type='text' id='"+inflow+"_name' value='' onclick='market_select_"+inflow+"()'/>";
+                if (inflow == "product") {
+                    htmltext += "<input type='hidden' name='market_product_id' id='market_product_id' value=''/>";
+                }
+            }
+            $("#deta_related").html(htmltext);
+
+            check_form_validator("#market_id", "必须选择客户服务订单");
+            if (inflow && inflow != "inernal") {
+                check_form_validator("#" + inflow + "_id", "没有选择相关" + inflow_info[inflow]);
+            }
+            return true;
+        }else if (related == "cultivate") {
+            var htmltext = "订单号：<input type='text' name='cultivate_name' id='cultivate_name' value=''  <if condition="!in_array('cultivate_name', $_GET['lockele'])">onclick='on_click_cultivate()' </if>/>";
+            htmltext += "<input type='hidden' id='cultivate_id' name='cultivate_id' value=''/>";
+            htmltext += "<input type='hidden' id='related_owner_role_id' name='related_owner_role_id' value=''/>";
+            if (inflow && inflow != "inernal") {
+                htmltext += "<input type='hidden' id='"+inflow+"_id' name='"+inflow+"_id' value=''/>";
+                var inflow_info = {"product":"雇员", "customer":"客户", "staff":"员工"};
+                htmltext += "&nbsp;" + inflow_info[inflow];
+                htmltext += "<input type='text' id='"+inflow+"_name' value='' onclick='cultivate_select_"+inflow+"()'/>";
+            }
+            $("#deta_related").html(htmltext);
+
+            check_form_validator("#cultivate_id", "必须选择培训订单");
+            if (inflow && inflow != "inernal") {
+                check_form_validator("#" + inflow + "_id", "没有选择相关" + inflow_info[inflow]);
+            }
+            return true;
+        }  else if (related == "product") {
+            var htmltext = "雇员：<input type='text' name='product_name' id='product_name' value='' onclick='select_product_native(this.name)'/>";
+            htmltext += "<input type='hidden' id='product_id' name='product_id' value=''/>";
+            $("#deta_related").html(htmltext);
+            return true;
+        } else if (related == "customer") {
+            var htmltext = "客户：<input type='text' name='customer_name' id='customer_name' value='' onclick='select_customer_native(this.name)'/>";
+            htmltext += "<input type='hidden' id='customer_id' name='customer_id' value=''/>";
+            $("#deta_related").html(htmltext);
+            return true;
+        } else if (related == "staff") {
+            var htmltext = "员工：<input type='text' name='staff_name' id='staff_name' value='' onclick='select_staff(this.name)'/>";
+            htmltext += "<input type='hidden' id='staff_id' name='staff_id' value=''/>";
+            $("#deta_related").html(htmltext);
+            return true;
+        } else {
+            $("#deta_related").html("");;
+        }
+        return false;
+    }
+
+    function popup_related_dialog(related, inflow) {
+        if (related == "trade") {
+            on_click_trade();
+        }else if (related == "market") {
+            on_click_market();
+        }else if (related == "cultivate") {
+            on_click_cultivate();
+        }else if (related == "customer") {
+            select_customer_native('customer_name');
+        }else if (related == "product") {
+            select_product_native('product_name');
+        }else if (related == "staff") {
+            select_staff('staff_name');
+        }
+        return show_related_html(related, inflow);
+    }
+
+    function show_ious_related(related) {
+        var htmltext = "<select id='related' name='related' onchange='popup_related_dialog(this.value);' style='width:90px'>";
+        htmltext += "<option value=''>请选择</option>";
+        htmltext += "<option value='trade'>产品订单</option>";
+        htmltext += "<option value='market'>客户服务</option>";
+        htmltext += "<option value='cultivate'>培训订单</option>";
+        htmltext += "</select>";
+        $("#deta_ious").html(htmltext);
+    }
+
+    function on_cash_inflow_model_change() {
+        var related_model = $("#related").val();
+        var inflow_model = $("#inflow_model").val();
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("account/getclausetype")}',
+            'data':{
+                'if': inflow_model,
+                'rm': related_model,
+                'im': "inernal",
+                'id': -2
+            },
+            'success':function(data){
+                var opt = "";
+                if(data.status == 1 && data.data){
+                    opt = "<select name='payway'>";
+                    $.each(data.data, function(k, v){
+                        opt += "<option value='"+ v.type_id+"'>" + v.name + "</option>";
+                    });
+                    opt += "</select>";
+                }
+                $("#cash_inflow_model").html(opt);
+            },
+            'complete':refresh_account_info
+        });
+    }
+
+    function on_cash_related_change() {
+        var related = $("#related").val();
+        if (related == "other") {
+            var htmltext = "<select style='width:90px' name='payway'>";
+            htmltext += "<option value='cost'>成本</option>";
+            htmltext += "<option value='fare'>费用</option>";
+            htmltext += "</select><input type='hidden'  name='clause_additive' value='cash'/>";
+            $("#cash_related_infow").html(htmltext);
+        } else {
+            var htmltext = "<select id='inflow_model' name='clause_additive' onchange='on_cash_inflow_model_change();' style='width:90px'>";
+            htmltext += "<option value='product'>雇员</option>";
+            htmltext += "<option value='customer'>客户</option>";
+            htmltext += "<option value='staff'>员工</option>";
+            htmltext += "</select><span id='cash_inflow_model'></span>";
+            $("#cash_related_infow").html(htmltext);
+        }
+        on_cash_inflow_model_change();
+    }
+
+    function show_cash_related() {
+        var htmltext = "<select id='related'  name='related' onchange='on_cash_related_change();' style='width:90px'>";
+        htmltext += "<option value='other'>其他</option>";
+        htmltext += "<option value='trade'>产品</option>";
+        htmltext += "<option value='market'>客户服务</option>";
+        htmltext += "<option value='cultivate'>新培训</option>";
+        htmltext += "</select><span id='cash_related_infow'></span>";
+        $("#deta_related").html(htmltext);
+        on_cash_related_change();
+    }
+
+    $("#clause_type_id").change(function(){
+        $("#deta_related").html("");
+        $("#money").attr('placeholder', "");
+
+        var clause_type = $('#clause_type_id option:selected');
+        var inflow = "";
+        var related = clause_type.attr("related");
+        if (related == "") {
+            related = clause_type.attr("inflow");
+        } else {
+            inflow = clause_type.attr("inflow");
+        }
+
+        show_related_html(related, inflow);
+        if (popup_related_dialog(related, inflow)) {
+            refresh_account_info();
+            return;
+        }
+
+        var clause_type = clause_type.val();
+        if (clause_type == "91" || clause_type == "96" || clause_type == "103" || clause_type == "107") {
+            show_ious_related(related);
+        } else if (clause_type == "86"){
+            show_cash_related();
+        } else {
+            get_account_tip($('#clause_type_id').val(), "{$t}", $("#clause_additive").val());
+        }
+        refresh_account_info();
+    });
+
+    $(function() {
+    <if condition="$account_type != ''">
+        var related_model = "{$account_type['related_model']}";
+        show_related_html(related_model);
+        switch (related_model) {
+            case "trade": {
+                refresh_account_info();
+                break;
+            }
+            case "market": {
+                var data = {
+                    'id': "{$Think.get.market_id}"
+                };
+                request_market_info(data, function(b){
+                    on_market_info(b);
+                    refresh_account_info();
+                });
+                break;
+            }
+            case "cultivate": {
+                var data = {
+                    'id': "{$Think.get.cultivate_id}"
+                };
+                request_cultivate_info(data, function(b){
+                    on_cultivate_info(b);
+                    refresh_account_info();
+                });
+                break;
+            }
+        }
+    </if>
+        <if condition="in_array('clause_type_id', $_GET['lockele'])">
+        $('#clause_type_id').mousedown(function(){return false;});
+        </if>
+
+        <foreach name="Think.get.lockele" item="vo">
+            $("#{$vo}").attr("readonly", "readonly");
+        </foreach>
+    });
+
+    function refresh_account_info() {
+        var account_info = "";
+        var model = $("#model").html();
+        account_info += model + " ";
+
+        var clause_name = $('#clause_name').val();
+        if (clause_name) {
+            account_info += clause_name + " ";
+            var clause_idcode = $('#clause_idcode').val();
+            if (clause_idcode) {
+                account_info += "[" + clause_idcode + "] ";
+            }
+        }
+        account_info += "{$dire|acction_type_desc}" + " ";
+
+        var clause_type_id = $('#clause_type_id option:selected').val();
+        if (clause_type_id) {
+            account_info += $('#clause_type_id option:selected').html() + " ";
+        }
+        account_info += $('#money').val() + " ";
+
+        var related = $('#related option:selected').val();
+        if (related) {
+            account_info += $('#related option:selected').html() + " ";
+        }
+
+        var trade_name = $('#trade_name').val();
+        if (trade_name) {
+            account_info += trade_name + " ";
+        }
+
+        $("#account_info").html(account_info);
+        if ($("#clause_additive").val() != "") {
+            $("#clause_type_id").removeAttr("disabled");
+            $("#money").removeAttr("disabled");
+        }
+    }
+</script>
+
+<if condition="($clause_additive == '') && ($t!='inernal')">
+<script>
+    $(function() {
+        $("#clause_additive").formValidator({
+            empty: false,
+            onFocus: " ",
+            onCorrect: function () {
+                $("#clause_type_id").removeAttr("disabled");
+                $("#money").removeAttr("disabled");
+                return "<span style='color:green;'>√</span>";
+            }
+        }).inputValidator({
+            min: 1, max: 255,
+            onErrorMin: function(){
+                $("#clause_type_id").attr("disabled", "disabled");
+                $("#money").attr("disabled", "disabled");
+                return "不能为空！";
+            },
+            onErrorMax: ""
+        });
+    });
+</script>
+</if>
+<script>
+    $(function() {
+        $("#clause_type_id").formValidator({
+            onShow: "",
+            empty:false,
+            onFocus:" ",
+            onCorrect:"<span style='color:green;'>√</span>",
+        }).inputValidator({
+            min:1,max:255,
+            fun:"必须选择账目类型！",
+            onErrorMin:"必须选择账目类型！",
+            onErrorMax:""
+        });
+    });
+    $(function() {refresh_account_info();});
+
+</script>
+<include file="Public:footer" />	

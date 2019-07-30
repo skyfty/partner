@@ -1,0 +1,31 @@
+<include file="Public:header" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4><a name="tab">证书详情</a></h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td <if condition="C('ismobile') eq 1">colspan="2"<else />colspan="4"</if>>
+                            <p style="font-size: 14px;">
+                                <a href="{:U('traincert/edit','id='.$traincert_id)}">编辑</a> |
+                                <a href="{:U('traincert/delete','id='.$traincert_id)}" class="del_confirm">{:L('DELETE')}</a> |
+                                <a href="javascript:void(0);" onclick="javascript:history.go(-1)">{:L('RETURN')}</a>
+                            </p>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                <include file="Public:defviewtable" />
+                </tbody>
+            </table>
+            <!--  -->
+		</div>
+	</div>
+</div>
+<include file="Public:footer" />

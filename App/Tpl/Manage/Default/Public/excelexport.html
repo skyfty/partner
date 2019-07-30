@@ -1,0 +1,20 @@
+
+<div class="accordion" id="accordion">
+    <volist name="export_list" id="vo">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-parent="#accordion" href="{$vo}" target="_blank">
+                    <span class="export-item">{$vo|cutString=100}</span>
+                </a>
+            </div>
+        </div>
+    </volist>
+</div>
+
+<script>
+    function ExportAll() {
+        $(".export-item").each(function(){
+            $(this).click();
+        });
+    }
+</script>

@@ -1,0 +1,159 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<div class="container">
+    <include file="Public:alert" />
+    <div class="page-header" style="border:none; font-size:14px; ">
+        <include file="Serve:navcat" />
+    </div>
+    <div class="row-fluid">
+        <div class="span1 knowledgecate">
+            <ul class="nav  nav-list">
+                <volist name="serve_category" id="cat">
+                <li <if condition="$focus_category['serve_category_id'] eq $cat['serve_category_id']">class="active"</if>>
+                    <a href="{:U('')}&{:FP($parameter, 'cat='.$cat['serve_category_id'])}">
+                        {$cat['name']}
+                    </a>
+                </li>
+                </volist>
+            </ul>
+        </div>
+        <div class="span11" style="float: right">
+            <ul class="breadcrumb">
+                <li><a href="{:U('')}&{:FP($parameter, 'cat=')}">全部</a> <span class="divider">/</span></li>
+                <volist name="bread_list" id="bread">
+                    <li><a href="{:U('')}&{:FP($parameter, 'cat='.$bread['serve_category_id'])}">{$bread['name']}</a> <span class="divider">/</span></li>
+                </volist>
+                <li class="active">{$focus_category['name']}</li>
+            </ul>
+        </div>
+        <div class="span11" style="float: right">
+            <div class="bulk-actions align-left">
+                <div class="pull-left">
+                    <a id="delete" class="btn btn-danger" style="margin-right: 8px;">
+                        <i class="icon-remove"></i>&nbsp;{:L('DELETE')}
+                    </a>
+                </div>
+                <ul class="nav pull-left">
+                    <form class="form-inline" id="searchForm" action="" method="get">
+                        <if condition="session('user_id') eq '1'">
+                            <li class="pull-left">
+                                {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                                <script>
+                                    $(function() {
+                                        $("#bylea").change(def_short_search_select);
+                                    });
+                                </script>
+                            </li>
+                        </if>
+                        <li class="pull-left">
+                            <include file="Public:def_index_fields_filter_select" />
+
+                        </li>
+                        <include file="Public:def_index_search_form" />
+                    </form>
+                </ul>
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="{:U('serve/add')}"  target="_blank"><i class="icon-plus"></i>&nbsp; 添加产品</a>&nbsp;
+                </div>
+            </div>
+        </div>
+
+        <div class="span11" style="float: right">
+            <form id="form1"  method="Post">
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+                    <thead>
+                    <tr id="childNodes_num">
+                        <th>
+                            <input class="check_all" name="check_all" id="check_all" type="checkbox" /> &nbsp;
+                        </th>
+                        <include file="Serve:model_list_header" />
+
+                        <th style="width:30px;">{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td id="td_colspan">
+                            {$page}
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>
+                                <input class="list" type="checkbox"  serve_name="{$vo['category']}" name="serve_id[]" value="{$vo.serve_id}"/>
+                            </td>
+                            <volist name="field_array" id="v">
+                                <include file="Public:def_index_list" />
+                            </volist>
+
+                            <td style="width: 50px;letter-spacing:3px">
+                                <a href="{:U('serve/view','id='.$vo['serve_id'])}"  target="_blank"  title="查看详细">
+                                    <i class="icon-th-large"></i>
+                                </a>
+                                <if condition="$vo['webshow'] neq 1">
+                                    <a rel="{$vo['serve_id']}" href="javascript:void(0)" class="webshowbtn" state="1"  data-toggle="tooltip" title="打开网站显示">
+                                        <i class="icon-eye-open"></i>
+                                    </a>
+                                    <else/>
+                                    <a rel="{$vo['serve_id']}" href="javascript:void(0)" class="webshowbtn" state="0"  data-toggle="tooltip" title="取消网站显示">
+                                        <i class=" icon-eye-close"></i>
+                                    </a>
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    function deleteConfirm(id,name){
+        if(confirm("{:L('DELETE_THE_ARTICLE')}"+name)){
+            window.location="{:U('serve/delete','id=')}"+id;
+        }
+    }
+
+    $(function(){
+
+        $("#check_all").click(function(){
+            $("input[class='list']").prop('checked', $(this).prop("checked"));
+        });
+
+        $('#delete').click(function(){
+            if(confirm("{:L('ARE_YOU_SRUE_DELETE')}")){
+                $("#form1").attr('action', '{:U("serve/delete")}');
+                $("#form1").submit();
+            }
+        });
+
+
+        $(".webshowbtn").click(function(){
+            var showbtn = $(this);
+            var serve_id = showbtn.attr("rel");
+            var state = showbtn.attr("state");
+            $.ajax({
+                type: 'get',
+                url: "{:U('serve/webshow')}",
+                data:{
+                    id:serve_id,
+                    state:state
+                },
+                success: function (data) {
+                    if (data) {
+                        alert("设置成功");
+                        window.location.reload();
+                    }
+                },
+                dataType:'json'
+            });
+        });
+    });
+</script>
+<include file="Public:footer" />
+

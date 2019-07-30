@@ -1,0 +1,23 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>提醒</h4>
+		</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form id="form1" action="{:U('prompt/edit', 'id='.$prompt['prompt_id'])}" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="prompt_id" value="{$prompt.prompt_id}"/>
+                <include file="Public:editfieldstable" />
+
+                <input name="a" type="hidden" value="edit">
+			</form>
+		</div>
+	</div>
+</div>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

@@ -1,0 +1,24 @@
+<table class="table" style="margin-bottom:0px">
+    <tr>
+        <td>
+            <select style="width:80px" id="text_filder_dialog_form_condition">
+                <option value="is">是</option>
+                <option value="isnot">不是</option>
+                <option value="is_empty">为空</option>
+                <option value="is_not_empty">不为空</option>
+            </select>
+            <input  style="width:90px" id="text_filder_dialog_form_value" type="text" class="text" value="">
+            <button type="button"   class="btn btn-mini btn-default text_filder_dialog_form_condition_ok_btn" style="float: right">确定</button>
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+    $(function() {
+        $('.text_filder_dialog_form_condition_ok_btn').click(function (event) {
+            $("[field='{$field}']").qtip('api').hide(event);
+        });
+    });
+
+</script>

@@ -1,0 +1,265 @@
+<include file="Public:header" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4><a name="tab">{:L('PRODUCT_DETAILS')}</a></h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Product:navtab" />
+            </div>
+			<div class="tab-content">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td colspan="6">
+                                <p style="font-size: 14px;">
+                                    <a href="javascript:void(0);" class="add_log">{:L('ADD_THE_LOG')}</a> |
+
+                                    <if condition="$product['is_owner']">
+                                    <a href="{:U('product/edit','product_id='.$product['product_id'].'&assort='.$assort)}">{:L('COMPILE')}</a> |
+                                    <if condition="$Think.get.visitor neq 'trash'">
+                                        <a href="{:U('product/delete','product_id='.$product['product_id'])}" class="del_product_confirm">{:L('DELETE')}</a> |
+                                    <else/>
+                                        <a href="{:U('product/completely_delete','product_id='.$product['product_id'])}" class="del_product_confirm">{:L('DELETE')}</a> |
+                                    </if>
+                                    <a href="{:U('product/cardinfo','id='.$product['product_id'])}" target="_blank">身份证信息</a> |
+                                    </if>
+
+                                    <eq name="product['is_owner']" value="true">
+                                    <if condition="$product['basic_submit_time'] eq 0">
+                                        <a>未提交</a> |
+                                    <else />
+                                        <a href="javascript:void(0);" class="verify">
+                                            审核
+                                            <if condition="$product['basic_verify'] eq -1">
+                                                [审核未通过]
+                                            <elseif condition="$product['basic_verify'] eq 0"/>
+                                                [待审核]
+                                            <else />
+                                                [审核通过]
+                                            </if>
+                                        </a>|
+                                        <a  href="{:U('product/reset_verify','state=-1&product_id='.$product['product_id'])}" class="reset_verify">
+                                            重置提交
+                                        </a>|
+                                    </if>
+                                    </if>
+
+                                    </eq>
+                                    <if condition="$product['commiss_id'] neq ''">
+                                        <a target="_blank" href="{:U('commiss/view','id='.$product['commiss_id'])}">客服意向</a>|
+                                    </if>
+                                    <a href="{$refer_url}" >返回</a>&nbsp;
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <include file="Product:basicinfo" />
+                            </td>
+                        </tr>
+                        <volist name="fields_group" id="gvo">
+                        <tr>
+                            <th colspan="4">
+                                {$gvo.name}
+                            </th>
+                        </tr>
+                        <php>$j=0;</php>
+                        <volist name="gvo['fields']" id="vo">
+                            <php>$j++;</php>
+                            <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['one_row'] == '1'">
+                                <if condition="$i%2 == 0">
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                </if>
+                                <tr>
+                                    <td class="tdleft" width="15%">{$vo.name}:</td>
+                                    <td colspan="5">
+                                        {$vo.html}
+                                    </td>
+                                </tr>
+                                <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                                    <php>$i++;</php>
+                                </if>
+                            <else/>
+                                <if condition="$i%2 != 0">
+                                <tr>
+                                </if>
+                                    <td class="tdleft" width="15%">{$vo.name}:</td>
+                                    <td width="35%">
+                                        <span style="color:#{$vo['color']}">
+                                            {$vo.html}
+                                        </span>
+                                    </td>
+                                <if condition="$i%2 == 0">
+                                </tr>
+                                </if>
+                                <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                                    <td colspan="3">&nbsp;</td>
+                                </tr>
+                                </if>
+                            </if>
+                        </volist>
+                            <if condition="$gvo.field_group_id == '0'">
+                            <tr>
+                                <td class="tdleft">{:L('QR_CODE_CARD_INFORMATION')}</td>
+                                <td colspan="3" style="color:#005580;">
+                                <div class="pull-left" >
+                                    <img src="{:U('product/qrcode', 'product_id='.$product['product_id'])}" width="150"/>
+                                </div>
+                                </td>
+                            </tr>
+                            </if>
+                        </volist>
+                    </tbody>
+                </table>
+                <!--  -->
+                <div>
+                    <ul class="nav nav-tabs"  id="log-tabs">
+                        <volist name="logcat" id="logc">
+                            <li><a href="#log-{$logc}"   data-toggle="tab">{$logc}</a></li>
+                        </volist>
+                    </ul>
+                    <div class="tab-content">
+                        <volist name="logcat" id="logc">
+                            <div  class="tab-pane"  id="log-{$logc}">
+                                <table class="table">
+                                    <if condition="$product['log'][$logc] eq null">
+                                        <tr>
+                                            <td>{:L('THERE_IS_NO_DATA')}</td>
+                                        </tr>
+                                        <else />
+                                        <volist name="product['log'][$logc]" id="vo">
+                                            <tr>
+                                                <td>
+                                                    <notempty name="vo.owner.user_name">
+                                                        <a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">
+                                                            {$vo.owner.user_name}
+                                                        </a>
+                                                    </notempty> &nbsp;
+                                                    {$vo.create_date|toDate} &nbsp;
+                                                    <notempty name="vo.create_date"> &nbsp; </notempty>
+                                                    <if condition="C('ismobile') eq 1"><br/></if>
+                                                    {$vo.subject}
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <if condition="strlen($vo['content']) gt 100">
+                                                        <div id="slog_{$vo.log_id}">
+                                                <pre>{$vo.content|msubstr=###,0,100}
+                                                <a class="more" rel="{$vo.log_id}" href="javascript:void(0)">
+                                                    {:L('READ_MORE')}
+                                                </a>
+                                                </pre>
+                                                        </div>
+                                                        <div id="llog_{$vo.log_id}" class="hide">
+                                                            <pre>{$vo.content}</pre>
+                                                        </div>
+                                                        <else/>
+                                                        <pre>{$vo.content}</pre>
+                                                    </if>
+                                                </td>
+                                            </tr>
+                                        </volist>
+                                    </if>
+                                    <tr>
+                                        <td colspan="2" style="text-align: right">
+                                            <a target="_blank" href="{:U('log/index', 'r=RLogProduct&module=product&assort='.$assort.'&type='.$logcatid[$logc].'&product_id='.$product_id)}">
+                                                更多...
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </volist>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+    $(function() {
+        $('#log-tabs a:first').tab('show');
+    });
+</script>
+<include file="Product:adjuect_queue" />
+
+<script type="text/javascript">
+
+$(".add_log").click(function(){
+    var dialog = art.dialog({
+        id: 'N3690',
+        title: "增加日志",
+        lock:true,
+        ok: function (data) {
+            $("#add-log").submit();
+        },
+        cancel:true
+    });
+    $.ajax({
+        url: '{:U("log/add","r=RLogProduct&module=product&id=".$product["product_id"]."&assort=$assort")}',
+        success: function (data) {
+            dialog.content(data);
+        },
+        cache: false
+    });
+});
+
+$(".verify").click(function(){
+    var dialog = art.dialog({
+        id: 'N3690',
+        title: "验证",
+        lock:true,
+        ok: function () {
+            var state = $("input[name='state']:checked").val();
+            if (state == 0 && $("#describe").val() == "") {
+                alert("必须说明审核不通过原因");
+                return false;
+            }
+            $("#myform").submit();
+        },
+        cancel:true
+    });
+    $.ajax({
+        url:'{:U("product/verify","product_id=".$product["product_id"]."&assort=$assort")}',
+        success: function (data) {
+            dialog.content(data);
+        },
+        cache: false
+    });
+});
+
+$(".reset_verify").click(function(){
+   return confirm('确实要重置提交状态吗？');
+});
+
+$(".more").click(function(){
+	var log_id = $(this).attr('rel');
+	$('#llog_'+log_id).attr('class','');
+	$('#slog_'+log_id).attr('class','hide');
+});
+
+$(function(){
+    /*删除提示*/
+    $('.del_product_confirm').click(function(){
+        if(confirm('确实要删除这个雇员吗！ \n操作会将相关订单、账户、雇员资料全部删除')){
+            return true;
+        }else{
+            return false;
+        }
+    });
+
+});
+
+</script>
+<include file="Public:footer" />

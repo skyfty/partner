@@ -1,0 +1,24 @@
+<script type="text/javascript">
+
+    function select_branch() {
+        art.dialog.open("{:U('Branch/listDialog')}", {
+            id: 'select_branch_dialog',
+            title: "选择分店员工",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 800,
+            height: 510,
+            ok: function () {
+                var role_ids = $(this.iframe.contentWindow.document).find('#role_ids').val();
+                var role_names = $(this.iframe.contentWindow.document).find('#role_names').val();
+                if (typeof(on_branch_roles) == "function") on_branch_roles(role_ids, role_names);
+                return true;
+            },
+            cancel: function () {
+                return true;
+            }
+        });
+    }
+
+</script>

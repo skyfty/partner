@@ -1,0 +1,30 @@
+<form class="form-horizontal" action="{:U('dispatch/adjuect_branch_queue')}" method="post" id="adjuect_queue_category">
+    <table class="table">
+        <input type='hidden' name="product_id" value="{$product['product_id']}"/>
+        <input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+        <input type='hidden' name="refer_url" value="{$refer_url}"/>
+        <input type='hidden' name="workstate_id" value="排岗"/>
+        <input type='hidden' name="act" value="md"/>
+        <tr>
+            <td>类别</td>
+            <td colspan="3">
+                {:proudct_category_select("queue_category_id", null, false, $type)}
+            </td>
+        </tr>
+        <if condition="$queue_branch_id eq '-2'">
+        <tr>
+            <td>医院</td>
+            <td colspan="3">
+                {:branch_hospital_select_html("queue_branch_id", $queue_branch_id, false, false)}&nbsp;&nbsp;
+                <script>
+                    $(function() {
+                        $("#branch_queue").change(do_search);
+                    });
+                </script>
+            </td>
+        </tr>
+        <else/>
+        <input type='hidden' name="queue_branch_id" value="{$queue_branch_id}"/>
+        </if>
+    </table>
+</form>

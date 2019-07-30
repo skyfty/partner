@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_staff_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("staff/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_staff(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("staff/listDialog")}', {
+            id: 'select_staff_dialog',
+            title: "选择员工",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var staff_id = $(this.iframe.contentWindow.document).find('input:radio[name="staff"]:checked').val();
+                var data = {
+                    'id': staff_id
+                };
+                request_staff_info(data, cb?cb:on_staff_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

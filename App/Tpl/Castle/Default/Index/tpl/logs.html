@@ -1,0 +1,20 @@
+<!-- navbar -->
+<div data-ng-include=" 'App/Tpl/Castle/Default/Index/tpl/blocks/header.html' " class="app-header navbar">
+</div>
+<!-- / navbar -->
+
+<!-- menu -->
+<div data-ng-include=" 'App/Tpl/Castle/Default/Index/tpl/blocks/aside.html' " class="app-aside hidden-xs {{app.settings.asideColor}}" ng-class="{'hide': app.hideAside }">
+</div>
+<!-- / menu -->
+
+<!-- view -->
+<div class="app-content">
+    <a href class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside" ></a>
+    <div class="app-content-body  app-content-full fade-in-up" style="bottom:0px"  ui-view>
+    </div>
+    <div ui-butterbar ng-state="butterbar"></div>
+</div>
+
+<div data-ng-include=" 'App/Tpl/Castle/Default/Index/tpl/blocks/settings.html' " class="settings panel panel-default">
+</div>

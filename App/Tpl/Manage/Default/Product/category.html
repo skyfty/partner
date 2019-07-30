@@ -1,0 +1,164 @@
+
+<include file="Public:header" />
+<style>
+    table tbody tr{cursor:move;}
+</style>
+<div class="container">
+    <div class="page-header">
+        <h4>{:L('SYSTEM_SETTINGS')}</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="tabbable">
+        <include file="Setting:settingnav" />
+
+    </div>
+    <div class="row">
+        <form action="{:U('product/category_delete')}" method="post">
+            <div class="span12">
+                <p><div class="bulk-actions align-left">
+                    <input type="submit" class="btn" value="{:L('DELETE')}"/>
+                    <button class="btn" type="button" id="sort_btn"><span class="icon-file"></span>&nbsp;{:L('SAVE_ORDER')}</button>&nbsp;
+
+                <div class="pull-right">
+                        <a class="btn btn-primary" id="add_category">{:L('ADD_PRODUCT_CATEGORIES')}</a>
+                    </div>
+                </div></p>
+            </div>
+            <div class="span12">
+                <table class="table table-hover table-striped table_thead_fixed" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th width="10%"><input type="checkbox" name="check_all" id="check_all" class="check_all"/> &nbsp;</th>
+                            <th width="10%">{:L('CLASSIFICATION_OF')}</th>
+                            <th width="10%">默认保险产品</th>
+                            <th width="10%">促单费系数</th>
+                            <th width="20%">{:L('OPERATION')}</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                {$page}
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <volist name="category_list" id="vo">
+                            <tr category_id="{$vo.category_id}">
+                                <td>
+                                    <input type="checkbox" category_id="{$vo.category_id}" class="list" name="category_list[]" value="{$vo.category_id}"/>
+                                </td>
+                                <td>{$vo.name}</td>
+                                <td>{$vo.def_serve.name}</td>
+                                <td>{$vo.urge_category_ratio}</td>
+                                <td>
+                                    <a class="edit" href="{:U('product/category_edit','id='.$vo['category_id'])}">{:L('COMPILE')}</a>&nbsp;
+                                    <if condition="$vo['webshow'] neq 1">
+                                        <a rel="{$vo['category_id']}" href="javascript:void(0)" class="webshowbtn" state="1">网站显示</a>&nbsp;
+                                    <else/>
+                                        <a rel="{$vo['category_id']}" href="javascript:void(0)" class="webshowbtn" state="0">取消显示</a>&nbsp;
+                                    </if>
+                                </td>
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div> <!-- End #main-content -->
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+	function changeContent(){
+		a = $("#select1  option:selected").val();
+		if(a=='1'){
+			window.location.href="{:U('product/index')}";
+		}else if(a=='2'){
+			window.location.href="{:U('product/category')}";
+		}else if(a=='3'){
+			window.location.href="{:U('product/count')}";
+		}
+	}
+
+
+    $("table tbody").sortable({
+        connectWith: "table tbody",
+        stop: function( event, ui ) {
+            $.each($(".list"), function(i, item){
+                var item_tr = $(item).parent().parent();
+                while(true) {
+                    if (item_tr.attr('category_id') != undefined) {
+                        break;
+                    }
+                    item_tr = item_tr.prev();
+                }
+                var category_id = item_tr.attr('category_id');
+                $(item).attr('category_id', category_id);
+            });
+        }
+    });
+
+	$(function(){
+		$("#check_all").click(function(){
+			$("input[class='list']").prop('checked', $(this).prop("checked"));
+		});
+		$("#add_category").click(function(){
+            var dialog = art.dialog({
+                id: 'add_category',
+                title: "增加类别",
+                lock:true,
+                ok: function (data) {
+                    $("#category_add_form").submit();
+                },
+                cancel:true
+            });
+            $.ajax({
+                url: "{:U('product/category_add')}",
+                success: function (data) {
+                    dialog.content(data);
+                },
+                cache: false
+            });
+		});
+	});
+
+    $(".webshowbtn").click(function(){
+        var showbtn = $(this);
+        var category_id = showbtn.attr("rel");
+        var state = showbtn.attr("state");
+        $.ajax({
+            type: 'get',
+            url: "{:U('product/category_webshow')}",
+            data:{
+                id:category_id,
+                state:state
+            },
+            success: function (data) {
+                if (data) {
+                    alert("设置成功");
+                    window.location.reload();
+                }
+            },
+            dataType:'json'
+        });
+    });
+
+    $("#sort_btn").click(
+        function() {
+            var position = [];
+            $.each($(".list"), function(i, item){
+                position.push(item.value);
+            });
+
+            $.get('{:U("product/category_sort")}',{postion:position}, function(data){
+                if (data.status == 1) {
+                    $('.alert.alert-success').remove();
+                    $(".page-header").after('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>' + data.info + '</div>');
+                } else {
+                    $('.alert.alert-error').remove();
+                    $(".page-header").after('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>' + data.info + '</div>');
+                }
+            }, 'json');
+        }
+    );
+</script>
+<include file="Public:footer" />	

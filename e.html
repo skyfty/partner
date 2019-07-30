@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>国际版MIni弹窗设置接口</title>
+</head>
+<body>
+<a href="javascript:void(0);" onclick="setpop(7)">Do not pop-up in 7 days</a><br/>
+<a href="javascript:void(0);" onclick="setpop(-1)">Never pop-up</a>
+
+<script type="text/javascript">
+    function setpop(n) {
+        window.external.setpop(n);
+    }
+</script>
+</body>
+</html>

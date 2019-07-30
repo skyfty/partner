@@ -1,0 +1,203 @@
+<include file="Public:header" />
+<include file="Public:indexmedia" />
+
+<div class="container">
+    <include file="Public:alert" />
+
+    <div class="page-header" style="border:none; font-size:14px; ">
+        <include file="Serve:navcat" />
+    </div>
+    <p class="view">
+        <i class="icon-list"></i>
+        <a href="{:U('')}&{:FP($parameter, 'by=&lia=')}" <if condition="$Think.get.lia eq null">class="active"</if>>
+        {:L('ALL')}
+        </a>
+        <a href="{:U('')}&{:FP($parameter, 'lia=self')}" <if condition="$Think.get.lia eq 'self'">class="active"</if>>
+        我负责的
+        </a>
+
+        <i class="icon-time"></i>
+        <a href="{:U('')}&{:FP($parameter, 'by=today')}" <if condition="$Think.get.by eq 'today'">class="active"</if>>{:L('TODAY_IS_NEW')}</a>
+        <a href="{:U('')}&{:FP($parameter, 'by=fmonth')}" <if condition="$Think.get.by eq 'fmonth'">class="active"</if>>上月新建</a>
+        <a href="{:U('')}&{:FP($parameter, 'by=month')}" <if condition="$Think.get.by eq 'month'">class="active"</if>>{:L('THIS_MONTH_THE_NEW')}</a>
+
+        <i class="icon-check"></i>
+        <a href="{:U('')}&{:FP($parameter, 'by=cx')}" <if condition="$Think.get.by eq 'cx'">class="active"</if>>已撤销</a>
+        <a href="{:U('')}&{:FP($parameter, 'by=dk')}" <if condition="$Think.get.by eq 'dk'">class="active"</if> >待开始</a>
+        <a href="{:U('')}&{:FP($parameter, 'by=jx')}" <if condition="$Think.get.by eq 'jx'">class="active"</if>>进行中</a>
+        <a href="{:U('')}&{:FP($parameter, 'by=js')}" <if condition="$Think.get.by eq 'js'">class="active"</if>>已结束</a>
+        <!--<a href="{:U('')}&{:FP($parameter, 'by=df')}" <if condition="$Think.get.by eq 'df'">class="active"</if>>待付款</a>-->
+
+    </p>
+    <div class="row-fluid">
+        <div class="span1 knowledgecate">
+            <include file="Trade:leftnav" />
+        </div>
+
+        <div class="span11" style="float: right">
+            <ul class="breadcrumb">
+                <li><a href="{:U('')}&{:FP($parameter, 'cat=')}">全部</a> <span class="divider">/</span></li>
+                <volist name="bread_list" id="bread">
+                    <li><a href="{:U('')}&{:FP($parameter, 'cat='.$bread['serve_category_id'])}">{$bread['name']}</a> <span class="divider">/</span></li>
+                </volist>
+                <li class="active">{$focus_category['name']}</li>
+            </ul>
+        </div>
+        <div class="span11"  style="float: right">
+            <div class="bulk-actions align-left">
+                <ul class="nav pull-left">
+                    <form class="form-inline" id="searchForm" action="" method="get">
+                        <li class="pull-left">
+                            <button  id="delete"  type="button" class="btn  btn-danger" style="margin-right: 5px;">
+                                <i class="icon-remove"></i>{:L('DELETE')}
+                            </button >
+                        </li>
+                        <if condition="session('user_id') eq '1'">
+                            <li class="pull-left">
+                                {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                                <script>
+                                    $(function() {
+                                        $("#bylea").change(def_short_search_select);
+                                    });
+                                </script>
+                            </li>
+                        </if>
+                        <li class="pull-left">
+                            {:branch_select_html("bybr", $branch,true, true, 6, $league['league_id'])}&nbsp;&nbsp;
+                            <script>
+                                $(function() {
+                                    $("#bybr").change(def_short_search_select);
+                                });
+                            </script>
+                        </li>
+                        <li class="pull-left">
+                            <if condition="($Think.get.trade_group_id neq null) and ($Think.get.group_type eq '1')">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        组管理<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a id="add_group" href="javascript:void(0);">添加到组</a></li>
+                                        <li><a id="remove_group" href="javascript:void(0);">从本组移除</a></li>
+                                    </ul>
+                                </div>
+                            <else/>
+                                <button  id="add_group" type="button"  class="btn" style="margin-right: 5px;">
+                                    <img src="__PUBLIC__/img/customer_source_icon.png"/>添加到组
+                                </button >
+                            </if>
+                        </li>
+
+                        <li class="pull-left">
+                            <include file="Public:def_index_fields_filter_select" />
+
+                        </li>
+                        <include file="Public:def_index_search_form" />
+                    </form>
+                </ul>
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="{:U('trade/add')}"  target="_blank">
+                            <i class="icon-plus"></i>&nbsp; 添加订单
+                        </a>&nbsp;
+                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="javascript:void(0);" id="advanced_dosearch" class="link">
+                                    {:L('ADVANCED_SEARCH')}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" id="excelExport" class="link">
+                                    </i>导出到Excel
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="span11"  style="float: right">
+            <form id="form1"  method="Post">
+                <table class="table table-hover table-striped table-condensed table_thead_fixed" id="listtable">
+                    <thead>
+                    <tr id="childNodes_num">
+                        <th>
+                            <input class="check_all" name="check_all" id="check_all" type="checkbox" /> &nbsp;
+                        </th>
+                        <include file="Trade:model_list_header" />
+                        <th>相关方</th>
+                        <th style="width:30px;">{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td id="td_colspan">
+                            {$page}
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="list" id="vo">
+                    <tr>
+                        <td>
+                            <input class="check_list" type="checkbox"  trade_name="{$vo['category']}" name="trade_id[]" value="{$vo.trade_id}"/>
+                        </td>
+                        <include file="Trade:model_list_row" />
+                        <td>
+                            <if condition="$vo['corre_info'] neq null">
+                                {$vo.corre_info}
+                            </if>
+                        </td>
+                        <td>
+                            <a href="{:U('trade/view','id='.$vo['trade_id'])}" target="_blank"   title="查看详细">
+                                <i class="icon-th-large"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<include file="Public:export_dialog" />
+<include file="Public:groupstance" />
+<include file="Public:adv_search" />
+<script>
+    $("#advanced_dosearch").click(function(){
+        $('#adv-search').dialog('open');
+        $('#adv-search').load('{:U("Trade/search")}');
+    });
+</script>
+
+
+<script type="text/javascript">
+
+    $(function(){
+
+        $("#check_all").click(function(){
+            $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+        });
+
+        $('#delete').click(function(){
+            art.dialog.confirm('确定删除吗?', function () {
+                $("#form1").attr('action', '{:U("trade/delete")}');
+                $("#form1").submit();
+            });
+
+        });
+
+        $(".trade_group").change(function(){
+            var trade_name = $(this).attr("trade_name");
+            $("input[trade_name='" +trade_name+ "']").prop('checked', $(this).prop("checked"));
+        });
+    });
+</script>
+<include file="Public:footer" />
+

@@ -1,0 +1,23 @@
+<form action="{:U('product/changedefstate')}" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="id" value="{$product_id}"/>
+    <input type="hidden" name="role_id" value="{$Think.session.role_id}">
+    <table class="table table-hover">
+        <tr>
+            <td class="tdleft">工作状态</td>
+            <td>
+                <select id="defeventstate" name="defeventstate">
+                    <volist name="workstate" id="w">
+                        <option value="{$w['workstate_id']}" <if condition="($w['workstate_id'] eq $defeventstate)">selected="selected"</if> >{$w['name']}</option>
+                    </volist>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input class="btn btn-primary" type="submit" name="submit" value="保存"/> &nbsp;
+                <input class="btn" onclick="javascript:$('#dialog-default-state-edit').dialog('close');" type="button" value="{:L('CANCEL')}"/>
+            </td>
+        </tr>
+    </table>
+</form>

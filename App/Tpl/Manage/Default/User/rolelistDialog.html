@@ -1,0 +1,58 @@
+
+<div>
+    <ul class="nav pull-left">
+        <li class="pull-left">
+            &nbsp;&nbsp;
+            <select id="role_field" style="width:auto" onchange="on_roleChangeCondition()" name="field">
+                <option value="">任意</option>
+            </select>&nbsp;
+        </li>
+        <include file="Public:listdialogsearch" />
+    </ul>
+</div>
+<p>&nbsp;</p>
+<empty name="list">
+    <div class="alert">{:L('THERE_IS_NO_DATA')}</div>
+<else/>
+    <table class="table table-hover" style="margin-bottom:1px">
+    <thead>
+    <tr id="role_dialog_thead">
+        <th></th>
+        <th>用户名</th>
+        <th>岗位</th>
+        <th>手机</th>
+    </tr>
+    </thead>
+    <tbody id="role_data">
+    <volist name="list" id="vo">
+        <tr>
+            <td>
+                <input type="radio" name="role_id" value="{$vo.role_id}" />
+            </td>
+            <td><if condition="$vo['category_id'] == 1"><img style="width:16px;" src="__PUBLIC__/img/admin_img.png"/><else /><img style="width:16px;" src="__PUBLIC__/img/user_img.png"/></if> &nbsp; <a href="{:U('user/view','id=' . $vo['user_id'])}">{$vo.name}</a></td>
+            <td>{$vo.department_name} - {$vo.role_name}</td>
+            <td>{$vo.telephone}</td>
+        </tr>
+    </volist>
+    </tbody>
+    <include file="Public:listdialogpage" />
+    </table>
+</empty>
+<script id="new-role-template" type="text/x-jquery-tmpl">
+{{each(i,b) list}}
+<tr>
+	<td>
+        <input type="radio" name="role_id" value="${b.role_id}">
+    </td>
+    <td>
+    {{if b.category_id==0}}
+        <img style="width:16px;" src="__PUBLIC__/img/admin_img.png"/>
+    {{else}}
+         <img style="width:16px;" src="__PUBLIC__/img/user_img.png"/>
+    {{/if}} &nbsp; <a href="{:U('user/view')}&id=${b.user_id}">${b.name}</a>
+    </td>
+    <td>${b.department_name} - ${b.role_name}</td>
+    <td>${b.telephone}</td>
+</tr>
+{{/each}}
+</script>

@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_currier_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("currier/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_currier(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("currier/listDialog")}', {
+            id: 'select_currier_dialog',
+            title: "选择新培训项目",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var currier_id = $(this.iframe.contentWindow.document).find('input:radio[name="currier"]:checked').val();
+                var data = {
+                    'id': currier_id
+                };
+                request_currier_info(data, cb?cb:on_currier_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

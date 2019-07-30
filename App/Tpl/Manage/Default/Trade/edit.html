@@ -1,0 +1,46 @@
+<include file="Public:header" />
+<script type="text/javascript" src="__PUBLIC__/js/kindeditor-all-min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/zh_CN.js"></script>
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>修改产品订单</h4>
+		</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form id="form1" action="{:U('')}" method="post" enctype="multipart/form-data">
+			    <input type="hidden" name="id" value="{$trade.trade_id}"/>
+                <input name="a" type="hidden" value="edit">
+                <include file="Public:editfieldstable" />
+			</form>
+		</div>
+	</div>
+</div>
+<include file="Serve:selectDialog" />
+<script type="text/javascript">
+    $("#serve_name").after("<span id='serve_span'></span>");
+    function on_serve_info(b) {
+        $('#price').val(b.price);
+        $('input:text[name="serve_name"]').val(b.serve_name);
+        $('input:hidden[name="serve_id"]').val(b.serve_id);
+    }
+    $('#serve_name').click(select_serve);
+</script>
+
+
+<script>
+    function calculate_trade_sum_price() {
+        var price = $("#price").val();
+        var amount = $("#amount").val();
+        $("#sum_price").val((price * amount).toFixed(2));
+    }
+    $("#price").change(calculate_trade_sum_price);
+    $("#amount").change(calculate_trade_sum_price);
+
+</script>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

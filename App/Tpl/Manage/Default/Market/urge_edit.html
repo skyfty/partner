@@ -1,0 +1,27 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header">
+        <h4>修改促单信息</h4>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <include file="Public:alert" />
+            <form action="{:U('')}" method="post"  enctype="multipart/form-data">
+                <input type="hidden" name="refer_url" value="{$refer_url}"/>
+                <input type="hidden" name="market_urge_id" value="{$market_urge['market_urge_id']}" />
+                <input type="hidden" name="id" value="{$market_urge['market_urge_id']}" />
+                <include file="Public:editfieldstable" />
+            </form>
+        </div>
+    </div>
+</div>
+<include file="Public:editfieldvalid"/>
+<script>
+    $(function(){
+        <if condition="$market_urge['isdefault'] neq 0">
+        $("#urge_role_id_name").attr("disabled", "disabled");
+        </if>
+    });
+</script>
+<include file="Public:footer" />

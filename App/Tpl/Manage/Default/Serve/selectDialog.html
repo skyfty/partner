@@ -1,0 +1,39 @@
+
+<script type="text/javascript">
+
+    function request_serve_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("serve/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_serve(param) {
+        art.dialog.data('param', param)
+        art.dialog.open("{:U('Serve/listDialog')}", {
+            id: 'select_serve_dialog',
+            title: "选择产品",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 510,
+            ok: function () {
+                var serve_id = $(this.iframe.contentWindow.document).find('input:radio[name="serve_id"]:checked').val();
+                var data = {
+                    'id': serve_id
+                };
+                request_serve_info(data, on_serve_info);
+            },
+            cancel: true
+        });
+    }
+
+</script>

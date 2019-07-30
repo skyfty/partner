@@ -1,0 +1,164 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+        </div>
+        <div class="span12">
+            <form action="{:U('')}" method="post" id="form1">
+                <input type="hidden" name="m" value="account"/>
+                <input type="hidden" name="a" value="cultivateadd"/>
+                <input type="hidden" name="t" id="t" value="cultivate"/>
+                <input type="hidden" name="refer_url" id="refer_url" value="{$refer_url}"/>
+                <input type="hidden" name="account_type" id="account_type" value="cultivate"/>
+                <input type="hidden" name="income_or_expenses" id="income_or_expenses" value="1"/>
+                <input type="hidden" name="clause_type_id" id="clause_type_id" value="{$account_type['type_id']}"/>
+                <input type="hidden" name="restrict" id="restrict" value="{$restrict}"/>
+                <input type="hidden" name="submit_time" value="{$submit_time}"/>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td  style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="button" onclick="on_click_return()" value="{:L('RETURN')}"/></td>
+
+                        </td>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td  style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;
+                            <input class="btn" type="button" onclick="on_click_return()" value="{:L('RETURN')}"/></td>
+                        </td>
+                    </tr>
+                    </tfoot>
+
+                    <tbody>
+                    <tr style="display: none">
+                    <td class="tdleft" width="5%" valign="middle" id="model">
+                       服务
+                    </td>
+                    <td valign="middle" colspan="3">
+                        <input type="hidden" name="clause_additive" id="clause_additive" value="{$clause_additive}">
+                        <input type="hidden" name="clause_idcode" id="clause_idcode" value="{$clause['idcode']}">
+                        <span id="clause_name_Tip" style="color:red;" class="onShow"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="10%">支付方式:</td>
+                        <td>
+                            <select class="weui_select" id="payway" name="payway">
+                                <option value="">--请选择--</option>
+                                <volist name=":payway_list()" id="vo">
+                                <option value="{$vo}">{$vo}</option>
+                                </volist>
+                                <option value="余额冻结">余额冻结</option>
+                            </select>
+                            <span id="paywayTip" style="color: red; display: none;" class="onShow">
+                                <span style="color:red;">*必选项</span>
+                            </span>
+                        </td>
+                        <td class="tdleft" width="5%">金额:</td>
+                        <td>
+                            <input type="text" id="money" name="money" value=""> &nbsp;
+                            <span id="moneyTip" style="color: red; display: none;" class="onShow">
+                                <span style="color:red;">*必选项</span>
+                            </span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="5%">支付时间:</td>
+                        <td>
+                            <input style="background:white;cursor:pointer;" readonly="readonly" accuracy="time" onfocus="show_wdate_picker('yyyy-MM-dd HH:mm',this);" name="payment_time" class="Wdate" id="payment_time" type="text" value="">
+                        </td>
+                        <td class="tdleft" width="5%">收据号:</td>
+                        <td>
+                            <input  name="receipt_number" id="receipt_number" type="text" value="">
+                            <span id="receipt_numberTip" style="color: red; display: none;" class="onShow">
+                                <span style="color:red;">*必选项</span>
+                            </span>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td class="tdleft" width="10%">描述:</td>
+                        <td colspan="3">
+                            <textarea style="width:80%" rows="6" class="span6" id="description" name="description"></textarea> &nbsp;
+                            <span id="descriptionTip" style="color:red;"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div> <!-- End #tab1 -->
+    </div> <!-- End #main-content -->
+</div>
+
+
+<script>
+    <if condition="$Think.get.money != ''">
+        $("#money").val("{$Think.get.money}");
+    </if>
+
+    $("#payway").change(function(){
+        var payway = $(this).val();
+        if (payway == "余额冻结") {
+            get_account_tip(222, "customer", "{$clause['customer_id']}");
+        } else {
+            $("#money").attr('placeholder', "");
+        }
+
+        if (payway == '余额冻结' || payway == '解冻') {
+            $("#receipt_number").attr('disabled', "disabled");
+            $("#payment_time").attr('disabled', "disabled");
+            $("#payment_time").css("background-color","#eee");
+            $("#receipt_numberTip").html('');
+            set_receipt_number_form_validator(false);
+        } else {
+            $("#receipt_number").removeAttr('disabled');
+            $("#payment_time").removeAttr('disabled');
+            $("#payment_time").css("background-color","white");
+            set_receipt_number_form_validator(true);
+        }
+    });
+</script>
+<include file="Account:newfieldvalid" />
+
+<script>
+    function set_receipt_number_form_validator(b) {
+        if (b) {
+            $("#receipt_number").formValidator({
+                empty:false,
+                onFocus:" ",
+                onShow: " ",
+                onCorrect:"<span style='color:green;'>√</span>"
+            }).inputValidator({
+                min:1,max:10,
+                onErrorMin:"收据号不能为空！",
+            });
+        } else {
+            $("#receipt_number").formValidator({
+                empty:true,
+                onShow: " ",
+            });
+        }
+
+    }
+
+
+    $(function(){
+        $("#payway").formValidator({
+            empty:false,
+            onFocus:" ",
+            onShow: " ",
+            onError:" ",
+            onCorrect:"<span style='color:green;'>√</span>"
+        }).inputValidator({
+            min:1,max:100,
+            onErrorMin:"支付方式不能为空！",
+        });
+    });
+</script>
+<include file="Public:footer" />	

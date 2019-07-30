@@ -1,0 +1,65 @@
+
+<div style="border: 1px solid #CCCCCC">
+<div id="datatree"></div>
+</div>
+
+<link type="text/css" href="__PUBLIC__/jstree/themes/default/style.css?t=20140830"  rel="stylesheet"/>
+<script src="__PUBLIC__/jstree/jstree.js"></script>
+<script>
+    $(function () {
+        var url = "{:U('branch/employee', 'id='.$branch['branch_id'])}";
+        $('#datatree').jstree({
+            'core' : {
+                "animation" : 0,
+                "check_callback" : true,
+
+                "themes" : { "stripes" : true },
+                'data' : {
+                    "url" : url,
+                    "dataType" : "json"
+                },
+                'multiple':false
+            },
+            "themes":{
+                "theme" : "classic",
+                "dots" : true,
+                "icons" : true,
+                "variant" : "large"
+
+            },
+            "types" : {
+                "root" : {
+                    "icon" : "/static/3.2.1/assets/images/tree_icon.png",
+                    "valid_children" : ["default"]
+                },
+                "default" : {
+                    "valid_children" : ["default","file"]
+                },
+                "file" : {
+                    "icon" : "glyphicon glyphicon-file",
+                    "valid_children" : []
+                }
+            },
+            'force_text' : true,
+            'plugins' : [
+                'state','sort','types','unique',
+                'dnd',
+                "contextmenu"
+            ],
+            "contextmenu": {
+                "items": on_contextmenu
+            }
+        }).on('move_node.jstree', function (e, data) {
+            $.get("{:U('branch/employee_move', 'id='.$branch['branch_id'])}", { 'nodeid' : data.node.id, 'parent' : data.parent })
+                    .done(function (d) {
+                    })
+                    .fail(function () {
+                        data.instance.refresh();
+                    });
+        }).bind("loaded.jstree", function (e, data) {
+                data.instance.open_all(-1);
+            }
+        );
+    });
+
+</script>

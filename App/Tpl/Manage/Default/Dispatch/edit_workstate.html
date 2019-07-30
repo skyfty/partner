@@ -1,0 +1,12 @@
+<form action="{:U('dispatch/edit_workstate')}" enctype="multipart/form-data" method="post" id="edit_workstate_form">
+    <input type="hidden" name="product_id" value="{$product['product_id']}"/>
+    <input type="hidden" name="role_id" value="{$Think.session.role_id}">
+    <table class="table table-hover">
+        <tr>
+            <td class="tdleft">工作状态</td>
+            <td>
+                {$workstate_id}
+            </td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,28 @@
+<volist name="fields_group" id="gvo">
+    <tr><th colspan="4">{$gvo.name}</th></tr>
+    <include file="Public:editfield" />
+</volist>
+
+
+<script type="text/javascript">
+
+    //初始化上传图片
+    $("body").on('click','input[type="file"]', function(){
+        var selector = $(this).attr('id');
+        var name = $(this).attr('name');
+        name = name.substring(0, 4);
+        var imgtype = [];
+        if (name == "vid_" ){
+            imgtype =["flv", "mp4", "3gp"];
+        } else if (name == "pic_") {
+            imgtype =["gif", "jpeg", "jpg", "bmp", "png"];
+        }
+        var opt = {
+            Img: selector+"_prev",
+            Width: 120,
+            Height: 120,
+            ImgType:imgtype
+        };
+        $("#"+selector).uploadPreview(opt);
+    });
+</script>

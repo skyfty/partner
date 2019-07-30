@@ -1,0 +1,522 @@
+<include file="Public:header" />
+
+<div class="container">
+<!-- Docs nav ================================================== -->
+<div class="page-header">
+    <h4><a name="tab">{:L('PRODUCT_DETAILS')}</a></h4>
+</div>
+<div class="row">
+<div class="span12">
+<include file="Public:alert" />
+<div class="tabbable">
+    <include file="Product:navtab" />
+</div>
+<div class="tab-content">
+<table class="table">
+    <thead>
+    <tr>
+        <td colspan="4">
+        <p style="font-size: 14px;">
+            <a href="javascript:void(0);" class="add_log">{:L('ADD_THE_LOG')}</a> |
+            <eq name="product['is_owner']" value="true">
+            <a href="{:U('product/addproductcat','product_id='.$product['product_id'])}">{:L('ADD_CAT')}</a> |
+            <a href="{:U('product/skilledit','product_id='.$product['product_id'].'&assort='.$assort)}">{:L('COMPILE')}</a> |
+            <a href="{:U('product/appraiseadd','product_id='.$product['product_id'].'&assort='.$assort)}">增加鉴定</a> |
+            </eq>
+            <eq name="product['is_owner']" value="true">
+            <if condition="$product['skill_submit_time'] eq 0">
+                <a>未提交</a>|
+            <else />
+                <a href="javascript:void(0);" class="verify">
+                    审核
+                    <if condition="$product['skill_verify'] eq -1">
+                        [审核未通过]
+                    <elseif condition="$product['skill_verify'] eq 0"/>
+                        [待审核]
+                    <else />
+                        [审核通过]
+                    </if>
+                </a>|
+                <a  href="{:U('product/reset_verify','state=-1&product_id='.$product['product_id'])}" class="reset_verify">
+                    重置提交
+                </a>|
+            </if>
+            </eq>
+        </p>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td colspan="6">
+            <include file="Product:basicinfo" />
+        </td>
+    </tr>
+    <volist name="fields_group" id="gvo">
+        <tr>
+            <th colspan="4">
+                {$gvo.name}
+            </th>
+
+        </tr>
+        <if condition="$gvo.field_group_id == '0'">
+            <tr>
+                <td class="tdleft" width="15%">{:L('DENGJI_TIME')}</td>
+                <td>
+                    <if condition="$product['create_time'] neq 0">
+                        {$product.create_time|date='Y-m-d H:i:s',###}
+                    </if>
+                </td>
+                <td class="tdleft">
+                    {:L('ADD_THE_INFORMATION_ON_PRODUCTS')}
+                </td>
+                <td>
+                    <a class="role_info" href="javascript:void(0)" rel="{$product.owner.role_id}">
+                        {$product.owner.user_name}
+                    </a>
+                </td>
+            </tr>
+        </if>
+
+        <php>$j=0;</php>
+        <volist name="gvo['fields']" id="vo">
+            <if condition="$vo['operating'] != '4'">
+                <php>$j++;</php>
+                <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['one_row'] == '1'">
+                    <if condition="$i%2 == 0">
+                        <td colspan="2">&nbsp;</td>
+                        </tr>
+                    </if>
+                    <tr>
+                        <td class="tdleft" width="15%">{$vo.name}:</td>
+                        <td colspan="5">
+                            {$vo.html}
+                        </td>
+                    </tr>
+                    <if condition="$i%2 != 0 && count($gvo['fields']) != $j">
+                        <php>$i++;</php>
+                    </if>
+                    <else/>
+                    <if condition="$i%2 != 0">
+                        <tr>
+                    </if>
+                    <td class="tdleft" width="15%">{$vo.name}:</td>
+                    <td width="35%">
+                        <span style="color:#{$vo['color']}">
+                            {$vo.html}
+                        </span>
+                    </td>
+                    <if condition="$i%2 == 0">
+                        </tr>
+                    </if>
+
+                    <if condition="$i%2 != 0 && count($gvo['fields']) == $j">
+                        <td colspan="3">&nbsp;</td>
+                        </tr>
+                    </if>
+                </if>
+            </if>
+        </volist>
+        <if condition="$gvo.field_group_id == '0'">
+            <tr>
+                <td class="tdleft">{:L('QR_CODE_CARD_INFORMATION')}</td>
+                <td <if condition="C('ismobile') neq 1">colspan="3"</if> style="color:#005580;">
+                <div class="pull-left">
+                    <img src="{:U('product/qrcode', 'product_id='.$product['product_id'])}"/>
+                </div>
+                <div class="pull-left">{:L('FUNCTION_DESCRIPTION')}</div>
+                </td>
+            </tr>
+        </if>
+    </volist>
+
+    </tbody>
+</table>
+
+<table class="table">
+    <tbody><tr>
+        <th>技能鉴定</th>
+    </tr>
+    <tr>
+        <td>
+            <table id="datatables" class="display datatables" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>科目名称</th>
+                    <th>笔试成绩</th>
+                    <th>实操成绩</th>
+                    <th>是否通过</th>
+                    <th>鉴定时间</th>
+                    <th style="width: 70px">操作</th>
+                </tr>
+                </thead>
+            </table>
+        </td>
+    </tr>
+    </tbody></table>
+
+
+
+
+<script id="appraise-info-tmpl" type="text/x-jquery-tmpl">
+<table class="table" cellpadding="2" cellspacing="0" border="0">
+    <tbody>
+        <tr>
+            <td class="tdleft" width="15%">科目名称</td>
+            <td>${course}</td>
+            <td class="tdleft" width="15%">笔试成绩</td>
+            <td>${written_exam}</td>
+            <td class="tdleft" width="15%">实操成绩</td>
+            <td>${operate_exam}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">是否通过</td>
+            <td>${passed}</td>
+            <td class="tdleft" width="15%">鉴定时间</td>
+            <td  colspan="3">${appraise_time_show}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">备注</td>
+            <td colspan="5">${describe}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">证书扫描</td>
+            <td colspan="5">{{html certificate_pic.html}}</td>
+        </tr>
+    </tbody>
+</table>
+</script>
+
+<script id="appraise-operator-tmpl" type="text/x-jquery-tmpl">
+    <a style="padding-left:2px" href="{:U('product/appraiseedit')}&id=${product_appraisal_id}">编</a>
+    <a style="padding-left:2px" href="{:U('product/appraisedelete')}&id=${product_appraisal_id}"  onclick="return del_confirm();">删</a>
+</script>
+
+
+<script>
+
+    $(document).ready(function() {
+        var table = $('#datatables').DataTable( {
+            ajax: {
+                "data": function(d) {
+                },
+                "url": "{:U('product/appraise_list', 'id='.$product['product_id'])}"
+            },
+            "columns": [
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+                { "data": "course" },
+                { "data": "written_exam" },
+                { "data": "operate_exam" },
+                { "data": "passed" },
+                { "data": "appraise_time_show" },
+                {
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+            ],
+            "columnDefs": [
+                {
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).html($("#appraise-operator-tmpl").tmpl(rowData));
+                    },
+                    "targets": 6
+                },
+                {
+                    "bSortable": false,
+                    "targets": 0
+
+                }
+            ],
+            "bStateSave":true,
+            'searching':false,
+            "processing": true,
+            "order": [[1, 'asc']],
+            'language': def_dataTable_lang_opt,
+        } );
+
+        $('#datatables tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                row.child($("#appraise-info-tmpl").tmpl(row.data())).show();
+                tr.addClass('shown');
+            }
+        } );
+
+        $('#datatables').on( 'init.dt', function () {
+            <if condition="$Think.get.show_product_id">
+                    $("#product_mark_{$Think.get.show_product_id}").parent().parent().find(".details-control").click();
+            </if>
+
+        }) .dataTable();
+
+    } );
+
+</script>
+
+
+    <table class="table table-hover">
+    <tr>
+        <th>服务类别</th>
+    </tr>
+
+    <if condition="$product.skill eq null">
+        <tr>
+            <td>{:L('THERE_IS_NO_DATA')} </td>
+        </tr>
+    <else />
+        <volist name="product.skill" id="skill_group_list">
+            <table class="table">
+                <tbody>
+                <volist name="skill_group_list['skill_field']" id="group_list">
+                    <php>$j=0;</php>
+                    <volist name="group_list['fields']" id="vo">
+                        <php>$j++;</php>
+                        <if condition="$vo['form_type'] == 'textarea' or $vo['form_type'] == 'editor' or $vo['one_row'] == '1'">
+                            <if condition="$i%2 == 0">
+                                <td colspan="2">&nbsp;</td>
+                                </tr>
+                            </if>
+                            <tr>
+                                <td class="tdleft" width="15%">{$vo.name}:</td>
+                                <td colspan="3">{$vo.html}</td>
+                            </tr>
+                            <if condition="$i%2 != 0 && count($skill_field_list['skill_field']) != $j">
+                                <php>$i++;</php>
+                            </if>
+                            <else/>
+                            <if condition="$i%2 != 0">
+                                <tr>
+                            </if>
+                            <td class="tdleft" width="15%">{$vo.name}:</td>
+                            <td width="35%">
+                                <span style="color:#{$vo['color']}">
+                                <if condition="$vo['form_type'] eq 'p_box'">
+                                    {$vo.html}
+                                <elseif condition="stristr('http://',$vo['default_value']) && 'http://' != $skill[$vo['field']] && '' != $product[$vo['field']]" />
+                                    <a href="{$skill[$vo['field']]}" target="_blank">{$vo.html}</a>
+                                <else />
+                                    {$vo.html}
+                                </if>
+                                </span>
+                            </td>
+                            <if condition="$i%2 == 0">
+                                </tr>
+                            </if>
+                            <if condition="$i%2 != 0 && count($skill_field_list['skill_field']) == $j">
+                                <td colspan="2">&nbsp;</td>
+                                </tr>
+                            </if>
+                        </if>
+                    </volist>
+                </volist>
+                <tr>
+                    <td colspan="6">
+                    <eq name="product.is_owner" value="true">
+                    <a href="{:U('product/editproductcat','id='.$skill_group_list['skill_id'].'&assort=skill&product_id='.$product['product_id'])}" class="edit_cat_event">
+                        {:L('EDIT')}
+                    </a>&nbsp;
+                    <a href="{:U('product/delproductcat','id='.$skill_group_list['skill_id'].'&assort=skill&product_id='.$product['product_id'])}" class="del_confirm">
+                        {:L('DELETE')}
+                    </a>&nbsp;
+                    <!--<if condition="$skill_group_list['status'] eq 1">-->
+                        <!--<a href="javascript:void(0);" onclick="update_confirm({$skill_group_list['skill_id']}, 0)">-->
+                            <!--升级通过-->
+                        <!--</a>&nbsp;-->
+                        <!--<a href="javascript:void(0);" onclick="update_confirm({$skill_group_list['skill_id']}, 1)">-->
+                            <!--升级不通过-->
+                        <!--</a>&nbsp;-->
+                    <!--</if>-->
+                    </eq>
+                    </td>
+                </tr>
+            </table>
+        </volist>
+        </tbody>
+    </if>
+</table>
+
+<div>
+    <ul class="nav nav-tabs"  id="log-tabs">
+        <volist name="logcat" id="logc">
+            <li><a href="#log-{$logc}"  data-toggle="tab">{$logc}</a></li>
+        </volist>
+    </ul>
+    <div class="tab-content">
+    <volist name="logcat" id="logc">
+        <div class="tab-pane"  id="log-{$logc}">
+            <table class="table">
+                <if condition="$product['log'][$logc] eq null">
+                    <tr>
+                        <td>{:L('THERE_IS_NO_DATA')}</td>
+                    </tr>
+                    <else />
+                    <volist name="product['log'][$logc]" id="vo">
+                        <tr>
+                            <td>
+                                <notempty name="vo.owner.user_name"><a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a></notempty> &nbsp;
+                                {$vo.create_date|date="Y-m-d  g:i:s a",###} &nbsp;
+                                <notempty name="vo.create_date"> &nbsp; </notempty>
+                                <if condition="C('ismobile') eq 1"><br/></if>
+                                {$vo.subject}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <if condition="strlen($vo['content']) gt 100">
+                                    <div id="slog_{$vo.log_id}">
+                                        <pre>{$vo.content|msubstr=###,0,100}
+                                        <a class="more" rel="{$vo.log_id}" href="javascript:void(0)">{:L('READ_MORE')}</a></pre>
+                                    </div>
+                                    <div id="llog_{$vo.log_id}" class="hide">
+                                        <pre>{$vo.content}</pre>
+                                    </div>
+                                    <else/>
+                                    <pre>{$vo.content}</pre>
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                </if>
+                <tr>
+                    <td colspan="2" style="text-align: right">
+                        <a target="_blank" href="{:U('log/index', 'r=RLogProduct&module=product&assort='.$assort.'&type='.$logcatid[$logc])}">
+                            更多...
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </volist>
+    </div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<script>
+    $(function() {
+        $('#log-tabs a:first').tab('show');
+    });
+</script>
+
+<div id="dialog-edit-jujue-desc" class="modal fade" role="dialog"  aria-hidden="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+                备注
+            </h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                关闭
+            </button>
+            <button type="submit" class="btn btn-primary" onclick="save_jujue_desc();">
+                保存
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(".reset_verify").click(function(){
+        return confirm('确实要重置提交状态吗？');
+    });
+    $(".verify").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "验证",
+            lock:true,
+            ok: function () {
+                var state = $("input[name='state']:checked").val();
+                if (state == 0 && $("#describe").val() == "") {
+                    alert("必须说明审核不通过原因");
+                    return false;
+                }
+                $("#myform").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url:'{:U("product/verify","module=product&assort=skill&product_id=".$product["product_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+
+    $(".add_log").click(function(){
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "增加日志",
+            lock:true,
+            ok: function (data) {
+                $("#add-log").submit();
+            },
+            cancel:true
+        });
+        $.ajax({
+            url: '{:U("log/add","r=RLogProduct&assort=skill&module=product&id=".$product["product_id"])}',
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    });
+
+    $(".more").click(function(){
+        var log_id = $(this).attr('rel');
+        $('#llog_'+log_id).attr('class','');
+        $('#slog_'+log_id).attr('class','hide');
+    });
+
+    var confirm_url = "{:U('product/skill_update_task')}&product_id={$product['product_id']}&";
+    function update_confirm(skill_id, state) {
+        if (state == 1) {
+            if (confirm("确认不通过升级申请吗?")) {
+                $('#dialog-edit-jujue-desc').modal({
+                    show: true,
+                    remote: "{:U('product/update_confirm_desc')}&skill_id=" + skill_id,
+                });
+            }
+        } else {
+            if (confirm("确认通过升级申请吗?")) {
+                window.location.assign(confirm_url + "&sid=" + skill_id + "&state=" + state);
+            }
+        }
+    }
+    function save_jujue_desc() {
+        var desc = $("#desc").val();
+        if (desc == "") {
+            alert("必须注明拒绝原因");return;
+        }
+        var skill_id = $("#skill_id").val();
+        $('#dialog-edit-jujue-desc').modal('hide');
+        window.location.assign(confirm_url + "&sid=" + skill_id + "&state=1&desc=" + desc);
+    }
+
+</script>
+
+<include file="Public:footer" />

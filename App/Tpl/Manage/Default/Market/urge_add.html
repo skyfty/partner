@@ -1,0 +1,24 @@
+<include file="Public:header" />
+
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4>添加促单信息</h4>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<include file="Public:alert"/>
+			<form id="form1" action="{:U('')}" method="post"  enctype="multipart/form-data">
+			    <input type="hidden" name="refer_url" value="{$refer_url}"/>
+				<input type="hidden" name="creator_id" value="{$_SESSION.user_id}"/>
+                <input type="hidden" name="m" value="market"/>
+                <input type="hidden" name="a" value="urge_add"/>
+				<input type="hidden" name="market_id" value="{$Think.get.id}"/>
+                <include file="Public:editfieldstable" />
+            </form>
+		</div>
+	</div>
+</div>
+
+<include file="Public:newfieldvalid"/>
+<include file="Public:footer" />

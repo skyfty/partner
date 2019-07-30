@@ -1,0 +1,44 @@
+<table class="table" style="margin-bottom:0px">
+    <tr>
+        <td>
+            <input id="date_select_wsbt" readonly="readonly" type="text" style="width:70px;background-color: white;cursor:default;" placeholder="开始时间" class="input-medium" name="wsbt" onfocus="list_col_fielter_date_select_begin_callback()">
+            -
+            <input id="date_select_wset" readonly="readonly" type="text" style="width:70px;background-color: white;cursor:default;" placeholder="结束时间" class="input-medium" name="wset" onfocus="list_col_fielter_date_select_end_callback()">
+
+            <button type="button"   class="btn btn-mini btn-default date_select_dialog_ok_btn" style="float: right">确定</button>
+
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function list_col_fielter_date_select_begin_callback() {
+        <if condition="$field_info['is_showtime'] eq '1'">
+        WdatePicker({
+            alwaysUseStartDate:true,
+            startDate:'%y-%M-%d 00:00:00',
+            dateFmt: 'yyyy-MM-dd HH:mm'
+        })
+        <else/>
+        WdatePicker({dateFmt: 'yyyy-MM-dd'})
+        </if>
+    }
+
+    function list_col_fielter_date_select_end_callback() {
+    <if condition="$field_info['is_showtime'] eq '1'">
+                WdatePicker({
+                    alwaysUseStartDate:true,
+                    startDate:'%y-%M-%d 23:59:59',
+                    dateFmt: 'yyyy-MM-dd HH:mm'
+                })
+                <else/>
+        WdatePicker({dateFmt: 'yyyy-MM-dd'})
+        </if>
+    }
+    $(function() {
+        $('.date_select_dialog_ok_btn').click(function (event) {
+            $("[field='{$field}']").qtip('api').hide(event);
+        });
+    });
+
+</script>

@@ -1,0 +1,257 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>{:L('PRODUCTION_EDITOR')}</h4>
+		</div>
+	<div class="row">
+        <div class="span12">
+			<include file="Public:alert" />
+		</div>
+        <div class="span12">
+			<form id="form1" action="{:U('product/edit', 'id='.$product['product_id'])}" method="post" enctype="multipart/form-data">
+			<table class="table" border="0" cellspacing="1" cellpadding="0">
+                <thead>
+                <tr>
+                    <td style="text-align:center;" colspan="4">
+                        <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                        <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                    </td>
+                </tr>
+                </thead>
+				<tfoot>
+					<tr>
+						<td style="text-align:center;" colspan="4">
+                            <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                        </td>
+                    </tr>
+				</tfoot>
+				<tbody>
+                    <tr><th  colspan="4">{:L('PRODUCT_PICTURE')}</th></tr>
+                    <tr>
+                        <td class="tdleft" height="125">主图</td>
+                        <td colspan="3" height="125">
+                            <input type="hidden" name="main_images_id" value="{$product.images.main.images_id}"/>
+                            <table  class="table table-striped">
+                                <tbody>
+                                <tr>
+                                    <td  height="135">
+                                        <input type="radio" name="main_pic" value="1" <if condition="$product['main_pic'] == 1">checked</if> />主图
+                                        <div class="thumbnail cardpicthumb">
+                                            <if condition="empty($product['images']['main']['path'])">
+                                                <img id="work_pic_prev" class="cardpicthumb" />
+                                            <else />
+                                                <a href="{$product.images.main.path}" target="_self" data-lightbox="roadtrip">
+                                                    <img id="work_pic_prev" src="{$product.images.main.path}" class="cardpicthumb" />
+                                                </a>
+                                            </if>
+
+                                            <a href="javascript:del_img_main('{$product.images.main.images_id}', 'work_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                            <a href="javascript:void(0);" onclick="photograph_main('work_pic');">
+                                                <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                            </a>
+                                        </div>
+                                        <div class="btn btn-success fileinput-button">
+                                            <span>选择头像文件</span>
+                                            <input type="file" name="work_pic[]" id="work_pic">
+                                            <input type="hidden" name="work_pic_base64" id="work_pic_base64">
+                                        </div>
+                                    </td>
+                                    <td  height="135">
+                                        <input type="radio" name="main_pic" value="2" <if condition="$product['main_pic'] != 1">checked</if>/>主图
+
+                                        <div class="thumbnail cardpicthumb">
+                                            <if condition="empty($product['images']['cardpic']['path'])">
+                                                <img id="card_pic_prev" class="cardpicthumb" />
+                                            <else/>
+                                                <img id="card_pic_prev" src="{$product.images.cardpic.path}" class="cardpicthumb " />
+                                            </if>
+                                            <a href="javascript:del_img_main('{$product.images.cardpic.images_id}', 'card_pic_prev');"><i class="icon-remove del_parts"></i></a>
+                                            <a href="javascript:void(0);" onclick="photograph_main('card_pic');">
+                                                <img class="del_parts" style="left:5px" src="./Public/img/xiangji.jpg">
+                                            </a>
+                                        </div>
+                                        <div class="btn btn-success fileinput-button">
+                                            <span>选择证件文件</span>
+                                            <input type="file" name="card_pic[]" id="card_pic">
+                                            <input type="hidden" name="card_pic_base64" id="card_pic_base64">
+                                        </div>
+                                    </td>
+                                    <input type="hidden" name="main_pic_type" id="main_pic_type" value="s"/>
+                                    <td width="70%">{:L('PRODUCT_MAIN_PICTURE_TIP')}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <include file="Public:editfieldsgroup" />
+                </tbody>
+			</table>
+                <input name="a" type="hidden" value="edit">
+                <input name="m" type="hidden" value="product">
+                <input type="hidden" name="product_id" value="{$product.product_id}"/>
+			</form>
+		</div>
+	</div>
+</div>
+
+<object id="rcard" type="application/x-rcard"  width="0" height="0">
+    <param name="onload" value="pluginLoaded" />
+</object>
+<script>
+    function del_img_main(param, pic_pre){
+        if(param){
+            if(confirm('{:L("CONFIRM_DELETE")}')){
+                $.ajax({
+                    'type':'get',
+                    'dataType':'json',
+                    'url':'{:U("product/delImg")}',
+                    'data':{images_id:param},
+                    'success':function(data){
+                        if(data.status == 1){
+                            $('#'+pic_pre).attr("src", "");
+                        }else{
+                            alert(data.info);
+                        }
+                    }
+                });
+            }
+        }else{
+            $('#'+pic_pre).attr("src", "");
+        }
+    }
+
+    $(function(){
+        var rcard = document.getElementById('rcard');
+        if (rcard.valid) {
+            if (rcard.attachEvent) {
+                rcard.attachEvent("onperson", person);
+            } else {
+                rcard.addEventListener("person", person, false);
+            }
+            rcard.open();
+
+        <if condition="$readcard == '1'">
+            rcard.person(true);
+        </if>
+        }
+
+        function person(p) {
+            if (p && p.cardid) {
+                var cardinfo = {
+                    name: p.name,
+                    address: p.address,
+                    cardid: p.cardid,
+                    police: p.police,
+                    nation: p.nation,
+                    sex: p.sex,
+                    validstart: p.validstart.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    validend: p.validend.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    birthday: p.birthday.toDate("yyyyMMdd").format("yyyy-MM-dd"),
+                    nationcode: p.nationcode,
+                    msg: p.msg
+                };
+                for (var i in cardinfo) {
+                    $("#" + i).val(cardinfo[i]);
+                }
+                rcard.attachfile(p.pic, function(imgbase){
+                    var img = "data:image/gif;base64," + imgbase;
+                    $("#card_pic_prev").attr("src", img);
+                    $("#card_pic_base64").val(img);
+                    $("#main_pic_type").val("s");
+                });
+                on_cardid_change();
+            }
+        }
+
+        <if condition="$per_change_owner_id neq true">
+        $("#owner_role_id_name").attr("disabled", "disabled");
+        </if>
+    });
+    function on_birthday_focus() {
+        WdatePicker({onpicked : on_birthday_picked});
+    }
+
+    function on_birthday_picked() {
+        reset_zodiac_constellation($("#birthday").val());
+    }
+
+    function reset_zodiac_constellation(birthday) {
+        var birtinfo = birthday.split('-');
+        var zodiac = getshengxiao(birtinfo[0]);
+        $("#zodiac option[value='"+zodiac+"']").prop("selected", true);
+
+        var constellation = getxingzuo(birtinfo[1], birtinfo[2]);
+        $("#constellation option[value='"+constellation+"']").prop("selected", true);
+    }
+
+    function on_cardid_change() {
+        var cardid = $("#cardid").val();
+        if (cardid) {
+            var birthday = getBirth(cardid);
+            $("#birthday").val(birthday);
+            reset_zodiac_constellation(birthday);
+        }
+    }
+    $("#cardid").change(on_cardid_change)
+
+    function channel_role_model_change() {
+        $('#telephone').qtip('destroy', true);
+        var telephone = $("#telephone").val();
+        if (!isMobile(telephone)) {
+            return;
+        }
+
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("product/check_commiss_info")}',
+            'data':{
+                "telephone":telephone,
+                "product_id":{$product.product_id},
+            },
+            'success':function(data){
+                if(data.status == 1 && data.data){
+                    $('#telephone').qtip(
+                    {
+                        hide: 'unfocus',
+                        show:true,
+                        style: 'qtip-bootstrap',
+                        content: '这个雇员的联系方式在客服模块有登记，请联系客服指派.客服电话: {:defaultinfo("commiss_telephone")}'
+                    });
+                }
+            }
+        });
+    }
+
+    $("#telephone").blur(function(){
+        channel_role_model_change();
+    });
+</script>
+
+<script id="channel_role_model_chosen_templ" type="text/x-jquery-tmpl">
+<div class="chosen-container chosen-container-single" style="width: 220px;" title="" id="channel_role_model_chosen_cover">
+    <a class="chosen-single">
+        <span>
+        ${channel_role_model_name}
+        </span>
+        <input type="hidden" name="channel_role_model_saver" value="${channel_role_model}">
+    </a>
+</div>
+</script>
+
+<if condition="!vali_permission('product', 'channeledit')">
+<script>
+    $('#channel_role_id_name').attr("disabled","disabled");
+    $("#channel_role_model_chosen").hide();
+    var crm = $("#channel_role_model option:selected").html();
+    $("#channel_role_model").after($("#channel_role_model_chosen_templ").tmpl({"channel_role_model_name":crm}));
+</script>
+</if>
+
+<include file="Public:editfieldvalid" />
+
+
+<include file="Public:def_channel_datapick"/>
+<include file="Public:footer" />

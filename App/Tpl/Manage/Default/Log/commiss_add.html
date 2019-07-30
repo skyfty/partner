@@ -1,0 +1,41 @@
+<form class="form-horizontal" action="{:U('Log/add')}" method="post" id="add-log">
+	<input type='hidden' name="r" <present name="r">value="{$r}"</present>/>
+	<input type='hidden' name="module" <present name="r">value="{$module}"</present>/> 
+	<input type='hidden' name="id" <present name="r">value="{$model_id}"</present>/> 
+	<input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+    <input type='hidden' name="category_id" value="1"/>
+	<if condition="$Think.get.type">
+		<input type='hidden' name="type" value="{$Think.get.type}"/>
+	</if>
+    <table class="table">
+		<tr>
+			<td class="tdleft">类型</td>
+			<td colspan="3">
+				<select id="assort" name="assort">
+					<if condition="vali_permission('commiss', 'logger', 'xs')">
+					<option value="xsbv">销售日志</option>
+					</if>
+					<if condition="vali_permission('commiss', 'logger', 'kf')">
+					<option value="kfbv">客服日志</option>
+					</if>
+				</select>
+				<input type="checkbox" name="logpubshow" id="logpubshow" />公开显示
+				<script>
+					function logpubshow_check() {
+						var sel = $(this).children('option:selected').val();
+						$("#logpubshow").attr("disabled",sel != "kfbv");
+					}
+					$("#assort").change(logpubshow_check);
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdleft">{:L('SUBJECT')}</td>
+			<td colspan="3"><input class="span3" type="text" name="subject" id="subject" placeholder="{:L('LESS_THAN_50_CHARACTER')}" /></td>
+		</tr>
+		<tr>
+			<td class="tdleft">{:L('CONTENT')}</td>
+			<td colspan="3"><textarea rows="6" class="span7" name="content"></textarea></td>
+		</tr>
+	</table>
+</form>

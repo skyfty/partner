@@ -1,0 +1,43 @@
+
+<script id="date-search" type="text/x-jquery-tmpl">
+<div id="account-datatable-date-filter" style="padding-left:20px" class="dataTables_filter">
+
+<div style="float:left;padding-top:4px">起止日期：</div>
+<input type="text" placeholder="开始时间" style="width:145px"   id="start_time" name="start_time" onClick="on_start_time_focus();" class="Wdate" value="{$Think.get.start_time}"/>
+<input style="float:right;" placeholder="结束时间"  style="width:145px" type="text" id="end_time" onClick="on_end_time_focus();" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+</div>
+</script>
+
+<script type="text/javascript">
+    var logger_table = $('#logger-datatable').dataTable(datatable_options);
+
+    $("#logger-datatable_filter").html($("#account-options").tmpl());
+    $("#logger-datatable_length").after($("#date-search").tmpl());
+
+    $("#logscope").chosen({
+        max_selected_options: 5,
+        disable_search:true,
+    });
+
+    function on_end_time_focus() {
+        var mindate = $("#start_time").val();
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm:ss',
+            minDate: mindate,
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_start_time_focus() {
+        WdatePicker({
+            dateFmt:'yyyy-MM-dd HH:mm:ss',
+            onpicked : on_time_change,
+            oncleared:on_time_change
+        });
+    }
+
+    function on_time_change() {
+        logger_table.fnClearTable(true);
+    }
+</script>

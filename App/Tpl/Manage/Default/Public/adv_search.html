@@ -1,0 +1,23 @@
+
+<script>
+    function advsearch(url) {
+        var dialog = art.dialog({
+            id: 'N3690',
+            title: "高级搜索",
+            lock:true,
+            ok: function () {
+                $("#adv_search_form").submit();
+            },
+            cancel:true,
+        });
+        dialog.size('20em', 60);
+        $.ajax({
+            url: url,
+            success: function (data) {
+                dialog.content(data);
+            },
+            cache: false
+        });
+    }
+</script>
+

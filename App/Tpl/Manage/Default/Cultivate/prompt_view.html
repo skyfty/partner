@@ -1,0 +1,35 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+	<div class="page-header">
+        <h4><a name="tab">新培训订单信息</a>
+            <span style="font-size: medium;color: #0088cc;"> - {$cultivate['idcode']} - {$cultivate['currier_id']|currier_show_html} - {$cultivate['model_show_html']}</span>
+        </h4>
+	</div>
+	<include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+		<div class="tabbable span12">
+			<div class="tab-content">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td colspan="4">
+                                <p style="font-size: 14px;">
+                                    <a href="{:U('prompt/add', 'ret_ref=1&model=cultivate&model_id='.$cultivate['cultivate_id'])}">添加</a> |
+                                </p>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <include file="Public:def_prompt_list"/>
+                    </tbody>
+                </table>
+			</div>
+		</div>
+	</div>
+</div>
+<include file="Public:footer" />	

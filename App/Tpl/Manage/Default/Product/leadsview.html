@@ -1,0 +1,100 @@
+<include file="Public:header" />
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">{:L('PRODUCT_DETAILS')}</a></h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Product:navtab" />
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Product:basicinfo" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--  -->
+                <p class="view">
+                    <i class="icon-list"></i>
+                    <a href="{:U('product/leadsview','assort=leads&id='.$product_id)}" <if condition="$Think.get.by eq null">class="active"</if>>
+                    {:L('ALL')}
+                    </a>
+
+                    <i class="icon-calendar"></i>
+                    <volist name="comm_state" id="vo">
+                        <a href="{:U('product/leadsview','by=cs&assort=leads&id='.$product_id)}&cs={$vo}" <if condition="$Think.get.cs eq '$vo'">class="active"</if>>{$vo}</a>&nbsp;
+                    </volist>
+
+                    <i class="icon-road"></i>
+                    <volist name="audition_state" id="vo">
+                        <a href="{:U('product/leadsview','by=as&assort=leads&id='.$product_id)}&as={$vo}" <if condition="$Think.get.as eq '$vo'">class="active"</if>>{$vo}</a>&nbsp;
+                    </volist>
+                </p>
+                <table class="table" class="display" cellspacing="0" width="100%" id="leads-data-tables">
+                    <thead>
+                    <tr>
+                        <volist name="field_array" id="vo">
+                            <th>
+                                {$vo.name}
+                            </th>
+                        </volist>
+                        <th>沟通状态</th>
+                        <th>面试状态</th>
+                        <th style="width:30px;">{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="product.leads" id="vo">
+                        <tr>
+                            <include file="Leads:model_list_row" />
+                            <td>{$vo.comm_state}</td>
+                            <td>{$vo.audition_state}</td>
+                            <td>
+                                <a href="{:U('leads/log', 'log=comm&leads_record_id='.$vo['leads_record_id'])}">
+                                    <i class="icon-road"></i>
+                                </a>
+                                <a href="{:U('leads/view','id='.$vo['leads_id'])}"  title="查看详细">
+                                    <i class="icon-th-large"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <style>
+                    th, td { white-space: nowrap; }
+                    div.dataTables_wrapper {
+                        width: 1155px;
+                        margin: 0 auto;
+                    }
+                </style>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#leads-data-tables').dataTable( {
+                            "scrollX": true,
+                            "order": [[ 0, "desc" ]],
+                            'language': def_dataTable_lang_opt
+                        } );
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="Public:footer" />

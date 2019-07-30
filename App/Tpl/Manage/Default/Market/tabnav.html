@@ -1,0 +1,45 @@
+<ul class="nav nav-tabs">
+
+    <li <if condition="$Think.get.assort eq 'basic' || $Think.get.assort  eq ''">class="active"</if> >
+    <a href="{:U('market/view', 'id='.$market['market_id'])}">基本信息</a>
+    </li>
+
+    <if condition="vali_permission('market','view','product')">
+    <li <if condition="$Think.get.assort  eq 'product'">class="active"</if>>
+    <a href="{:U('market/view', 'id='.$market['market_id'].'&assort=product')}">雇员服务信息</a>
+    </li>
+    </if>
+
+    <if condition="vali_permission('market','view','channel')">
+    <li <if condition="$Think.get.assort  eq 'channel'">class="active"</if>>
+    <a href="{:U('market/view', 'id='.$market['market_id'].'&assort=channel')}">渠道信息</a>
+    </li>
+    </if>
+
+    <if condition="vali_permission('market','view','account')">
+    <li <if condition="$Think.get.assort  eq 'account'">class="active"</if>>
+    <a href="{:U('market/view', 'id='.$market['market_id'].'&assort=account')}">付款信息</a>
+    </li>
+    </if>
+
+    <if condition="vali_permission('market','view','cost')">
+    <li <if condition="$Think.get.assort  eq 'cost'">class="active"</if>>
+    <a href="{:U('market/view', 'id='.$market['market_id'].'&assort=cost')}">成本结算</a>
+    </li>
+    </if>
+
+    <if condition="vali_permission('market','view','prompt')">
+    <li <if condition="$Think.get.assort  eq 'prompt'">class="active"</if>>
+    <a href="{:U('market/view', 'id='.$market['market_id'].'&assort=prompt')}">提醒列表
+        <if condition="$promtp_count gt 0">
+        <div style="color: red;float:right" class="animated bounce infinite">({$promtp_count})</div>
+            </if>
+
+    </a>
+    </li>
+    </if>
+
+    <li <if condition="$Think.get.assort  eq 'logger'">class="active"</if>>
+    <a href="{:U('market/view', 'id='.$market['market_id'].'&assort=logger')}">日志</a>
+    </li>
+</ul>

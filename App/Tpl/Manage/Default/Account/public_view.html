@@ -1,0 +1,26 @@
+<script>
+
+    function change_payment_verify(account_id) {
+        art.dialog.open('{:U("account/change_payment_verify", "t=".$type."&id=")}' + account_id, {
+            id: 'change_payment_verify_dialog',
+            title: "审核账目",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            ok: function () {
+                var tipdialog = show_lock_tips('提交中...');
+                var form = $(this.iframe.contentWindow.document).find('#change_payment_verify_form');
+                $(form).ajaxSubmit({
+                    success: function() {
+                        tipdialog.close();
+                        art.dialog.tips("状态修改成功");
+                        window.location.reload();
+                    }
+                });
+                this.close();
+                return false;
+            },
+            cancel: true
+        });
+    }
+</script>

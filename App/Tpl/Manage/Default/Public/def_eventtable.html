@@ -1,0 +1,156 @@
+<script src="__PUBLIC__/datepicker/js/eye.js" type="text/javascript"></script>
+
+<script  type="text/javascript">
+    function parseDate(date, format) {
+        if (date.constructor == Date) {
+            return new Date(date);
+        }
+        var parts = date.split(/\W+/);
+        var against = format.split(/\W+/), d, m, y, h, min, now = new Date();
+        for (var i = 0; i < parts.length; i++) {
+            switch (against[i]) {
+                case 'd':
+                case 'e':
+                    d = parseInt(parts[i],10);
+                    break;
+                case 'm':
+                    m = parseInt(parts[i], 10)-1;
+                    break;
+                case 'Y':
+                case 'y':
+                    y = parseInt(parts[i], 10);
+                    y += y > 100 ? 0 : (y < 29 ? 2000 : 1900);
+                    break;
+                case 'H':
+                case 'I':
+                case 'k':
+                case 'l':
+                    h = parseInt(parts[i], 10);
+                    break;
+                case 'P':
+                case 'p':
+                    if (/pm/i.test(parts[i]) && h < 12) {
+                        h += 12;
+                    } else if (/am/i.test(parts[i]) && h >= 12) {
+                        h -= 12;
+                    }
+                    break;
+                case 'M':
+                    min = parseInt(parts[i], 10);
+                    break;
+            }
+        }
+        return new Date(
+                y === undefined ? now.getFullYear() : y,
+                m === undefined ? now.getMonth() : m,
+                d === undefined ? now.getDate() : d,
+                h === undefined ? now.getHours() : h,
+                min === undefined ? now.getMinutes() : min,
+                0
+        );
+    }
+
+    (function($){
+        var initLayout = function() {
+            var def_event_picker_option = {
+                flat: true,
+                date: ['2009-12-28','2010-01-23'],
+                format: 'Y-m-d',
+                mode: 'single',
+                starts: 1,
+                locale: {
+                    days: ["日", "一", "二", "三", "四", "五", "六", "日"],
+                    daysShort: ["日", "一", "二", "三", "四", "五", "六", "日"],
+                    daysMin: ["日", "一", "二", "三", "四", "五", "六", "日"],
+                    months: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                    monthsShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"],
+                    weekMin: 'wk'
+                },
+                onBeforeShow: function(){
+                    return true;
+                },
+
+                onInit: function(options){
+                    options.onDateChange(options);
+                },
+
+                onDateChange:function(options){
+                    var currentCal = Math.floor(options.calendars/2);
+                    var beginDate = new Date(options.current);
+                    beginDate.addMonths(-currentCal);
+                    var endDate = new Date(options.current);
+                    endDate.addMonths(-currentCal + options.calendars);
+                    options.reqeventdate(beginDate, endDate);
+                },
+                onRender: function(date, in_month) {
+                    for (var i = 0; i < window.eventData.length; ++i) {
+                        var d = window.eventData[i];
+                        if (in_month && d.begin <= date && date <= d.end) {
+                            var bd = moment(d.begin).get("date"), ed = moment(d.end).get("date");
+                            var bm = moment(d.begin).get("month"), em = moment(d.end).get("month");
+                            var cd = moment(date).get("date");
+                            var cm = moment(date).get("month");
+                            var md = ((bm == cm && bd == cd) || (em == cm && ed == cd));
+                            var wid = d.event.workstate_id;
+                            var cls = {
+                                disabled: wid=="请假"||wid=="公司培训"||wid=="司外订单"||wid == "上岗",
+                            };
+                            if (wid == "请假") {
+                                cls['className'] = "quanquan";
+                            } else if (wid == "公司培训") {
+                                cls['className'] = "lvsee";
+                            }else if(wid == "司外订单"){
+                                cls['className'] = "busy";
+                            } else{
+                                cls['className'] = md ? "quanbann" : "quanoo";
+                            }
+                            return cls;
+                        }
+                    }
+
+                    var state_css = {disabled: false,className: false};
+                    if (!in_month || moment() >= date) {
+                        state_css['disabled'] = true;
+                    }
+                    return state_css;
+                },
+
+                reqeventdate: function(beginDate, endDate) {
+                    var product_id = "{$product_id}";
+                    var url = '{:U("Product/getevent", "product_id=".$product_id)}';
+                    url += "&start_date=" + beginDate.format("yyyy-MM-dd");
+                    url += "&end_date=" + endDate.format("yyyy-MM-dd");
+                    window.eventData = [];
+                    $.ajax({type: "GET", url: url,
+                        success: function(data){
+                            if (data && data[product_id]) {
+                                data[product_id].forEach(function(e){
+                                    window.eventData.push({
+                                        event: e,
+                                        begin: new Date(e.start.replace(/-/g, "/")),
+                                        end: new Date(e.end.replace(/-/g, "/"))
+                                    });
+                                });
+                            }
+                            window.event_picker.DatePickerClear();
+                        }
+                    });
+                }
+            };
+            window.eventData = [];
+            window.check_event = function(date) {
+                for (var i = 0; i < window.eventData.length; ++i) {
+                    var d = window.eventData[i];
+                    if (d.begin <= date && date <= d.end) {
+                        return d;
+                    }
+                }
+            };
+
+            window.event_picker = $('#event_datepicker').DatePicker($.extend(def_event_picker_option, event_picker_option));
+        };
+        EYE.register(initLayout, 'init');
+    })(jQuery)
+</script>
+
+

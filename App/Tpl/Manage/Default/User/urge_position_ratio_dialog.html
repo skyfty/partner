@@ -1,0 +1,20 @@
+<form id="urge_position_ratio_dialog_form" class="form-horizontal" action="{:U('User/urge_position_ratio_dialog')}" method="Post">
+
+<table class="table table-hover" id="user_table">
+	<thead>
+		<tr>
+            <th width="60px">级别</th>
+			<th>系数</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<volist name="ratio_setting" id="vo">
+		<tr>
+            <td>{$vo}</td>
+			<td><input class="level_input" type="number" name="{$vo}" maxlength="" value="{$staff_level_ratio[$vo]}"></td>
+		</tr>
+		</volist>
+	</tbody>
+</table>
+</form>

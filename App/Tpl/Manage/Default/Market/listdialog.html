@@ -1,0 +1,56 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-hover" id="market_dialog_table">
+                <thead>
+                <tr>
+                    <th style="width: 10px">&nbsp;</th>
+                    <th>编号</th>
+                    <th>类别</th>
+                    <th>状态</th>
+                    <th>结算状态</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script id="market-checkbox" type="text/x-jquery-tmpl">
+{{if no_settle_state == 1 && settle_state != 918}}
+<input type="radio" name="market_id" value="" disabled="disabled" />
+{{else}}
+<input type="radio" name="market_id" value="${market_id}" />
+{{/if}}
+</script>
+
+<script>
+    var param = art.dialog.data("param");
+    if (param == null || typeof param['no_settle_state'] == "undefined") {
+        param['no_settle_state'] = 0;
+    }
+    $('#market_dialog_table').dataTable({
+        ajax: {
+            "url": "{:U('Market/listDialog')}",
+            "data":param
+        },
+        "columnDefs": [
+            {
+                "bSortable": false,
+                "targets": 0,
+                "createdCell": function (td, cellData) {
+                    cellData.no_settle_state = param.no_settle_state;
+                    $(td).html($('#market-checkbox').tmpl(cellData));
+                }
+            }
+        ],
+        "pageLength": 7,
+        "scrollX": true,
+        "serverSide": true,
+        "processing": true,
+        "order": [[ 1, "desc" ]],
+        'language': def_dataTable_lang_opt
+    });
+</script>
+</body>

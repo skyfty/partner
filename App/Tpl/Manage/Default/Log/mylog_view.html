@@ -1,0 +1,155 @@
+<include file="Public:header" />
+<div class="container">
+	<div class="page-header">
+		<h4>{:L('LOG_VIEW')}</h4>
+	</div>
+	<include file="Public:alert"/>
+	<div class="row">
+		<div class="tabbable span12">
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<table class="table" border="0" cellspacing="1" cellpadding="0">
+						<tbody>
+							<tr>
+								<td colspan="2">
+									<span style="font-size: 18px;color: #000;font-weight: 600;">
+										{$log.subject} &nbsp; 
+										<span style="font-size:14px;">
+											<span style="font-weight:500;color: #000;">(
+											<notempty name="log['creator']['user_name']">
+												<a class="role_info" rel="{$log.creator.role_id}" href="javascript:void(0)">
+													<span style="font-size:14px;">{$log.creator.user_name}</span>
+												</a>
+											</notempty>:{$log.create_date|date="Y-m-d H:i",###})
+											</span>
+										</span>&nbsp;  &nbsp;  &nbsp;
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<th colspan="2">{:L('BASIC_INFO')}</th>
+							</tr>
+							<tr>
+								<td class="tdleft" width="17%">详细内容:</td>
+								<td><div style="min-height:200px"><if condition="$log.content neq null">{$log.content}</if></div></td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-pane" id="tab2">
+					<table class="table table-hover">
+						<if condition="$log.file eq null">
+							<tr>
+								<td>{:L('EMPTY_DATA')} </td>
+							</tr>
+						<else /> 
+							<tr>
+								<th>&nbsp;</th>
+								<th>{:L('FILE_NAME')}</th>
+								<th>{:L('SIZE')}</th>
+								<th>{:L('ADDED_BY')}</th>
+								<th>{:L('ADD_TIME')}</th>
+							</tr>
+							<volist name="log.file" id="vo">
+								<tr>
+									<td class="tdleft">
+										<a href="{:U('file/delete','r=RFileLeads&id='.$vo['file_id'])}" class="del_confirm">{:L('DELETE')}</a>
+									</td>
+									<td>
+										<a target="_blank" href="{$vo.file_path}">{$vo.name}</a>
+									</td>
+									<td>
+										{$vo.size}{:L('BYTE')}
+									</td>
+									<td>
+										<notempty name="vo.owner.user_name"><a class="role_info" rel="{$vo.owner.role_id}" href="javascript:void(0)">{$vo.owner.user_name}</a></notempty>
+									</td>
+									<td>
+										<notempty name="vo.create_date">{$vo.create_date|date="Y-m-d g:i:s a",###}</notempty>
+									</td>
+								</tr>
+							</volist>
+						</if>
+						<tr>
+							<td colspan="5">
+								<a href="javascript:void(0);" class="add_file">{:L('ADD')}</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="hide" id="dialog-file" title="{:L('DIALOG_ADD_ATTACHMENTS')}">loading...</div>
+<div class="hide" id="dialog-role-info" title="{:L('DIALOG_USER_INFO')}">loading...</div>
+<if condition="$comment_role_id">
+<div class="hide" id="dialog-comment" title="{:L('COMMENT')}">loading...</div>
+<div class="hide" id="dialog-editcomment" title="{:L('EDIT_COMMENT')}">loading...</div>
+</if>
+<script type="text/javascript">
+<if condition="C('ismobile') eq 1">width=$('.container').width() * 0.9;<else/>width=600;</if>
+$("#dialog-file").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeigth: 400,
+	position: ["center",100]
+});
+$("#dialog-role-info").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$("#dialog-comment").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100],
+	buttons: { 
+		"{:L('OK')}": function () {
+			$('#comment').submit();
+			$(this).dialog("close"); 
+		},
+		"{:L('CANCEL')}": function () {
+			$(this).dialog("close");
+		}
+	}
+});
+$("#dialog-editcomment").dialog({
+    autoOpen: false,
+    modal: true,
+	width: width,
+	maxHeight: 400,
+	position: ["center",100],
+	buttons: { 
+		"{:L('OK')}": function () {
+			$('#editcomment').submit();
+			$(this).dialog("close"); 
+		},
+		"{:L('CANCEL')}": function () {
+			$(this).dialog("close");
+		}
+	}
+});
+$(function(){
+
+	<if condition="$comment_role_id">
+	$("#comment_btn").click(function(){
+		$('#dialog-comment').dialog('open');
+		$('#dialog-comment').load('{:U("comment/add","to_role_id=".$log["role_id"]."&module=log&module_id=".$log["log_id"])}');
+	});
+	$(".edit_comment_btn").click(function(){
+		comment_id = $(this).attr('rel');
+		$('#dialog-comment').dialog('open');
+		$('#dialog-comment').load('{:U("comment/edit","to_role_id=".$log["role_id"]."&id=")}'+comment_id);
+	});
+	</if>
+});
+</script>
+<include file="Public:footer" />

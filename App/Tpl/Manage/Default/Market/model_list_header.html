@@ -1,0 +1,132 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$vo['field'] == 'category_id'">
+            <include file="Public:def_index_list_col" />
+
+            <a onmouseover="mopen('category_list')" onmouseout="mclosetime()" href="javascript:void(0);">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.category_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.category_id|proudct_category_map}</span>
+            </if>
+            <div  id="category_list" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.category_id eq '')"> href="{:U('')}&{:FP($parameter, 'category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'category_id=')}"</if>>
+                全部
+                </a>
+                <volist name="category_list" id="vo">
+                    <a <if condition="($Think.get.category_id eq $vo['category_id'])"> href="{:U('')}&{:FP($parameter, 'category_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'category_id='.$vo['category_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'owner_role_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('owner_role_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="owner_role_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.owner_role_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.owner_role_id|role_show}</span>
+            </if>
+
+            <div id="owner_role_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.owner_role_id eq '')"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":market_owner_staff_list($category_id, $branch, $asids, $ssids)" id="vo">
+                    <a <if condition="($Think.get.owner_role_id eq $vo['role_id'])"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id='.$vo['role_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'survey_state'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('survey_state')" onmouseout="mclosetime()"  href="javascript:void(0);" id="survey_state_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.survey_state neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.survey_state}</span>
+            </if>
+            <div id="survey_state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.survey_state eq '')"> href="{:U('')}&{:FP($parameter, 'survey_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'survey_state=')}"</if>>
+                全部
+                </a>
+                <volist name=":model_select_field_list(982)" id="vo">
+                    <a <if condition="($Think.get.survey_state eq $vo)"> href="{:U('')}&{:FP($parameter, 'survey_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'survey_state='.$vo)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'evaluate_state'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('evaluate_state')" onmouseout="mclosetime()"  href="javascript:void(0);" id="evaluate_state_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.evaluate_state neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.evaluate_state}</span>
+            </if>
+            <div id="evaluate_state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.evaluate_state eq '')"> href="{:U('')}&{:FP($parameter, 'evaluate_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'evaluate_state=')}"</if>>
+                全部
+                </a>
+                <volist name=":model_select_field_list(981)" id="vo">
+                    <a <if condition="($Think.get.evaluate_state eq $vo)"> href="{:U('')}&{:FP($parameter, 'evaluate_state=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'evaluate_state='.$vo)}"</if>>
+                    {$vo}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'status_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('list_header_status_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="status_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+
+            <if condition="$status_list['as']['csid']">
+                <br/><span style="font-weight:normal">
+                <a href="{:U('')}&{:FP($parameter, 'asids=&asid=')}" style="color: darkmagenta"  class="active">[{$status_list['as']['csid']['name']}]</a>
+                </span>
+            </if>
+
+            <div id="list_header_status_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.asids eq $status_list['as']['sid'])">href="{:U('')}&{:FP($parameter, 'asids=&asid=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'asids='.$status_list['as']['sid'].'&asid=')}"</if>>
+                全部
+                </a>
+                <volist name="status_list['as']['slist']" id="vo">
+                    <a <if condition="($Think.get.asid eq $vo['status_id'])"> href="{:U('')}&{:FP($parameter, 'asid=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'asid='.$vo['status_id'].'&asids='.$status_list['as']['sid'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'settle_state'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('list_header_settle_state')" onmouseout="mclosetime()"  href="javascript:void(0);" id="settle_state_filter">
+                <i class="icon-filter"></i>
+            </a>
+
+           <if condition="$status_list['ss']['csid']">
+               <br/><span style="font-weight:normal">
+               <a href="{:U('')}&{:FP($parameter, 'ssids=&ssid=')}" style="color: darkmagenta"  class="active">[{$status_list['ss']['csid']['name']}]</a>
+                </span>
+           </if>
+
+            <div id="list_header_settle_state" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.ssids eq $status_list['ss']['sid'])">href="{:U('')}&{:FP($parameter, 'ssids=&ssid=')}" class="active"<else/>href="{:U('')}&{:FP($parameter, 'ssids='.$status_list['ss']['sid'].'&ssid=')}"</if>>
+                全部
+                </a>
+                <volist name="status_list['ss']['slist']" id="vo">
+                    <a <if condition="($Think.get.ssid eq $vo['status_id'])"> href="{:U('')}&{:FP($parameter, 'ssid=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'ssid='.$vo['status_id'].'&ssids='.$status_list['ss']['sid'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <else/>
+            <include file="Public:def_index_list_col" />
+            <include file="Public:def_index_list_field_col" />
+        </if>
+    </th>
+</volist>
+
+<script>
+    $(function(){
+        $.ajax("{:U('Market/make_owner_role_id_list_header')}")
+    });
+</script>

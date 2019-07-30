@@ -1,0 +1,60 @@
+<include file="Public:header" />
+<style>
+    table tbody tr{cursor:move;}
+</style>
+<script type="text/javascript" src="__PUBLIC__/js/jscolor/jscolor.js"></script>
+<div class="container">
+    <div class="page-header">
+        <h4>{:L('SYSTEM_SETTING')}</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="tabbable">
+        <include file="Setting:settingnav" />
+    </div>
+    <div class="row">
+        <div class="span2 knowledgecate">
+            <include file="Setting:fieldsnav" />
+        </div>
+        <form action="{:U('setting/fielddelete')}" method="post" onSubmit="return checkForm()">
+            <div class="span10">
+                <p><div class="bulk-actions align-left">
+                <button type="submit" class="btn"><i class="icon-remove"></i>&nbsp;{:L('DELETE')}</button>&nbsp;
+                <button class="btn" type="button" id="sort_btn"><span class="icon-file"></span>&nbsp;{:L('SAVE_ORDER')}</button>&nbsp;
+
+                <div class="pull-right">
+                    <button class="btn btn-default" type="button" id="fieldsgroup"><i class="icon-plus"></i>&nbsp; 分组管理</button>
+                    <a   data-toggle="modal"  href='{:U("setting/fieldadd","model=$model&assort=$assort")}' data-target="#dialog-add-field" class="btn btn-primary" id="add">
+                        <i class="icon-plus"></i>&nbsp; {:L('ADD_FIELDS')}
+                    </a>
+                </div>
+            </div></p>
+            </div>
+            <div class="tabbable span10">
+                <ul class="nav nav-tabs">
+                    <li  <if condition="$_GET['assort'] eq 'basic' || $_GET['assort'] eq ''">class="active"</if> >
+                    <a href="{:U('setting/product_fields', 'model=product&assort=basic')}">基本信息</a>
+                    </li>
+                    <li <if condition="$_GET['assort'] eq 'skill'">class="active"</if>>
+                    <a href="{:U('setting/product_fields', 'model=product&assort=skill')}">专业技能
+                    </a>
+                    </li>
+                    <li <if condition="$_GET['assort'] eq 'train'">class="active"</if> >
+                    <a href="{:U('setting/product_fields', 'model=product&assort=train')}">培训信息</a>
+                    </li>
+                    <li <if condition="$_GET['assort'] eq 'event'">class="active"</if> >
+                    <a href="{:U('setting/product_fields', 'model=product&assort=event')}">日程</a>
+                    </li>
+                    <li <if condition="$_GET['assort'] eq 'evaluate'">class="active"</if> >
+                    <a href="{:U('setting/product_fields', 'model=product&assort=evaluate')}">评价</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="span10">
+                <include file="Setting:fieldsgrouptable" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<include file="Setting:fieldsgroupjs" />
+<include file="Public:footer" />

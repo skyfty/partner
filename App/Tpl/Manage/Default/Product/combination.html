@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link type="text/css" href="http://apps.bdimg.com/libs/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="http://apps.bdimg.com/libs/bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/2.3.2/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/jquery.tmpl.min.js?t=20140830" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/moment.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.artDialog.js?skin=default"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/iframeTools.js"></script>
+
+    <link href="http://querybuilder.js.org/dist/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="http://querybuilder.js.org/dist/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="http://querybuilder.js.org/dist/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet">
+    <link href="http://querybuilder.js.org/dist/selectize/dist/css/selectize.bootstrap3.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Public/jquery-querybuilder/css/query-builder.default.css" id="qb-theme">
+    <link rel="stylesheet" href="http://mistic100.github.io/jQuery-QueryBuilder/assets/flags/flags.css">
+    <style>
+        .flag { display: inline-block; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <section class="bs-docs-section clearfix">
+
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+            <div id="builder-import_export" class="query-builder form-inline">
+                <dl id="builder-import_export_group_0" class="rules-group-container">
+                    <dt class="rules-group-header">
+                    <div class="btn-group pull-right group-actions">
+                        <button type="button" class="btn btn-xs btn-success" data-add="rule">
+                            <i class="glyphicon glyphicon-plus"></i> Add rule
+                        </button>
+                        <button type="button" class="btn btn-xs btn-success" data-add="group">
+                            <i class="glyphicon glyphicon-plus-sign"></i> Add group
+                        </button>
+                    </div>
+                    <div class="btn-group group-conditions">
+                        <button type="button" class="btn btn-xs btn-default" data-not="group"><i class="glyphicon glyphicon-unchecked"></i> NOT</button>
+                        <label class="btn btn-xs btn-primary active disabled">
+                            <input type="radio" name="builder-import_export_group_0_cond" value="AND" disabled=""> AND
+                        </label>
+                        <label class="btn btn-xs btn-primary disabled">
+                            <input type="radio" name="builder-import_export_group_0_cond" value="OR" disabled=""> OR
+                        </label>
+                    </div>
+                    <div class="error-container" data-toggle="tooltip">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                    </div>
+                    </dt>
+                    <dd class="rules-group-body">
+                        <ul class="rules-list">
+                            <li id="builder-import_export_rule_0" class="rule-container">
+                                <div class="rule-header">
+                                    <div class="btn-group pull-right rule-actions">
+                                        <button type="button" class="btn btn-xs btn-danger" data-delete="rule">
+                                            <i class="glyphicon glyphicon-remove"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="error-container" data-toggle="tooltip">
+                                    <i class="glyphicon glyphicon-warning-sign"></i>
+                                </div>
+                                <div class="rule-filter-container">
+                                    <select class="form-control" name="builder-import_export_rule_0_filter">
+                                        <option value="-1">------</option>
+                                        <option value="name">Name</option>
+                                        <option value="category">Category</option>
+                                        <option value="in_stock">In stock</option>
+                                        <option value="price">Price</option>
+                                        <option value="id">Identifier</option>
+                                    </select>
+                                </div>
+                                <div class="rule-operator-container"></div>
+                                <div class="rule-value-container"></div>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-warning reset" data-target="import_export">Reset</button>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-success set-sql" data-target="import_export">Set rules from SQL</button>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary parse-sql" data-target="import_export" data-stmt="false" id="btn-get-sql">SQL</button>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="http://querybuilder.js.org/dist/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+<script src="http://querybuilder.js.org/dist/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+<script src="http://querybuilder.js.org/dist/selectize/dist/js/standalone/selectize.min.js"></script>
+<script src="http://querybuilder.js.org/dist/sql-parser/browser/sql-parser.js"></script>
+<script src="http://querybuilder.js.org/dist/interact/dist/interact.min.js"></script>
+<script src="/Public/jquery-querybuilder/js/query-builder.standalone.js"></script>
+
+<script>
+    var sql_import_export = 'name LIKE "%Johnny%" AND (category = 2 OR in_stock = 1)';
+
+    var mongo_import_export = {
+        "$and": [{
+            "price": { "$lt": 10.25 }
+        }, {
+            "$or": [{
+                "category": 2
+            }, {
+                "category": 1
+            }]
+        }]
+    }
+
+    $('#builder-import_export').queryBuilder({
+        plugins: [
+            'not-group'
+        ],
+
+        filters: [{
+            id: 'name',
+            label: 'Name',
+            type: 'string'
+        }, {
+            id: 'category',
+            label: 'Category',
+            type: 'integer',
+            input: 'select',
+            values: {
+                1: 'Books',
+                2: 'Movies',
+                3: 'Music',
+                4: 'Tools',
+                5: 'Goodies',
+                6: 'Clothes'
+            },
+            operators: ['equal', 'not_equal', 'in', 'not_in', 'is_null', 'is_not_null']
+        }, {
+            id: 'in_stock',
+            label: 'In stock',
+            type: 'integer',
+            input: 'radio',
+            values: {
+                1: 'Yes',
+                0: 'No'
+            },
+            operators: ['equal']
+        }, {
+            id: 'price',
+            label: 'Price',
+            type: 'double',
+            validation: {
+                min: 0,
+                step: 0.01
+            }
+        }, {
+            id: 'id',
+            label: 'Identifier',
+            type: 'string',
+            placeholder: '____-____-____',
+            operators: ['equal', 'not_equal'],
+            validation: {
+                format: /^.{4}-.{4}-.{4}$/
+            }
+        }]
+    });
+
+    $('#btn-reset').on('click', function() {
+        $('#builder-import_export').queryBuilder('reset');
+    });
+
+    $('#btn-set-sql').on('click', function() {
+        $('#builder-import_export').queryBuilder('setRulesFromSQL', sql_import_export);
+    });
+
+
+    $('#btn-get-sql').on('click', function() {
+        var result = $('#builder-import_export').queryBuilder('getSQL');
+
+        if (result.sql.length) {
+            alert(result.sql + '\n\n' + JSON.stringify(result.params, null, 2));
+        }
+    });
+
+</script>
+</body>
+</html>

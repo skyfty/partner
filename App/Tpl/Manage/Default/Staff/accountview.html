@@ -1,0 +1,72 @@
+<include file="Public:header" />
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">员工详情</a></h4>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <include file="Staff:navtab" />
+            </div>
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <include file="Staff:basicinfo" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="table">
+                    <if condition="$is_admin || $self_staff == false">
+                    <tr>
+                        <td colspan="4">
+                            <a href="{:U('account/index', 'search='.$staff['staff_id']).'&field=clause_additive&t=staff&act=search'}" target="_blank">列表</a> &nbsp;
+                            <a href="{:U('account/add', 'clause_additive='.$staff['staff_id']).'&t=staff&dire=-1'}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">添加支出</a> &nbsp;
+                            <a href="{:U('account/add', 'clause_additive='.$staff['staff_id']).'&t=staff&dire=1'}&refer_add_url={$Think.Server.REQUEST_URI|urlencode}">添加收入</a> &nbsp;
+                        </td>
+                    </tr>
+                    </if>
+                    <tr>
+                        <td width="20%" class="tdleft">余额</td><td>{$staff.balance}</td>
+                        <td width="20%" class="tdleft">可支付余额</td><td>{$staff.actual}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%" class="tdleft">可提现余额</td><td>{$staff.cash}</td>
+                        <td width="20%" class="tdleft">总计未付金额</td><td>{$staff.sum_surplus_price}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%" class="tdleft">客户服务未付金额</td><td colspan="3">{$staff.market_surplus_price}</td>
+                    </tr>
+                </table>
+
+                <div>
+                    <include file="Public:def_account_list" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $('#account-tabs a:first').tab('show');
+    });
+</script>
+
+<include file="Public:footer" />

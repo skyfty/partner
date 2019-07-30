@@ -1,0 +1,78 @@
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr id="data-table-thead">
+        <volist name="field_array" id="vo">
+            <th>{$vo.name}</th>
+        </volist>
+        <th>
+            相关人
+        </th>
+        <th>
+            创建时间
+        </th>
+        <th style="text-align: center">
+            操作
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <volist name="trade_list" id="vo">
+        <tr>
+            <volist name="field_array" id="v">
+                <td>
+                    <if condition="$v['form_type'] eq 'datetime'">
+                        <if condition="$vo[$v['field']] neq '0'">
+                            <if condition="$v['is_showtime'] eq '1'">
+                                {$vo[$v['field']] | date='Y-m-d H:i',###}
+                            <else/>
+                                {$vo[$v['field']] | date='Y-m-d',###}
+                            </if>
+                        </if>
+                    <elseif condition="$v['form_type'] eq 'linkaddress'"/>
+                        <a href="{$vo[$vo['field']]}" target="_blank">{$vo[$v['field']]}</a>
+                    <elseif condition="$v['form_type'] eq 'se_box'"/>
+                        <switch name="vo.corre">
+                            <case value="product">雇员</case>
+                            <case value="customer">客户</case>
+                        </switch>
+                    <else />
+                        {$vo[$v['field']]}
+                    </if>
+                </td>
+            </volist>
+            <td>
+                <if condition="$vo['corre_info'] neq null">
+                    {$vo.corre_info}
+                </if>
+            </td>
+            <td data-order="{$vo.create_time}">
+                <if condition="$vo['create_time'] neq '0'">
+                    {$vo.create_time|date='Y-m-d H:i',###}
+                </if>
+            </td>
+            <td style="text-align: center">
+                <a href="{:U('trade/view','id='.$vo['trade_id'])}"  target="_blank" title="查看详细">
+                    <i class="icon-th-large"></i>
+                </a>
+            </td>
+        </tr>
+    </volist>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example').dataTable( {
+            "scrollX": true,
+            'info':false,
+            "aoColumnDefs": [
+                {
+                    "bSortable": false,
+                    "aTargets": [ document.getElementById("data-table-thead").children.length -1 ]
+                }
+            ],
+            "order": [[ 0, "desc" ]],
+            'language': def_dataTable_lang_opt
+        } );
+    });
+</script>

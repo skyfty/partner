@@ -1,0 +1,24 @@
+<table class="table" style="margin-bottom:0px">
+    <tr>
+        <td>
+            <select style="width:80px" id="number_filder_dialog_form_condition">
+                <option value="gt">大于</option>
+                <option value="lt">小于</option>
+                <option value="eq">等于</option>
+                <option value="neq">不等于</option>
+            </select>
+            <input  style="width:90px" id="number_filder_dialog_form_value" type="number" class="text" value="">
+            <button type="button"   class="btn btn-mini btn-default number_filder_dialog_form_condition_ok_btn" style="float: right">确定</button>
+        </td>
+    </tr>
+</table>
+
+
+<script type="text/javascript">
+    $(function() {
+        $('.number_filder_dialog_form_condition_ok_btn').click(function (event) {
+            $("[field='{$field}']").qtip('api').hide(event);
+        });
+    });
+
+</script>

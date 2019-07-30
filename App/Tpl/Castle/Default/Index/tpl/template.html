@@ -1,0 +1,396 @@
+
+
+<script id="fields-template" type="text/x-jquery-tmpl">
+    {{if cf == '1'}}
+        {{if popover == '1'}}
+             <div class="popover-wrapper">
+                <a href="#" popover ui-view-value="${d}" field-options="${fi}" editable-condition-field="${d}"></a>
+            </div>
+        {{else}}
+            <a href="#" ui-view-value="${d}" field-options="${fi}" editable-condition-field="${d}"></a>
+        {{/if}}
+
+    {{else f.form_type == 'datetime'}}
+        {{if f.range == '1'}}
+            <a href="#" class="ui-view-value" ui-view-value="${d}" editable-date-range="${d}" field-options="${fi}"></a>
+        {{else}}
+            <a href="#" class="ui-view-value" ui-view-value="${d}" editable-date="${d}" field-options="${fi}"></a>
+        {{/if}}
+    {{else f.form_type == 'pic'}}
+        <ui-picture-list field-model="${d}" field-options="${fi}"  ui-pic-list-id="{{= f.field_id}}"></ui-picture-list>
+    {{else f.form_type == 'address'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}" field-options="${fi}" editable-address="${d}"></a>
+    {{else f.form_type == 'channel_role_model_box'}}
+        <a href="#" class="ui-view-value" ui-channel-role-model-select="${d}"  field-options="${fi}" editable-channel-role-model-box="${d}"></a>
+    {{else f.form_type == 'channel_role_id_box'}}
+        <a href="#" class="ui-view-value" ui-channel-role-id-select="${d}"  field-options="${fi}" editable-channel-role-id-box="${d}"></a>
+    {{else f.form_type == 'user'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}"  model-name="staff" field-options="${fi}" editable-model-id="${d}"></a>
+    {{else f.form_type == 'market'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}"  model-name="market" field-options="${fi}" editable-model-id="${d}"></a>
+    {{else f.form_type == 'cultivate'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}"  model-name="cultivate" field-options="${fi}" editable-model-id="${d}"></a>
+    {{else f.form_type == 'trade'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}"  model-name="trade" field-options="${fi}" editable-model-id="${d}"></a>
+    {{else f.form_type == 'customer'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}"  model-name="customer" field-options="${fi}" editable-model-id="${d}"></a>
+    {{else f.form_type == 'product'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}"  model-name="product" field-options="${fi}" editable-model-id="${d}"></a>
+    {{else f.form_type == 'p_box'}}
+        <a href="#" class="ui-view-value" onfilter="filterProductCategory($data);" ui-view-value="${d}" field-options="${fi}" editable-select-pcat-box="${d}"></a>
+    {{else f.form_type == 'a_box'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}" field-options="${fi}" editable-select-account-type-box="${d}"></a>
+    {{else f.form_type == 'number'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}" editable-number="${d}" field-options="${fi}"></a>
+    {{else f.form_type == 'select'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}" field-options="${fi}" editable-select-box="${d}"></a>
+    {{else f.form_type == 'textarea'}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}" field-options="${fi}" editable-textarea="${d}"></a>
+    {{else}}
+        <a href="#" class="ui-view-value" ui-view-value="${d}" editable-text="${d}" field-options="${fi}"></a>
+    {{/if}}
+</script>
+
+<script id="group-fields-template" type="text/x-jquery-tmpl">
+    <div class="form-horizontal">
+    {{each(i,f) s.fields}}
+        {{if f.form_type == 'pic'}}
+        <div class="form-group" style="height:75px">
+        {{else}}
+        <div class="form-group" style="height:30px">
+        {{/if}}
+            <div>
+                <label class="col-sm-3 control-label">
+                {{if f.form_type == 'pic'}}
+                    {{= f.name}}<br/>
+                    <a href="javascript:void(0);" onclick="angular.element(this).scope().pictureNew(this)" field-model="${d}.${f.field}" field-options="{{= af}}[{{= i}}]" style="margin-right:5px"><i class="fa fa-upload"></i></a>
+                {{else}}
+                    {{= f.name}}
+                {{/if}}
+                </label>
+            </div>
+            <div class="col-sm-9">
+            {{tmpl({cf:0,f:f,fi:af+'['+i+']',d:d+'.'+f.field}) '#fields-template'}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg pull-in"></div>
+    {{/each}}
+    </div>
+</script>
+
+<script id="picture-list-fields-template" type="text/x-jquery-tmpl">
+<div>
+  <div class="box-secondary" style="margin:3px 3px"  ng-repeat="(k,s) in ${fieldModel}">
+    <ui-picture field-model="s" pic-model="${fieldModel}" field-options="${fieldOptions}"  />
+  </div
+</div>
+</script>
+
+<script id="associate-view-template" type="text/x-jquery-tmpl">
+<div ng-include="index/${model}_associate/model/${amodel}/id/${id}"></div>
+</script>
+
+
+<script id="picture-fields-template" type="text/x-jquery-tmpl">
+<a href="${pic.path}" target="_self" data-lightbox="group-attachment">
+  <img src="${pic.path}" class="thumbnail productotherlistthumb img-responsive" style="width:70px;height:70px" />
+  <a href="javascript:void(0);" onclick="angular.element(this).scope().pictureDelete(this,'${picModel}');"  field-model="${model}">
+    <img class="del_parts" src="./Public/img/delete.gif">
+  </a>
+</a>
+</script>
+
+<script id="edit-picture-list-fields-template" type="text/x-jquery-tmpl">
+<div class="box-secondary" style="display:none">
+  <div class="fileinput-button" style="border-color:white;height:70px;width:70px;">
+    <div class="filediv"><input uploader="uploader" options="{'m':'${field.model}','f':'${field.field}'}" nv-file-select="" type="file" style="height: 70px;padding-top:40px" /></div>
+    <div class="prediv"></div>
+    <a href="javascript:void(0);" onclick="angular.element(this).scope().pictureDelete(this,'${picModel}')"  field-model="${model}">
+      <img class="del_parts" src="./Public/img/delete.gif" />
+    </a>
+  </div>
+</div>
+</script>
+
+<script id="condition-template" type="text/x-jquery-tmpl">
+{{if f.form_type == 'number' || f.form_type == 'floatnumber' }}
+<select class="form-control condition-select" style="width: auto" ng-model="${d}.condition" ng-init="${d}.condition='eq'">
+     <option value="eq">等于</option>
+     <option value="gt">大于</option>
+     <option value="lt">小于</option>
+     <option value="neq">不等于</option>
+{{else f.form_type == 'date' || f.form_type == 'datetime' }}
+<select class="form-control condition-select" style="width: auto" ng-model="${d}.condition" ng-init="${d}.condition='between'">
+     <option value="between">在之间</option>
+     <option value="not_between">不在之间</option>
+     <option value="ltb">早于起始时间</option>
+     <option value="gtb">晚于起始时间</option>
+     <option value="lte">早于结束时间</option>
+     <option value="gte">晚于结束时间</option>
+{{else f.form_type == 'select' || f.form_type == 'user' }}
+<select class="form-control condition-select" style="width: auto" ng-model="${d}.condition" ng-init="${d}.condition='is'">
+     <option value="is">是</option>
+     <option value="isnot">不是</option>
+{{else}}
+<select class="form-control condition-select" style="width: auto" ng-model="${d}.condition" ng-init="${d}.condition='contains'">
+    <option value="contains">包含</option>
+    <option value="not_contain">不包含</option>
+    <option value="is">是</option>
+    <option value="isnot">不是</option>
+    <option value="start_with">开始于</option>
+    <option value="end_with">结束于</option>
+    <option value="is_empty">为空</option>
+    <option value="is_not_empty">不为空</option>
+{{/if}}
+</select>
+</script>
+
+
+<script id="search-input-template" type="text/x-jquery-tmpl">
+{{if f.form_type == 'number' || f.form_type == 'floatnumber' }}
+     <input type="number" class="form-control  condition-value" ng-model="${d}.value" placeholder="请您输入关键词">
+{{else f.form_type == 'date' || f.form_type == 'datetime' }}
+     <div class="input-daterange input-group condition-value" field-model="${d}.value" style="width:100%">
+        <input type="text" data-placeholder="起始时间" ng-model="${d}.value.start" class="editable-input form-control ng-pristine ng-valid ng-touched range-start"/>
+        <span class="input-group-addon">至</span>
+        <input  ng-model="${d}.value.end" data-placeholder="结束时间" type="text" class="editable-input form-control ng-pristine ng-valid ng-touched  range-end"/>
+     </div>
+{{else f.form_type == 'select'}}
+    <select noneSelectedText="选择一些选项..." ng-model="${d}.value" multiple class="form-control condition-value selectpicker" mobile="true">
+    {{each(i,d) f.data}}
+        <option value="${d.value}">${d.text}</option>
+    {{/each}}
+    </select>
+{{else}}
+    <input type="text" class="form-control  condition-value"  ng-model="${d}.value" placeholder="请您输入关键词">
+{{/if}}
+</script>
+
+<script id="condition-fields-template" type="text/x-jquery-tmpl">
+<span class="input-group-btn">
+    {{tmpl({f:f,d:d}) '#condition-template'}}
+</span>
+
+<span class="field-input">
+    {{tmpl({f:f,d:d}) '#search-input-template'}}
+</span>
+</script>
+
+
+<script id="log-condition-fields-template" type="text/x-jquery-tmpl">
+<span class="input-group-btn">
+    {{tmpl({f:f,d:d}) '#condition-template'}}
+</span>
+
+<span class="input-group">
+    {{tmpl({f:f,d:d}) '#search-input-template'}}
+    <span class="input-group-btn">
+        <button class="btn btn-lg btn-default" type="button">Search</button>
+    </span>
+</span>
+</script>
+
+<script id="skill-template" type="text/x-jquery-tmpl">
+<div class="row">
+<div class="col-lg-6 col-md-4 col-sm-6"  ng-repeat="(k,s) in ${model}">
+   <div class="panel b-a">
+    <div  ng-style="{'background-color':(s.dirty)?'#f8da4e':''}" class="panel-heading wrapper-xs no-border bg-success"></div>
+    <div class="panel-heading" style="background-color:#f6f8f8">
+      <div class="clearfix">
+        <div class="clear">
+          <div class="h3 m-t-xs m-b-xs">
+            {{s.name||"未设置"}}
+            <a class="btn btn-danger btn-xs pull-right" ng-click="removeSkill(s);" href=""><i class="fa fa-times fa-fw"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-group no-radius alt">
+      {{each(i,f) assort.fields}}
+      <div class="list-group-item">
+        <div class="row">
+            <div class="col-sm-5"><label class="control-label" style="padding-top:9px">${f.name}</label></div>
+            <div class="col-sm-7"><div  class="pull-right">{{tmpl({cf:0,f:f,fi:af+'['+i+']',d:'s'+'.'+f.field}) '#fields-template'}}</div></div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
+</div>
+</script>
+
+
+<script id="multipleSearch.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title">高级搜索</h3>
+    </div>
+    <div class="modal-body">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="(k,item) in items"  ng-style="{'z-index': (fields[item.field].form_type=='select'?1000 - k:23)}">
+                <a class="btn  btn-info pull-right ng-click-active" ng-click="deleteItem(k)" style="">
+                    <i class="fa fa-times"></i>
+                </a>
+                <ui-field-condition ng-fields="fields" cas-model="items[k]"/>
+            </li>
+        </ul>
+        <p>
+            <button ng-click="addCondition()" class="btn btn-primary btn-block"><i class="fa fa-plus fa-fw m-r-xs"></i> 增加搜索条件</button>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</script>
+
+<script id="groupCondition" type="text/x-jquery-tmpl">
+<div class="wrapper-md">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div>
+                <span>{{${model}.name}}</span>
+                <a class="btn btn-danger  btn-xs pull-right m-t-n-xs"  ng-click="deleteGroup(${model})"><i class="fa fa-times"></i> 删除</a>
+                <a class="btn btn-default  btn-xs pull-right m-t-n-xs"  ng-click="saveGroup(${model})"><i class="fa fa-save"></i> 保存</a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row wrapper" style="padding-bottom:0px">
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="(k,item) in ${fields}"  ng-style="{'z-index': (fields[item.field].form_type=='select'?1000 - k:23)}">
+                        <a class="btn  btn-info pull-right ng-click-active" ng-click="${fields}.splice(k,1)" style="">
+                            <i class="fa fa-times"></i>
+                        </a>
+                        <ui-field-condition ng-fields="fields" cas-model="${fields}[k]"/>
+                    </li>
+                </ul>
+                <p>
+                    <button ng-click="${fields}.push({});" class="btn btn-primary btn-block"><i class="fa fa-plus fa-fw m-r-xs"></i> 增加搜索条件</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="staffDialog.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title">员工列表</h3>
+    </div>
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <div class="modal-body">
+        <table ui-static-datatable="items" ng-data-url="/Staff/index" ng-type="radio" class="table table-striped b-t b-light" style="white-space: nowrap;">
+            <thead>
+            <tr>
+                <th ng-field="staff_id" searchable="false" orderable="false">选择</th>
+                <th ng-field="idcode">编号</th>
+                <th ng-field="name">名称</th>
+                <th ng-field="branch_name">门店</th>
+                <th ng-field="name">岗位</th>
+                <th ng-field="name">职务</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</script>
+
+<script id="customerDialog.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title">员工列表</h3>
+    </div>
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <div class="modal-body">
+        <table ui-static-datatable="items" ng-data-url="/customer/index" ng-type="radio" class="table table-striped b-t b-light" style="white-space: nowrap;">
+            <thead>
+            <tr>
+                <th ng-field="staff_id" searchable="false" orderable="false">选择</th>
+                <th ng-field="idcode">编号</th>
+                <th ng-field="name">名称</th>
+                <th ng-field="name">岗位</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</script>
+
+<script id="branchDialog.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title">门店列表</h3>
+    </div>
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <div class="modal-body">
+        <table ui-static-datatable="items" ng-data-url="/branch/index" ng-type="radio" class="table table-striped b-t b-light" style="white-space: nowrap;">
+            <thead>
+            <tr>
+                <th ng-field="branch_id" searchable="false" orderable="false">选择</th>
+                <th ng-field="code">编号</th>
+                <th ng-field="name">名称</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</script>
+
+<script id="addLog.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title">日志</h3>
+    </div>
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>标题</label>
+            <input type="text" class="form-control" placeholder="" ng-model="items.subject" required>
+        </div>
+        <div class="form-group">
+            <label>内容</label>
+            <textarea class="form-control" rows="6" placeholder="Type your message"  ng-model="items.content"></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</script>
+
+
+
+<script id="verify.html" type="text/ng-template">
+    <div class="modal-header">
+        <h3 class="modal-title">{{params.label}}</h3>
+    </div>
+    <div ui-butterbar ng-state="butterbar" class="active" style="z-index:9999"></div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="btn-group">
+                <label class="btn btn-sm btn-info" ng-model="items.state" btn-radio="'-1'"><i class="fa fa-check text-active"></i> 未提交</label>
+                <label class="btn btn-sm btn-success" ng-model="items.state" btn-radio="'1'"><i class="fa fa-check text-active"></i>审核通过</label>
+                <label class="btn btn-sm btn-info" ng-model="items.state" btn-radio="'0'"><i class="fa fa-check text-active"></i>审核未通过</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="6" placeholder="输入备注"  ng-model="items.describe"></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="cancel()">取消</button>
+        <button class="btn btn-primary" ng-click="ok()">确定</button>
+    </div>
+</script>

@@ -1,0 +1,40 @@
+<include file="Public:dialog_header" />
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="{:U('Branch/change_category_config')}" method="post" id="change_category_config_form">
+                <input type="hidden" name="id" value="{$branch['branch_id']}"/>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th style="width: 70px">类别</th>
+                        <th style="width: 70px">中介费比例</th>
+                        <th style="width: 70px">签约中介费比例</th>
+                        <th style="width: 70px">催单费系数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="category_config" id="vo">
+                        <tr>
+                            <td>
+                                {$vo['name']}
+                            </td>
+                            <td>
+                                <input type="number" style="width: 100px" name="agency_scale_{$vo['category_id']}" value="{$vo['agency_scale']}"/>
+                            </td>
+                            <td>
+                                <input type="number" style="width: 100px"  name="sign_agency_scale_{$vo['category_id']}" value="{$vo['sign_agency_scale']}"/>
+                            </td>
+                            <td>
+                                <input type="number" style="width: 100px"  name="urge_scale_{$vo['category_id']}" value="{$vo['urge_agency_scale']}"/>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

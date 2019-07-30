@@ -1,0 +1,189 @@
+<include file="Public:header" />
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4><a name="tab">{:L('ACCOUNT_DETAILS')}</a>&nbsp;&nbsp;{$account['state_tip']}</h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tab-content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <if condition="($account['payment_verify'] == '1') and ($admin_role === false)">
+                                    <a href="javascript:void(0);" style="color: #D2CDCD" class="disabled"  data-toggle="tooltip" title="">{:L('DELETE')}</a> |
+                                <else/>
+                                    <a href="{:U('account/delete','id='.$account['account_id'])}&dire={$dire}&t={$t}&refer_url={$refer_url|urlencode}" class="del_confirm">{:L('DELETE')}</a> |
+                                </if>
+
+                                <if condition="($account['payment_verify'] == '1')">
+                                    <a href="javascript:void(0);" style="color: #D2CDCD" class="disabled"  data-toggle="tooltip" title="">编辑</a> |
+                                <else/>
+                                    <a href="{:U('account/edit','id='.$account['account_id'])}&dire={$dire}&t={$t}" role="button"  data-toggle="modal">编辑</a> |
+                                </if>
+
+                                <if condition="($account['payment_verify'] == '1') or (!$per_verify)">
+                                    <a href="javascript:void(0);" style="color: #D2CDCD" class="disabled">审核
+                                        [
+                                        <switch name="account.payment_verify">
+                                            <case value="0">待确认</case>
+                                            <case value="1">确认</case>
+                                            <default />无法确认
+                                        </switch>
+                                        ] </a>|
+                                <else/>
+                                    <if condition="($Think.get.t eq 'cultivate')">
+                                        <a href="javascript:void(0);" role="button" ref="{$account['account_id']}" onclick="change_payment_verify({$account['account_id']});">审核
+                                            [
+                                            <switch name="account.payment_verify">
+                                                <case value="0">待确认</case>
+                                                <case value="1">确认</case>
+                                                <default />无法确认
+                                            </switch>
+                                            ] </a>|
+                                    </if>
+                                </if>
+
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="tdleft"><b>{:L('CREATOR_ROLE')}</b>:</td>
+                        <td>
+                            <a class="role_info" rel="{$account['creator_role_id']}" href="javascript:void(0)">
+                                {$account['creator_name']}
+                            </a>
+                        </td>
+                        <td class="tdleft"><b>{:L('CREATE_TIME')}</b>:</td>
+                        <td>{$account['create_time']|date="Y-m-d H:m:s",###}</td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft"><b>账户类型</b>:</td>
+                        <td>培训订单
+                        </td>
+                        <td class="tdleft"><b>账户</b>:</td>
+                        <td>{$account.clutivate.corre_info}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="4">基本信息</th></tr>
+                    <tr>
+                        <td class="tdleft" width="15%">项目:</td>
+                        <td width="35%">
+                            <span style="color:#">培训订单</span>
+                        </td>
+                        <td class="tdleft" width="15%">金额:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['money']|number_format=###,2}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">支付方式:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['payway']}</span>
+                        </td>
+                        <td class="tdleft" width="15%">支付时间:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['payment_time']|toDate=###}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">状态:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['payment_verify']|payment_verify_map}</span>
+                        </td>
+                        <td class="tdleft" width="15%">确认时间:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['verify_time']|toDate=###}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">确认人:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['verify_role_id']|role_html}</span>
+                        </td>
+                        <td class="tdleft" width="15%">收据号:</td>
+                        <td width="35%">
+                            <span style="color:#333333">{$account['receipt_number']}</span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">描述:</td>
+                        <td colspan="3">{$account['description']}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <if condition="$account.infow neq ''">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th colspan="4">相关账户信息</th>
+                        </tr>
+                        <tr>
+                            <td class="tdleft" width="15%">账户类型:</td>
+                            <td width="35%">
+                                <switch name="account.infow.module_id">
+                                    <case value="product">雇员</case>
+                                    <case value="customer">客户</case>
+                                    <case value="flow">流水</case>
+                                    <default />公司
+                                </switch>
+                            </td>
+                            <td class="tdleft" width="15%">账目类型:</td>
+                            <td width="35%">
+                                培训订单付款
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdleft" width="15%">账户名:</td>
+                            <td width="35%">
+                                {$account.infow.show_infow}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </if>
+
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th colspan="4">培训订单信息</th>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">订单号:</td>
+                        <td width="35%">
+                            <a href="{:U('clutivate/view','id='.$account['clutivate']['clutivate_id'])}"  target="_blank">
+                                {$account.cultivate.cultivate_idcode}
+                            </a>
+                        </td>
+                        <td class="tdleft" width="15%">雇员:</td>
+                        <td width="35%">
+                            {$account.cultivate.corre_info}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tdleft" width="15%">服务价格:</td>
+                        <td width="35%">
+                            {$account.cultivate.money}
+
+                        </td>
+                        <td class="tdleft" width="15%">培训类别:</td>
+                        <td>
+                            {$account.cultivate.category_name}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<include file="Account:public_view" />
+<include file="Public:footer" />

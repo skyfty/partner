@@ -1,0 +1,116 @@
+<include file="Public:header" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+			<h4>编辑账目</h4>
+		</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+			<form id="form1" action="{:U('account/edit', 'id='.$account['account_id'])}" method="post" enctype="multipart/form-data">
+			    <input type="hidden" name="account_id" value="{$account.account_id}"/>
+                <input type="hidden" name="restrict" id="restrict" value="{$restrict}"/>
+                <input type="hidden" name="t" id="t" value="{$t}"/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                <thead>
+                <tr>
+                    <td style="text-align:center;" colspan="4">
+                        <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                        <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                    </td>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td style="text-align:center;" colspan="4">
+                        <input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                        <input class="btn" type="button" onclick="javascript:location.assign('{$refer_url}')" value="{:L('RETURN')}"/>
+                    </td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <if condition="$account.clause_type_id == 86">
+                <tr>
+                    <td class="tdleft" width="15%">服务类型</td>
+                    <td colspan="3">
+                        <select id="related" name="related" style="width:90px"  onchange='on_cash_related_change();'>
+                            <option value="other" <eq name="account.related" value="other">selected</eq> >其他</option>
+                            <option value="business" <eq name="account.related" value="business">selected</eq> >家政</option>
+                            <option value="trainorder" <eq name="account.related" value="trainorder">selected</eq> >培训</option>
+                            <option value="trade" <eq name="account.related" value="trade">selected</eq> >产品</option>
+                        </select><span id='cash_related_infow'></span>
+                    </td>
+                    <script>
+                        $(function(){ on_cash_related_change(); });
+                    </script>
+                </tr>
+                 </if>
+                <tr>
+                    <td class="tdleft" width="15%">描述:</td>
+                    <td colspan="3">
+                        <textarea rows="6" class="span6" id="description" name="description">{$account.description}</textarea> &nbsp;  <span id="descriptionTip" style="color:red;"></span>
+                    </td>
+                </tr>
+                </tbody>
+			</table>
+            <input name="a" type="hidden" value="edit">
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+
+    function on_cash_inflow_model_change() {
+        var related_model = $("#related").val();
+        var inflow_model = $("#inflow_model").val();
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("account/getclausetype")}',
+            'data':{
+                'if': inflow_model,
+                'rm': related_model,
+                'im': "inernal",
+                'id': -2
+            },
+            'success':function(data){
+                var opt = "";
+                if(data.status == 1 && data.data){
+                    opt = "<select name='payway' id='payway'>";
+                    $.each(data.data, function(k, v){
+                        opt += "<option value='"+ v.type_id+"'>" + v.name + "</option>";
+                    });
+                    opt += "</select>";
+                }
+                $("#cash_inflow_model").html(opt);
+                $('#payway option[value="{$account.payway}"]').prop("selected", true);
+            },
+        });
+    }
+
+    function on_cash_related_change() {
+        var related = $("#related").val();
+        if (related == "other") {
+            var htmltext = "<select style='width:90px' name='payway' id='payway'>";
+            htmltext += "<option value='cost'>成本</option>";
+            htmltext += "<option value='fare'>费用</option>";
+            htmltext += "</select><input type='hidden'  name='clause_additive' value='cash'/>";
+            $("#cash_related_infow").html(htmltext);
+            $('#payway option[value="{$account.payway}"]').prop("selected", true);
+
+        } else {
+            var htmltext = "<select id='inflow_model' name='clause_additive' onchange='on_cash_inflow_model_change();' style='width:90px'>";
+            htmltext += "<option value='product'>雇员</option>";
+            htmltext += "<option value='customer'>客户</option>";
+            htmltext += "</select><span id='cash_inflow_model'></span>";
+            $("#cash_related_infow").html(htmltext);
+            $('#inflow_model option[value="{$account.clause_additive}"]').prop("selected", true);
+
+        }
+        on_cash_inflow_model_change();
+</script>
+
+<include file="Public:footer" />

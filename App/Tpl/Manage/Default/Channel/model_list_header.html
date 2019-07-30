@@ -1,0 +1,16 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$vo['field'] == 'parentid'">
+            <include file="Public:def_index_list_col" />
+            <a href="javascript:void(0);" id="parentid_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.parentid neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.parentid|channel_show_html}{:show_table_head_clear("parentid",$parameter)}</span>
+            </if>
+        <else/>
+            <include file="Public:def_index_list_col" />
+            <include file="Public:def_index_list_field_col" />
+        </if>
+    </th>
+</volist>

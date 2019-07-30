@@ -1,0 +1,59 @@
+<include file="Public:header" />
+<link rel="stylesheet" href="__PUBLIC__/treeview/jquery.treeview.css" type="text/css">
+<script type="text/javascript" src="__PUBLIC__/treeview/jquery.treeview.js"></script>
+<script type="text/javascript" src="__PUBLIC__/treeview/jquery.treeview.edit.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $("#browser").treeview();
+    })
+</script>
+
+<style type="text/css">
+    .ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+</style>
+<div class="container">
+
+
+    <div class="row">
+
+            <div>
+                {$tree_code}
+            </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(function(){
+        $(".treeview .file").hover(function(){
+            rel = $(this).attr('rel');
+            $('#control_file' + rel).show();
+        },function(){
+            rel = $(this).attr('rel');
+            $('#control_file' + rel).hide();
+        });
+        $(".treeview .folder").hover(function(){
+            rel = $(this).attr('rel');
+            $('#control_folder' + rel).show();
+        },function(){
+            rel = $(this).attr('rel');
+            $('#control_folder' + rel).hide();
+        });
+        $("#check_all").click(function(){
+            $("input[class='check_list']").prop('checked', $(this).prop("checked"));
+        });
+        $(".permission").click(function(){
+            var id = $(this).attr('rel');
+            var url = '{:U("setting/fieldgrouppermission","field_group_id=$field_group_id&examine=")}' + id;
+            $.ajax({
+                url:url,
+                async:false
+            });
+            alert("权限设置成功");
+            window.location.reload();
+        });
+    });
+
+</script>

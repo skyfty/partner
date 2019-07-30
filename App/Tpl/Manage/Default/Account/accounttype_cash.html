@@ -1,0 +1,104 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4>{:L('SYSTEM_SETTINGS')}</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="tabbable">
+        <include file="Setting:settingnav" />
+
+    </div>
+
+    <div class="row">
+        <div class="span2 knowledgecate">
+            <include file="Setting:fieldsnav" />
+        </div>
+        <form action="{:U('account/accounttype_delete')}" method="post">
+            <div class="tabbable span10">
+                <include file="Account:accounttype_tabnav" />
+
+            </div>
+            <div class="span10">
+                <p>
+                <div class="bulk-actions align-left">
+                    <input type="submit" class="btn del_confirm" value="{:L('DELETE')}"/>
+                    <button class="btn" type="button" id="sort_btn">
+                        <span class="icon-fildel_confirme"></span>&nbsp;{:L('SAVE_ORDER')}
+                    </button>
+
+                    <div class="pull-right">
+                        <a class="btn btn-primary" id="add_accounttype" onclick="return accounttype_add();">
+                            {:L('ADD_ACCOUNT_CATEGORIES')}
+                        </a>
+                    </div>
+                </div>
+                </p>
+            </div>
+            <div class="span10">
+                <table class="table table-hover table-striped table_thead_fixed" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th width="10%">
+                            <input type="checkbox" name="check_all" id="check_all" class="check_all"/> &nbsp;
+                        </th>
+                        <th width="15%">{:L('CLASSIFICATION_OF')}</th>
+                        <th width="7%">类别</th>
+                        <th width="10%">类型</th>
+                        <th width="10%">关联模型</th>
+                        <th width="10%">相关方</th>
+                        <th>{:L('DESCRIPTION')}</th>
+                        <th width="5%">{:L('OPERATION')}</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            {$page}
+                        </td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <volist name="accounttype_list" id="vo">
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="list" order_id="{$vo.order_id}"  name="accounttype_list[]" value="{$vo.type_id}"/>
+                            </td>
+                            <td>{$vo.name}</td>
+                            <td>
+                                <switch name="vo.module_id">
+                                    <case value="product">雇员</case>
+                                    <case value="customer">客户</case>
+                                    <case value="flow">流水</case>
+                                    <default />公司
+                                </switch>
+                            </td>
+                            <td>{$vo.mold}</td>
+                            <td>
+                                <switch name="vo.related_model">
+                                    <case value="trade">产品订单</case>
+                                </switch>
+                            </td>
+                            <td>
+                                <switch name="vo.inflow_model">
+                                    <case value="product">雇员</case>
+                                    <case value="customer">客户</case>
+                                    <case value="inernal">{'league_name'|session}</case>
+                                    <case value="flow">流水</case>
+                                </switch>
+                            </td>
+                            <td>
+                                {$vo.description}
+                            </td>
+                            <td>
+                                <a href="{:U('account/accounttype_edit', 'assort=cash&id='.$vo['type_id'])}"  onclick="return accounttype_edit(this);">{:L('COMPILE')}</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </div> <!-- End #main-content -->
+        </form>
+    </div>
+</div>
+<include file="Account:accounttype_dialog" />
+<include file="Public:footer" />	

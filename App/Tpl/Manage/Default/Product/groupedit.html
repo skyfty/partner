@@ -1,0 +1,33 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4>修改分组</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="span11">
+        <form class="form-horizontal" action="{:U('product/groupedit')}" method="post" name="form1" id="form1">
+            <input type="hidden" name="refer_url" value="{$refer_url}"/>
+            <input type="hidden" name="module_group_id" value="{$module_group['product_group_id']}"/>
+            {:L('PRODUCT_GROUP_NAME')}：
+            <input type="text" name="group_name" id="name" class="span7" value="{$module_group['name']}"/>&nbsp;&nbsp;
+            <include file="Public:groupedittable" />
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $("#return_btn").click(function(){
+        window.location.assign("{:U('product/index', 'act=group')}");
+    });
+    $(".group_radio").change(function(b){
+        if ($(this).val() == 0) {
+            window.location.assign("{:U('product/groupedit', 'group_type=0&module_group_id='.$module_group['product_group_id'])}");
+        } else {
+            window.location.assign("{:U('product/groupstance', 'group_type=1&module_group_id='.$module_group['product_group_id'])}");
+        }
+    });
+</script>
+
+<include file="Public:footer" />

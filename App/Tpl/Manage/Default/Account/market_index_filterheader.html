@@ -1,0 +1,146 @@
+<form class="form-inline" id="searchForm"  action="{:U('')}" method="get">
+    <ul class="nav pull-left">
+        <if condition="session('user_id') eq '1'">
+            <li class="pull-left">
+                {:league_select_html("bylea", $league['league_id'])}&nbsp;&nbsp;
+                <script>
+                    $(function() {
+                        $("#bylea").change(do_search);
+                    });
+                </script>
+            </li>
+        </if>
+        <li class="pull-left">
+            {:branch_select_html("bybr", $branch, true, true, null,$league['league_id'] )}&nbsp;&nbsp;
+            <script>
+                $(function() {
+                    $("#bybr").change(do_search);
+                });
+            </script>
+        </li>
+        <li class="pull-left">
+            <select style="width:auto;min-width: 90px" name="t" id="index_type">
+                <option value="market" href="{:U('Account/market', 't=market')}">客户服务</option>
+                <option  value="cultivate"  href="{:U('Account/cultivate', 't=cultivate')}">新培训</option>
+            </select>&nbsp;&nbsp;
+        </li>
+        <li class="pull-left">
+            <select style="width:auto;min-width: 90px" name="field" id="field" onchange="changeCondition()">
+                <option class="all" value="all">任意字段</option>
+                <option class="role" value="creator_role_id">创建人</option>
+                <option class="role" value="verify_role_id">确认人</option>
+                <option class="role" value="related_owner_role_id">订单责任人</option>
+                <option class="floatnumber" value="money" rel="account">金额</option>
+                <option class="textarea" value="description" rel="account">描述</option>
+                <option class="text" value="receipt_number">收据号</option>
+            </select>&nbsp;&nbsp;
+        </li>
+        <li id="conditionContent" class="pull-left">
+            <select id="condition" style="width:auto"   name="all[condition]" onchange="changeSearch()">
+                <option value="contains">{:L('CONTAINS')}</option>
+                <option value="not_contain">{:L('NOT_CONTAIN')}</option>
+                <option value="is">{:L('IS')}</option>
+                <option value="isnot">{:L('ISNOT')}</option>
+                <option value="start_with">{:L('START_WITH')}</option>
+                <option value="end_with">{:L('END_WITH')}</option>
+                <option value="is_empty">{:L('IS_EMPTY')}</option>
+                <option value="is_not_empty">{:L('IS_NOT_EMPTY')}</option>
+            </select>&nbsp;&nbsp;
+        </li>
+        <li id="searchContent" class="pull-left">
+            <input id="search" type="text" class="input-medium search-query"  name="all[value]"/>&nbsp;
+        </li>
+        <li class="pull-left">
+            {:L('FROM')}<input style="width:90px;background-color:white;cursor:pointer;" readonly type="text" id="start_time" name="start_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.start_time}"/>
+            {:L('TO')}<input style="width:90px;background-color:white;cursor:pointer;" readonly type="text" id="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;
+            <select id="bytime" style="width:auto" name="bytime">
+                <option value="">全部</option>
+                <option value="today">今日</option>
+                <option value="month">本月</option>
+                <option value="year">本年</option>
+            </select>&nbsp;&nbsp;
+            <select id="bysub" style="width:auto" name="bysub">
+                <option value="">提交</option>
+                <option value="c">确认</option>
+                <option value="p">支付</option>
+            </select>&nbsp;&nbsp;
+
+        </li>
+
+        <li class="pull-left">
+            <input type="hidden" name="m" value="account"/>
+            <input type="hidden" name="t" value="{$t}"/>
+            <input type="hidden" name="a" value="{$t}"/>
+            <input type="hidden" name="dire" value="{$dire}"/>
+            <input type="hidden" name="act" id="act" value="search"/>
+            <if condition="$Think.get.by neq null">
+                <input type="hidden" name="by" value="{$Think.get.by}"/>
+            </if>
+            <if condition="$Think.get.type neq null">
+                <input type="hidden" name="type" value="{$Think.get.type}"/>
+            </if>
+            <if condition="$Think.get.payway neq null">
+                <input type="hidden" name="payway" value="{$Think.get.payway}"/>
+            </if>
+            <if condition="$Think.get.catid neq null">
+                <input type="hidden" name="catid" value="{$Think.get.catid}"/>
+            </if>
+            <if condition="$Think.get.pvs neq null">
+                <input type="hidden" name="pvs" value="{$Think.get.pvs}"/>
+            </if>
+            <if condition="$Think.get.lia neq null">
+                <input type="hidden" name="lia" value="{$Think.get.lia}"/>
+            </if>
+            {:search_form_default_param($parameter, $debar_search_field)}
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-mini  btn-default" id="dosearch"> <img src="__PUBLIC__/img/search.png"/></button>
+                <button type="button" id="clean_search" class="btn btn-mini">全部</button>&nbsp;
+            </div>
+            {:search_form_default_param($parameter, $debar_search_field)}
+            <script>
+                $("#clean_search").click(function(){
+                    var search_field_name = $("#search").attr("name");
+                    var search_field_condition = $("#condition").attr("name");
+                    $("#search").val('');$("input[name='"+search_field_name+"']").val('');
+                    $("#condition").val('');$("input[name='"+search_field_condition+"']").val('');
+                    $("#field").val('');
+                    $("#wsbt").val('');
+                    $("#wset").val('');
+                    $("#nobd").val('');
+                    $("#start_time").val('');
+                    $("#end_time").val('');
+                    $("#bytime").val('');
+                    $("#searchForm").submit();
+                });
+
+            </script>
+        </li>
+    </ul>
+</form>
+
+<script>
+    function do_search() {
+        $("#act").val('search');
+        $("#searchForm").submit();
+    }
+    $(function() {
+        <if condition = "$Think.get.field neq null" >
+        $("#field option[value='{$search_field}']").prop("selected", true);changeCondition();
+        $("#condition option[value='{$search_condition}']").prop("selected", true);changeSearch();
+        $("#search").prop('value', '{$search_value}');
+        </if>
+        $("#field").chosen({});
+        $("#bytime option[value='{$Think.get.bytime}']").prop("selected", true);
+        $("#bysub option[value='{$Think.get.bysub}']").prop("selected", true);
+
+        $("#dosearch").click(do_search);
+
+        $("#index_type option[value='{$Think.get.t}']").prop("selected", true);
+        $("#index_type").change(function(){
+            window.location.replace($("#index_type option:selected").attr("href"));
+        });
+        $("#search").focus();
+    });
+
+</script>

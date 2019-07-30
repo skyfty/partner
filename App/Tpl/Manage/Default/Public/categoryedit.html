@@ -1,0 +1,21 @@
+<table class="table table-hover" style="border: none">
+    <tr>
+        <td width="100px">类别:</td>
+        <td>
+            <select style="width:auto" id="parentid" name="parentid">
+                <option value="0">一级分类</option>
+                {$root_category}
+            </select>&nbsp;&nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td width="100px">名称:</td>
+        <td>
+            <input type="hidden" id="{$module}_category_id" name="{$module}_category_id" value="{$Think.get.id}"/>
+            <input type="text" id="name" name="name" value="{$module_category.name}"/>
+        </td>
+    </tr>
+</table>
+<script>
+
+</script>

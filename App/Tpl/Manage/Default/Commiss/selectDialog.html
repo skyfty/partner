@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+    function request_commiss_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("commiss/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_commiss(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("commiss/listDialog")}', {
+            id: 'select_commiss_dialog',
+            title: "选择客服",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var commiss_id = $(this.iframe.contentWindow.document).find('input:radio[name="commiss"]:checked').val();
+                var data = {
+                    'id': commiss_id
+                };
+                request_commiss_info(data, cb?cb:on_commiss_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+</script>

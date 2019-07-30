@@ -1,0 +1,37 @@
+<script>
+    function channel_datapick_info_reponse(b) {
+        $("#channel_role_radio").val(b.channel_role_radio);
+        var channel_price = ({$market['gain']} * b.channel_role_radio) / 100;
+        $("#channel_price").val(channel_price);
+    }
+
+    function channel_datapick_change() {
+        var option_select = $("#channel_role_model  option:selected");
+        var model = option_select.attr("model");
+        var model_value = option_select.attr("value");
+        if (model == "客户库" || model == "雇员库" || model == "员工库") {
+            request_channel_info({"id":model_value}, channel_datapick_info_reponse);
+        } else  {
+            var channel_role_id = $("#channel_role_id").val();
+            if (channel_role_id) {
+                request_channel_info({"id":model_value}, function(b){
+                    if (channel_role_id == model_value) {
+                        channel_datapick_info_reponse(b);
+                    } else {
+                        request_channel_info({"id":channel_role_id}, function(b2){
+                            if (b2) {
+                                for (var x in b2)
+                                {
+                                    if (b2[x] != "" && b2[x] != 0) {
+                                        b[x] = b2[x];
+                                    }
+                                }
+                            }
+                            channel_datapick_info_reponse(b);
+                        });
+                    }
+                });
+            }
+        }
+    }
+</script>

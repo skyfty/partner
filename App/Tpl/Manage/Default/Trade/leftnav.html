@@ -1,0 +1,17 @@
+
+
+<ul class="nav  nav-list">
+    <li class="active">
+        <a href="{:U('')}">类别</a>
+    </li>
+    <volist name="serve_category" id="cat">
+        <li>
+        <a href="{:U('')}&{:FP($parameter, 'cat='.$cat['serve_category_id'])}" <if condition="$focus_category['serve_category_id'] eq $cat['serve_category_id']">class="active"</if>>
+            {$cat['name']}
+        </a>
+        </li>
+    </volist>
+    <li class="active">
+        <a href="{:U('')}&{:FP($parameter, 'act=group')}">分组</a>
+    </li>
+</ul>

@@ -1,0 +1,10 @@
+<form class="form-horizontal" action="{:U('cultivate/retreat_submit_settlement')}" method="post" id="cancel_submit_form">
+    <input type='hidden' name="id" value="{$Think.get.id}"/>
+    <input type='hidden' name="role_id" value="{$Think.session.role_id}"/>
+    <table class="table">
+        <tr>
+            <td class="tdleft">原因</td>
+            <td colspan="3"><textarea rows="6" class="span7" name="content" id="content"></textarea></td>
+        </tr>
+    </table>
+</form>

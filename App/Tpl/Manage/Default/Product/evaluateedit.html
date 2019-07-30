@@ -1,0 +1,32 @@
+<include file="Public:header" />
+<div class="container" style="width: 1300px">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4>{:L('PRODUCTION_EDITOR')}</h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+        </div>
+        <div class="span10" style="width: 1300px">
+            <form id="form1" action="{:U('product/evaluateedit', 'id='.$product['product_id'].'&assort='.$assort)}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="product_id" value="{$product.product_id}"/>
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <tfoot>
+                    <tr>
+                        <td style="text-align:center;" colspan="4"><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/>&nbsp;
+                            <input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('RETURN')}"/></td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <include file="Public:editfieldsgroup" />
+                    </tbody>
+                </table>
+                <input name="a" type="hidden" value="evaluateedit">
+            </form>
+        </div>
+    </div>
+</div>
+
+<include file="Public:editfieldvalid" />
+<include file="Public:footer" />

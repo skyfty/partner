@@ -1,0 +1,165 @@
+<include file="Public:header" />
+<div class="container">
+	<include file="Public:alert" />
+	<div class="row">
+		<div class="span2 knowledgecate">
+			<ul class="nav nav-list">
+				<li class="active">
+					<a href="javascript:void(0);">{:L('VIEW_BY_LOG_CATEGORY')}</a>
+				</li>
+				<li><a href="{:U('log/index','by='.$_GET['by'].'&r='.$_GET['r'].'&module='.$_GET['module'].'&assort='.$_GET['assort'].'&product_id='.$_GET['product_id'])}" <if condition="$_GET['type'] eq null">class="active"</if>><i class="icon-white icon-chevron-right"></i>{:L('ALL')}</a></li>
+				<volist name="category_list" id="vo">
+					<li>
+                        <a href="{:U('log/index','type='.$vo['category_id'].'&by='.$_GET['by'].'&r='.$_GET['r'].'&module='.$_GET['module'].'&assort='.$_GET['assort'].'&product_id='.$_GET['product_id'])}" <if condition="$_GET['type'] eq $vo['category_id']">class="active"</if>>
+                        <i class="icon-chevron-right"></i>
+                        {$vo['name']}
+                        </a>
+                    </li>
+				</volist>
+			</ul>
+		</div>
+		<div class="span10">
+			<ul class="nav pull-left">		
+				<li class="pull-left"><a id="delete" class="btn" style="margin-right: 8px;"><i class="icon-remove"></i>&nbsp;{:L('DELETE')}</a> </li>
+				<li class="pull-left">
+					<form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="index.php" method="get">
+						<ul class="nav pull-left">
+							<li class="pull-left">
+								<select id="field" style="width:auto" onchange="changeCondition()" name="field">
+									<option class="all" value="all">{:L('ANY_FIELDS')}</option>
+									<option class="role" value="role_id">{:L('ROLE_NAME')}</option>
+									<option class="word" value="subject">{:L('SUBJECT')}</option>
+									<option class="word" value="content">{:L('CONTENT')}</option>
+									<option class="date" value="create_date">{:L('CREATE_TIME')}</option>
+									<option class="date" value="update_date">{:L('UPDATE_TIME')}</option>
+								</select>&nbsp;&nbsp;
+							</li>
+							<li id="conditionContent" class="pull-left">
+							<select id="condition" style="width:auto" name="condition" onchange="changeSearch()">
+								<option value="contains">{:L('CONTAINS')}</option>
+								<option value="not_contain">{:L('NOT_CONTAIN')}</option>
+								<option value="is">{:L('IS')}</option>
+								<option value="isnot">{:L('ISNOT')}</option>						
+								<option value="start_with">{:L('START_WITH')}</option>
+								<option value="end_with">{:L('END_WITH')}</option>
+								<option value="is_empty">{:L('IS_EMPTY')}</option>
+								<option value="is_not_empty">{:L('IS_NOT_EMPTY')}</option>
+								</select>&nbsp;&nbsp;
+							</li>
+							<li id="searchContent" class="pull-left"><input id="search" type="text" class="input-medium search-query" name="search"/>&nbsp;&nbsp;</li>
+							<li class="pull-left"><input type="hidden" name="m" value="log"/>
+							<if condition="$Think.get.by neq null"><input type="hidden" name="by" value="{$Think.get.by}"/></if>
+							<if condition="$Think.get.type neq null"><input type="hidden" name="type" value="{$Think.get.type}"/></if>
+							<if condition="$Think.get.module neq null"><input type="hidden" name="module" value="{$Think.get.module}"/></if>
+							<if condition="$Think.get.r neq null"><input type="hidden" name="r" value="{$Think.get.r}"/></if>
+                            <if condition="$Think.get.assort neq null"><input type="hidden" name="assort" value="{$Think.get.assort}"/></if>
+                            <if condition="$Think.get.product_id neq null"><input type="hidden" name="assort" value="{$Think.get.product_id}"/></if>
+                            <button type="submit" class="btn"> <img src="__PUBLIC__/img/search.png"/>  {:L('SEARCH')}</button></li>
+						</ul>
+					</form>
+				</li>
+			</ul>
+		</div>
+		<div class="span10">
+			<form id="form1" method="post">
+			<table class="table table-hover table-striped table_thead_fixed">
+				<if condition="$list eq null">
+					<tr><td>{:L('EMPTY_TPL_DATA')}</td></tr>
+				<else/>
+					<thead>
+						<tr>
+							<th><input id="check_all" class="control_all" type="checkbox" /></th>
+							<th>{:L('SUBJECT')}</th>
+							<th>{:L('ROLE_NAME')}</th>
+							<th style="width: 160px">
+								<if condition="$_GET['asc_order'] == 'create_date'">
+									<a href="{:U('log/index','desc_order=create_date&'.$parameter)}">
+										{:L('CREATE_TIME')}&nbsp;<img src="__PUBLIC__/img/arrow_up.png">
+									</a>
+								<elseif condition="$_GET['desc_order'] == 'create_date'"/>
+									<a href="{:U('log/index','asc_order=create_date&'.$parameter)}">
+										{:L('CREATE_TIME')}&nbsp;<img src="__PUBLIC__/img/arrow_down.png">
+									</a>
+								<else/>
+									<a href="{:U('log/index','desc_order=create_date&'.$parameter)}">{:L('CREATE_TIME')}</a>
+								</if>
+							</th>
+							<th style="width: 100px">{:L('OPERATING')}</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<td colspan="6">
+								{$page}
+							</td>
+						</tr>
+					</tfoot>
+					<tbody>
+						<volist name="list" id="vo">
+						<tr>
+							<td><input class="check_list" type="checkbox" name="log_id[]" value="{$vo.log_id}"
+								<if condition="$vo['pre_delete'] "><else/>  disabled="disabled"</if>
+							/></td>
+							<td>
+								<a href="{:U('log/mylog_view','id='.$vo['log_id'].'&type='.$_GET['type'].'&by='.$_GET['by'].'&field='.$_GET['field'].'&condition='.$_GET['condition'].'&search='.$_GET['search'].'&r='.$_GET['r'].'&module='.$_GET['module'].'&assort='.$_GET['assort'])}">
+									<if condition="$vo['subject'] ">{$vo.subject}<else />{$vo['content']|msubstr=###,0,35}...</if>
+								</a>
+							</td>
+							<td><notempty name="vo.creator.user_name"><a class="role_info" rel="{$vo.creator.role_id}" href="javascript:void(0)">{$vo.creator.user_name}</a></notempty></td>
+							<td>{$vo.create_date|date="Y-m-d H:i",###}</td>
+							<td>
+								<a target="_blank" href="{:U('log/mylog_view','id='.$vo['log_id'].'&type='.$_GET['type'].'&by='.$_GET['by'].'&field='.$_GET['field'].'&condition='.$_GET['condition'].'&search='.$_GET['search'].'&r='.$_GET['r'].'&module='.$_GET['module'].'&assort='.$_GET['assort'])}">{:L('VIEW')}</a>
+							</td>
+						</tr>
+						</volist>
+					</tbody>
+				</if>
+			</table>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="hide" id="dialog-role-info" title="{:L('DIALOG_USER_INFO')}">loading...</div>
+<script type="text/javascript">
+$("#dialog-role-info").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 600,
+	maxHeight: 400,
+	position: ["center",100]
+});
+$(function(){
+	<if condition="$Think.get.field neq null">
+		$("#field option[value='{$Think.get.field}']").prop("selected", true);changeCondition();
+		$("#condition option[value='{$Think.get.condition}']").prop("selected", true);changeSearch();
+		$("#search").prop('value', '{$Think.get.search}');
+	</if>
+	$('#delete').click(function(){
+		if(confirm("{:L('CONFIRM_DELETE')}")){
+			$("#form1").attr('action', '{:U("log/log_delete")}');
+			$("#form1").submit();
+		}
+	});
+
+	$("#check_all").click(function(){
+		$("input[class='check_list']").prop('checked', $(this).prop("checked"));
+	});
+})
+function changeContent(){
+	$module = $('#module').val();
+	if($module == 6){
+		window.location='{:U('Log/index','by='.$_GET['by'].'&type=4')}';
+	}else if($module == 1){
+		window.location='{:U('Log/index','r=rCustomerLog&module=customer&by='.$_GET['by'].'&type=1')}';
+	}else if($module == 2){
+		window.location = '{:U('Log/index','r=rContactsLog&module=contacts&by='.$_GET['by'].'&type=1')}';
+	}else if($module == 3){
+		window.location='{:U('Log/index','r=rBusinessLog&module=business&by='.$_GET['by'].'&type=1')}';
+	}else if($module == 4){
+		window.location='{:U('Log/index','r=rLogTask&module=task&by='.$_GET['by'].'&type=1')}';
+	}else if($module == 5){
+		window.location='{:U('Log/index','r=rEventLog&module=event&by='.$_GET['by'].'&type=1')}';
+	}
+}
+</script>
+<include file="Public:footer" />

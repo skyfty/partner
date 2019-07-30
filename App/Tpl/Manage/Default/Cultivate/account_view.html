@@ -1,0 +1,227 @@
+<include file="Public:header" />
+<include file="Public:viewmedia" />
+
+<div class="container">
+    <div class="page-header">
+        <h4><a name="tab">新培训订单信息</a>
+            <span style="font-size: medium;color: #0088cc;"> - {$cultivate['idcode']} - {$cultivate['currier_id']|currier_show_html} - {$cultivate['model_show_html']}</span>
+        </h4>
+
+    </div>
+    <include file="Public:alert"/>
+    <div class="tabbable">
+        <include file="tabnav"/>
+    </div>
+    <div class="row-fluid">
+        <div class="tabbable span12">
+            <div class="tab-content">
+                <table class="table table-hover">
+                    <thead >
+                    <tr>
+                        <td colspan="4">
+                            <p style="font-size: 14px;">
+                                <if condition="is_cultivate_settle($cultivate) or $cultivate['status_id'] == '0'">
+                                <else/>
+                                    <a href="{:U('Account/add', 'type_id='.$clause_type_id.'&t=cultivate&dire=1&clause_additive='.$cultivate['cultivate_id'])}&refer_add_url={$_SERVER['REQUEST_URI']|urlencode}&restrict=cultivate">增加</a> |
+                                </if>
+
+                            </p>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="6">
+                            <table class="table">
+                                <tr>
+                                    <td class="tdleft" width="16%">结算状态:</td>
+                                    <td width="16%">
+                                        {$cultivate['settle_state']|format_cultivate_status}
+                                    </td>
+                                    <td class="tdleft" width="16%">订单金额:</td>
+                                    <td width="16%">{$cultivate['sum_settle_price']}</td>
+                                    <td class="tdleft" width="16%">已付金额:</td>
+                                    <td width="16%">{$cultivate['deficit_price']}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft" width="16%">已确认金额:</td>
+                                    <td width="16%">
+                                        {$cultivate['confirm_price']}
+                                    </td>
+                                    <td class="tdleft" width="16%">未确认金额:</td>
+                                    <td width="16%">{$cultivate['wait_confirm_price']}</td>
+                                    <td class="tdleft" width="16%">未付金额:</td>
+                                    <td width="16%">{$cultivate['surplus_price']}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft" width="16%">已冻结金额:</td>
+                                    <td colspan="5" width="16%">
+                                        {$cultivate['model_earnest']}
+                                        <if condition="is_cultivate_settle($cultivate) or $cultivate['status_id'] == '0'">
+                                            <a style="color: #D0D0D0;cursor: no-drop;" href="javascript:void(0);">[解冻]</a>
+                                        <else/>
+                                            <a href="{$thaw_account_url}">[解冻]</a>
+                                        </if>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table id="datatables" class="display datatables" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th style="width: 20px"></th>
+                        <th style="width: 130px">提交时间</th>
+                        <th style="width: 130px">支付时间</th>
+                        <th style="width: 60px">收款方式</th>
+                        <th>金额</th>
+                        <th style="width: 80px">审核状态</th>
+                        <th style="width: 130px">确认时间</th>
+                        <th>支付流水</th>
+                        <th>收据号</th>
+                        <th style="width: 20px"></th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script id="account-info-tmpl" type="text/x-jquery-tmpl">
+<table class="table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+    <tbody>
+        <tr>
+
+            <td class="tdleft" width="15%">提交时间</td>
+            <td>${create_time_show}</td>
+            <td class="tdleft" width="15%">金额</td>
+            <td>${money}</td>
+            <td class="tdleft" width="15%">收款方式</td>
+            <td>${payway}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">审核状态</td>
+            <td>${payment_verify_show}</td>
+            <td class="tdleft" width="15%">审核时间</td>
+            <td>${verify_time_show}</td>
+            <td class="tdleft" width="15%">审核人</td>
+            <td>{{html verify_role_show}}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">支付时间</td>
+            <td>${payment_time_show}</td>
+            <td class="tdleft" width="15%">支付流水</td>
+            <td>${flow_account_idcode}</td>
+            <td class="tdleft" width="15%">流水确认</td>
+            <td>${flow_account_state}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">收据号</td>
+            <td colspan="5">${receipt_number}</td>
+        </tr>
+        <tr>
+            <td class="tdleft" width="15%">备注</td>
+            <td colspan="5">${description}</td>
+        </tr>
+    </tbody>
+</table>
+</script>
+
+<script id="account-operator-tmpl" type="text/x-jquery-tmpl">
+{{if payment_verify !='1'}}
+    <a href="{:U('account/edit')}&t=cultivate&id=${account_id}&refer_url={$_SERVER['REQUEST_URI']|urlencode}&restrict=cultivate">编</a>
+{{else}}
+    <a style="color: #D0D0D0;cursor: no-drop;">编</a>
+{{/if}}
+
+{{if per_delete}}
+    <a  href="{:U('account/delete')}&t=cultivate&id=${account_id}&refer_url={$_SERVER['REQUEST_URI']|urlencode}&restrict=cultivate" onclick="return del_confirm();">删</a>
+{{else}}
+    <a style="color: #D0D0D0;cursor: no-drop;">删</a>
+{{/if}}
+</script>
+
+
+<script>
+
+    $(document).ready(function() {
+        var table = $('#datatables').DataTable( {
+            ajax: {
+                "data": function(d) {
+                },
+                "url": "{:U('cultivate/account_list', 'id='.$cultivate['cultivate_id'])}"
+            },
+            "columns": [
+                {
+                    "className":      'details-control',
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                },
+                { "data": "create_time_show" },
+                { "data": "payment_time_show" },
+                { "data": "payway" },
+                { "data": "money" },
+                { "data": "payment_verify_show" },
+                { "data": "verify_time_show" },
+                { "data": "flow_account_show" },
+                { "data": "receipt_number" },
+
+                {
+                    "orderable":      false,
+                    "data":           null,
+                    "defaultContent": ''
+                }
+            ],
+            "columnDefs": [
+                {
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).html($("#account-operator-tmpl").tmpl(rowData));
+                    },
+                    "targets": 9
+                },
+                {
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        var html = rowData.payment_verify_show;
+                        if(rowData.verify_role_show) {
+                            html += "[" + rowData.verify_role_show + "]";
+                        };
+                        $(td).html(html);
+                    },
+                    "targets": 5
+                },
+                {
+                    "bSortable": false,
+                    "targets": 0
+
+                }
+            ],
+            'searching':false,
+            "processing": true,
+            "order": [[1, 'desc']],
+            'language': def_dataTable_lang_opt
+        } );
+
+        $('#datatables tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                row.child($("#account-info-tmpl").tmpl(row.data())).show();
+                tr.addClass('shown');
+            }
+        } );
+    } );
+
+</script>
+
+
+<include file="Public:footer" />	

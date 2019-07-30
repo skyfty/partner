@@ -1,0 +1,218 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <include file="Public:alert" />
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li>
+                        <a href="{:U('branch/view', 'id='.$branch['branch_id'])}">门店详情</a>
+                    </li>
+                    <li class="active">
+                        <a href="{:U('branch/employee', 'id='.$branch['branch_id'])}">员工</a>
+                    </li>
+                </ul>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td colspan="4">
+                        <p style="font-size: 14px;">
+                            <if condition="$is_shopkeeper">
+                            <a onclick="add_role();" href="javascript:void(0);">增加</a> |
+                            <a onclick="employee_remove();" href="javascript:void(0);">移除</a> |
+                            </if>
+                            <a href="{$refer_url}">{:L('RETURN')}</a>
+                        </p>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+            <include file="Branch:employee_tree" />
+            <div style="padding-top: 10px">
+                拖动可改变上下级关系。
+                <img src="/Public/img/admin_img.png"/>店长
+                <img src="/Public/img/user_img.png"/>员工
+            </div>
+
+            <!--  -->
+        </div>
+    </div>
+</div>
+
+<script>
+    function on_contextmenu(node) {
+        if (node.parent == "#") {
+            return null;
+        }
+        var item = {
+            "create": null,
+            "rename": null,
+            "remove": null,
+            "ccp": null,
+            "add_role": {
+                "label": "增加下级员工",
+                "action": add_role
+            },
+            "employee_remove": {
+                "label": "删除员工",
+                "action": employee_remove
+            },
+            <if condition="$is_shopkeeper">
+            "employee_associate": {
+                "label": "项目交接",
+                "action": employee_associate
+            }
+            </if>
+        };
+
+        if (node['icon'] == "/Public/img/admin_img.png") {
+            item['employee_shopkeeper'] = {
+                "label": "取消店长",
+                "action": employee_remove_shopkeeper
+            };
+        } else {
+            item['employee_shopkeeper'] = {
+                "label": "设为店长",
+                "action": employee_shopkeeper
+            };
+        }
+
+        return item;
+    }
+
+    function employee_associate() {
+        var ref = $('#datatree').jstree(true);
+        var sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        var role_id = ref.get_node(sel).data;
+        window.location.assign("{:U('User/associate')}&id=" + role_id);
+    }
+
+    function employee_add(role_id) {
+        var ref = $('#datatree').jstree(true);
+        var sel = ref.get_selected();
+        var parentid = sel.length ? ref.get_node(sel).id:0;
+        parentid = $.isNumeric(parentid)?parentid:0;
+
+        $.ajax({
+            'type':'post',
+            'dataType':'json',
+            'url':'{:U("branch/employee_add")}',
+            'data':{
+                "role_id":role_id,
+                "parentid":parentid,
+                "branch_id":"{$branch['branch_id']}"
+            },
+            'success':function(data){
+                if (data) {
+                    if ($.isPlainObject(data)) {
+                        var parent = $('#datatree').jstree('get_selected');
+                        if (!parent.length) {
+                            parent= ref.get_node("#j1_1");
+                        }
+                        var node = {
+                            "id":data.node_id,
+                            "icon":data.user_icon,
+                            "text":data.user_name
+                        };
+                        ref.create_node(parent, node, 'last');
+                        ref.open_node(parent);
+                        art.dialog.tips("操作完成");
+
+                    } else {
+                        art.dialog.tips(data);
+                    }
+                }
+            }
+        });
+    };
+
+    function employee_remove() {
+        var ref = $('#datatree').jstree(true);
+        var sel = ref.get_selected();
+        if(!sel.length) { return false; }
+
+        art.dialog.confirm('移除这个员工会将其下属归并到此员工的上级， 确实要移除吗?', function () {
+            var nodeid = ref.get_node(sel).id;
+            $.ajax({
+                'type':'post',
+                'dataType':'json',
+                'url':'{:U("branch/employee_remove")}',
+                'data':{
+                    "nodeid":nodeid,
+                    "branch_id":"{$branch['branch_id']}"
+                },
+                'success':function(data){
+                    ref.refresh();
+                    art.dialog.tips("操作完成");
+                }
+            });
+        });
+    }
+
+    function employee_shopkeeper() {
+        var ref = $('#datatree').jstree(true);
+        var sel = ref.get_selected();
+        if(!sel.length) { return false; }
+
+        art.dialog.confirm('确实要将此员工设置为店长码?', function () {
+            var nodeid = ref.get_node(sel).id;
+            $.ajax({
+                'type':'post',
+                'dataType':'json',
+                'url':'{:U("branch/employee_shopkeeper")}',
+                'data':{
+                    "nodeid":nodeid,
+                    "branch_id":"{$branch['branch_id']}"
+                },
+                'success':function(data){
+                    ref.refresh();
+                    art.dialog.tips("操作完成");
+
+                }
+            });
+        });
+
+    }
+
+    function employee_remove_shopkeeper() {
+        var ref = $('#datatree').jstree(true);
+        var sel = ref.get_selected();
+        if(!sel.length) { return false; }
+
+        art.dialog.confirm('确实要取消此员工的店长码?', function () {
+            var nodeid = ref.get_node(sel).id;
+            $.ajax({
+                'type':'post',
+                'dataType':'json',
+                'url':'{:U("branch/employee_remove_shopkeeper")}',
+                'data':{
+                    "nodeid":nodeid,
+                    "branch_id":"{$branch['branch_id']}"
+                },
+                'success':function(data){
+                    ref.refresh();
+                    art.dialog.tips("操作完成");
+
+                }
+            });
+        });
+    }
+
+
+</script>
+
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    function on_staff_info(b) {
+        employee_add(b.role_id);
+    }
+    function add_role(){
+        select_staff();
+    }
+</script>
+
+<include file="Public:footer" />

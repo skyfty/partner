@@ -1,0 +1,40 @@
+
+<script type="text/javascript">
+
+    function request_traincert_info(p, cb) {
+        $.ajax({
+            'type':'get',
+            'dataType':'json',
+            'url':'{:U("traincert/getInfo")}',
+            'data':p,
+            'success':function(data){
+                if(data.status == 1){
+                    if (cb) cb(data.data);
+                }
+            }
+        });
+    }
+
+    function select_traincert(param, cb) {
+        art.dialog.data('reqparam', param);
+        art.dialog.open('{:U("Traincert/listDialog")}', {
+            id: 'select_traincert',
+            title: "选择证书",
+            lock:true,
+            fixed:true,
+            window: 'top',
+            width: 780,
+            height: 400,
+            ok: function () {
+                var traincert_id = $(this.iframe.contentWindow.document).find('input:radio[name="traincert"]:checked').val();
+                var data = {
+                    'id': traincert_id
+                };
+                request_traincert_info(data, cb?cb:on_traincert_info);
+                return true;
+            },
+            cancel: true
+        });
+    }
+
+</script>

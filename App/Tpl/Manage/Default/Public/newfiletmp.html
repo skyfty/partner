@@ -1,0 +1,61 @@
+<include file="Public:picfiletmp" />
+
+<script id="new-video-template" type="text/x-jquery-tmpl">
+<table id="tables_files_${field}_${idx}" class="table table-striped">
+    <tbody class="files">
+        <tr class="template-upload fade in">
+            <td>
+                <input type="text" name="${field}_name[]" id="${field}_${idx}_prev_name">
+            </td>
+            <td width="30%">
+                <div class="btn btn-success fileinput-button"><span>选择文件</span>
+                    <input type="file" name="vid_${field}[]" id="${field}_${idx}">
+                </div>&nbsp;<a class="btn btn-warning fileinput-button btn_reduce_files"><span>取消</span></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</script>
+<script>
+    var video_seq_item = 1;
+    $('.btn_add_video').click(function(){
+        var product_field = $(this).attr('field_name');
+        var data = {
+            idx: video_seq_item,
+            field: product_field
+        };
+        $('.' + product_field).before($( "#new-video-template" ).tmpl(data));
+        video_seq_item ++;
+    });
+</script>
+
+
+<script id="new-file-template" type="text/x-jquery-tmpl">
+<table id="tables_files_${field}_${idx}" class="table table-striped">
+    <tbody class="files">
+        <tr class="template-upload fade in">
+            <td>
+                <input type="text" name="${field}_name[]" id="${field}_${idx}_prev_name">
+            </td>
+            <td width="30%">
+                <div class="btn btn-success fileinput-button"><span>选择文件</span>
+                    <input type="file" name="fil_${field}[]" id="${field}_${idx}">
+                </div>&nbsp;<a class="btn btn-warning fileinput-button btn_reduce_files"><span>取消</span></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</script>
+<script>
+    var file_seq_item = 1;
+    $('.btn_add_file').click(function(){
+        var product_field = $(this).attr('field_name');
+        var data = {
+            idx: file_seq_item,
+            field: product_field
+        };
+        $('.' + product_field).before($( "#new-file-template" ).tmpl(data));
+        file_seq_item ++;
+    });
+</script>
+

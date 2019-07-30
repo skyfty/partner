@@ -1,0 +1,75 @@
+<table  class="table"  style="border: 0px;margin-bottom:0px">
+    <tbody>
+    <tr>
+        <td width="300px">
+            <if condition="!empty($staff['images']['main'])">
+                <div class="box-secondary">
+                    <a href="{$staff.images.main.path}" data-lightbox="roadtrip">
+                        <img src="{$staff.images.main.path}" class="thumbnail cardpicthumb">
+                    </a>
+                </div>
+            </if>
+            <if condition="!empty($staff['images']['cardpic'])">
+                <a href="{$staff.images.cardpic.path}" data-lightbox="roadtrip">
+                    <img src="{$staff.images.cardpic.path}" class="thumbnail cardpicthumb">
+                </a>
+            </if>
+        </td>
+        <td>
+            <table class="table">
+                <tr>
+                    <td class="tdleft" width="16%">编号:</td>
+                    <td width="16%">
+                        {$staff['idcode']}
+                        <if condition="$staff['wxbind'] == '已绑定'">
+                            <a href="{:U('sms/sendDialog', 'model=staff&ids='.$staff['staff_id'].'&by=model&mobile='.$staff['telephone'])}" class="smsphone">
+                                <img src='/Public/images/wxb.png'>
+                            </a>
+                        </if>
+                    </td>
+                    <td class="tdleft" width="16%">姓名:</td>
+                    <td width="16%">{$staff['name']}</td>
+                    <td class="tdleft" width="16%">性别:</td>
+                    <td width="16%">{$staff['sex']}</td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="16%">所属门店:</td>
+                    <td width="16%">
+                        {$staff['branch_id']|branch_html}
+                    </td>
+                    <td class="tdleft" width="16%">部门:</td>
+                    <td width="16%">{$staff['department_id']|department_html}</td>
+                    <td class="tdleft" width="16%">岗位:</td>
+                    <td width="16%">{$staff['position_id']|position_html}</td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="16%">上级领导:</td>
+                    <td width="16%">
+                        {$staff['owner_role_id']|role_html}
+                    </td>
+                    <td class="tdleft" width="16%">手机号码:</td>
+                    <td width="16%">
+                        {$staff['telephone']}
+                    </td>
+                    <td class="tdleft" width="16%">账户余额:</td>
+                    <td width="16%">
+                        {$staff.balance}
+                    </td>
+                </tr>
+                <tr>
+
+                    <td class="tdleft" width="16%">账户状态:</td>
+                    <td width="16%">
+                        {$staff.user_state}
+                    </td>
+                    <td class="tdleft" width="16%">未付金额:</td>
+                    <td width="16%" colspan="3">
+                        {$staff.surplus_sum_amount}
+                    </td>
+
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>

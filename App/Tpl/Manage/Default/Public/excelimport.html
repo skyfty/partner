@@ -1,0 +1,109 @@
+<include file="Public:dialog_header" />
+<link rel="stylesheet" href="__PUBLIC__/jquery-file-upload/css/jquery.fileupload.css" type="text/css" />
+<script src="__PUBLIC__/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="__PUBLIC__/jquery-file-upload/js/jquery.fileupload.js"></script>
+<script src="__PUBLIC__/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+<script src="__PUBLIC__/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+<style>
+    .progress-bar {
+        height: 18px;
+        background: green;
+    }
+</style>
+<body data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true" style="background-color: white">
+<div class="container">
+    <div class="row-fluid">
+        <div class="span12">
+            <form id="excelimport_form" action="{:U($module_name.'/excelimport')}" method="post"  enctype="multipart/form-data">
+                <table class="table" width="95%" border="0" cellspacing="1" cellpadding="0">
+                    <tbody>
+                    <tr>
+                        <td>
+                            文件总大小不能超过20MB，允许类型：.xls
+                            <p id="attachment1">
+
+                                <span class="btn btn-success fileinput-button">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>选择文件...</span>
+                                    <input type="file" name="file" id="excel_file"/>
+                                </span>
+                                <span id="file_list_span"></span>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="progress">
+                                <div class="progress-bar" style="width: 0%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function excel_import_process(file_url) {
+        $.ajax({
+            type:"post",
+            url: '{:U($module_name."/getprocess")}',
+            data:{
+                fu:file_url
+            },
+            success: function (data) {
+               if (data) {
+                   var progress = parseInt(data.loaded / data.total * 100, 10);
+                   $('.progress-bar').css('width',progress + '%');
+                   if (data.loaded >= data.total) {
+                       window.location.reload();
+                   }
+               }
+            },
+            cache: false
+        });
+    }
+
+    function request_parse_excel_file(file_url) {
+        $.ajax({
+            type:"post",
+            url: '{:U("")}',
+            data:{
+                fu:file_url
+            },
+            success: function (data) {
+                if (data.total == 0) {
+                    setInterval(function(){
+                        excel_import_process(file_url);
+                    }, 500);
+                }
+            },
+            cache: false
+        });
+    }
+
+    $(function () {
+        $("#excel_file").fileupload(
+                {
+                    autoUpload: false,
+                    url: "/api/excelupload.php?m={$module_name}",
+                    dataType: 'json',
+                    acceptFileTypes: /(\.|\/)(xls)$/i,
+                }
+        ).on('fileuploadadd', function (e, data) {
+            data.context = $("#file_list_span").html($('<button id="upload_btn"/>').text('上传').click(function () {
+                        $(this).replaceWith($('<span id="upload_btn"/>').text('上传中...'));
+                        data.submit();
+                    })).prepend("<span>" + data.files[0].name + "</span>");
+        }).on('fileuploaddone', function (e, data) {
+            $('#upload_btn').replaceWith($('<span id="upload_btn"/>').text('上传完成, 正在导入数据...'));
+            request_parse_excel_file(data.result.file["0"].url);
+        }).on('fileuploadprogressall', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('.progress-bar').css('width',progress + '%');
+        }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+    });
+
+</script>

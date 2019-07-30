@@ -1,0 +1,52 @@
+<include file="Public:header" />
+
+<div class="container">
+    <div class="page-header" style="border:none; font-size:14px;">
+        <include file="Product:navcat" />
+    </div>
+    <include file="Public:alert" />
+    <div class="row-fluid">
+        <div class="span12">
+            <ul class="nav pull-left">
+                <li class="pull-left">
+                    <form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="" method="get">
+                        <ul class="nav pull-left">
+                            <include file="Public:def_analy_search_from" />
+                            <li class="pull-left">
+                                类别&nbsp;
+                                <select  name="acat" id="acat">
+                                    <volist name="cat_array" id="vo">
+                                        <option value="{$vo['category_id']}">{$vo['name']}</option>
+                                    </volist>
+                                </select>
+                                <script>
+                                    $("#acat option[value='{$Think.get.acat}']").prop("selected", true);
+                                    $("#acat").change(function(){
+                                        $("#searchForm").submit();
+                                    });
+                                </script>
+                            </li>
+                        </ul>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2 knowledgecate">
+            <include file="Product:analycat" />
+        </div>
+        <div class="span10">
+            <div class="row-fluid">
+                <div class="span12">
+                    <include file="Product:navcatnewly" />
+                </div>
+            </div>
+            <div class="row-fluid">
+                <include file="Public:def_newly_analy_charts" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<include file="Public:footer" />

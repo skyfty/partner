@@ -1,0 +1,44 @@
+<volist name="field_array" id="vo">
+    <th  class="flter_table_header">
+        <if condition="$vo['field'] == 'owner_role_id'">
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('owner_role_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="owner_role_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.owner_role_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.owner_role_id|role_show}</span>
+            </if>
+            <div id="owner_role_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.owner_role_id eq '')"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":berth_owner_staff_list($branch)" id="vo">
+                    <a <if condition="($Think.get.owner_role_id eq $vo['role_id'])"> href="{:U('')}&{:FP($parameter, 'owner_role_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'owner_role_id='.$vo['role_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <elseif condition="$vo['field'] == 'dorm_id'"/>
+            <include file="Public:def_index_list_col" />
+            <a onmouseover="mopen('dorm_id')" onmouseout="mclosetime()"  href="javascript:void(0);" id="dorm_id_filter">
+                <i class="icon-filter"></i>
+            </a>
+            <if condition="($Think.get.dorm_id neq '')">
+                <br/><span style="font-weight:normal">{$Think.get.dorm_id|dorm_show_html}</span>
+            </if>
+            <div id="dorm_id" onmouseover="mcancelclosetime()" onmouseout="mclosetime()">
+                <a <if condition="($Think.get.dorm_id eq '')"> href="{:U('')}&{:FP($parameter, 'dorm_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'dorm_id=')}"</if>>
+                全部
+                </a>
+                <volist name=":branch_dorm_list($branch)" id="vo">
+                    <a <if condition="($vo['dorm_id'] eq $Think.get.dorm_id)"> href="{:U('')}&{:FP($parameter, 'dorm_id=')}" class="active"<else/> href="{:U('')}&{:FP($parameter, 'dorm_id='.$vo['dorm_id'])}"</if>>
+                    {$vo['name']}
+                    </a>
+                </volist>
+            </div>
+        <else/>
+            <include file="Public:def_index_list_col" />
+            <include file="Public:def_index_list_field_col" />
+        </if>
+    </th>
+</volist>

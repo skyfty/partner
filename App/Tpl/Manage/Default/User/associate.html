@@ -1,0 +1,82 @@
+<include file="Public:header" />
+<div class="container">
+    <div class="page-header">
+        <h4>员工交接 - {$user['user_name']}
+        </h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+            <div class="span12">
+                <table class="table table-hover table-striped table_thead_fixed">
+                    <thead>
+                    <tr>
+                        <th>模块</th>
+                        <th>负责数</th>
+                        <th>{:L('OPERATING')}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <volist name="associate_list" id="vo">
+                        <if condition="$vo['count']">
+                        <tr>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.count}</td>
+                            <td>
+                                <a onclick="select_role('{$key}');" href="javascript:void(0);">交接</a>&nbsp;
+                            </td>
+                        </tr>
+                        </if>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</div>
+
+
+
+
+<include file="Staff:selectDialog" />
+<script type="text/javascript">
+    var mode_name = "";
+    function submit_accociate(role_id) {
+        if (mode_name == "") {
+            art.dialog.alert("无效的模块");
+            return;
+        }
+        art.dialog.confirm("确实要完成交接吗?", function(){
+            $.ajax({
+                'type':'get',
+                'dataType':'json',
+                'url':'{:U("User/submit_associate")}',
+                'data':{
+                    "src_role_id":"{$user['role_id']}",
+                    "dest_role_id":role_id,
+                    "mode":mode_name
+                },
+                'success':function(data){
+                    art.dialog.alert(data.info);
+                    if (data.status == 1) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+
+    function on_staff_info(b) {
+        if (b.role_id == {$user['role_id']}) {
+            art.dialog.alert("不可以选择自己做为交接对象");
+            return;
+        }
+        submit_accociate(b.role_id);
+    }
+
+    function select_role(mode){
+        mode_name = mode;
+        select_staff();
+    }
+</script>
+
+<include file="Public:footer" />

@@ -1,0 +1,20 @@
+<include file="Public:header" />
+<link href="__PUBLIC__/video-js/video-js.min.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/video-js/video.js"></script>
+<script>
+    videojs.options.flash.swf = "__PUBLIC__/video-js/video-js.swf";
+</script>
+
+<div class="container">
+    <!-- Docs nav ================================================== -->
+    <div class="page-header">
+        <h4>观看视频</h4>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <video id="example_video_1" class="video-js vjs-default-skin" autoplay  controls width="100%" height="600" data-setup='{}'>
+                <source src="{$file_path}" type='{$video_type}' />
+            </video>
+        </div>
+    </div>
+<include file="Public:footer" />
