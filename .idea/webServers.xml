@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="262241c2-c975-4e69-8734-0fef26495cbd" name="aobaomuying.cn" url="http://47.104.3.226">
+        <fileTransfer host="47.104.3.226" port="2124" rootFolder="/public_html" password="df9bdf93df92df99df9adf93df9bdf9f" username="b_ayihui_cn">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
